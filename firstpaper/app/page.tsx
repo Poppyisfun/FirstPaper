@@ -1,129 +1,115 @@
-import Link from "next/link";
 import Nav from "@/components/Nav";
-import Reveal from "@/components/Reveal";
 import HeroSpotlight from "@/components/HeroSpotlight";
+import HeroCopy from "@/components/HeroCopy";
 import DemoStrip from "@/components/DemoStrip";
 import CountUp from "@/components/CountUp";
+import { Rise, Stagger, RiseItem } from "@/components/motion-primitives";
+import { BtnLink } from "@/components/Btn";
 
 const loop = [
   {
     tone: "g",
     n: "01 — Read",
     t: "What it says",
-    d: "The real paper, verbatim, with a short plain-language translation beside any paragraph that loses you. Never a summary of what's wrong — just what it means.",
+    d: "The real paper, verbatim. Any paragraph that loses you has a plain-language translation sitting next to it: what the sentence means, not what's wrong with it.",
   },
   {
     tone: "n",
     n: "02 — Check",
     t: "Did it land?",
-    d: "Quick questions so you can't drift forward half-understanding. Instant feedback, no punishment for getting it wrong.",
+    d: "A few quick questions, so you can't drift forward half-understanding. Get one wrong and nothing happens except that you find out.",
   },
   {
     tone: "a",
     n: "03 — Judge",
     t: "Is it any good?",
-    d: "The part everyone else skips. Sample size, controls, correlation vs cause, who funded it. You commit to an answer before you see the explanation.",
+    d: "The part everyone else skips. Sample size, controls, correlation dressed up as cause, who paid for it. You commit to an answer before the explanation appears.",
   },
+];
+
+/** `count` animates up from zero; `text` renders as-is. */
+const stats: { count?: number; text?: string; l: string }[] = [
+  { count: 7, l: "Things you learn to check" },
+  { count: 3, l: "Reading levels" },
+  { text: "$0", l: "Cost, forever" },
+  { text: "100%", l: "Open-access papers" },
 ];
 
 export default function Home() {
   return (
     <>
-      <Nav dark active="start" />
+      <a className="skip" href="#how">
+        Skip to content
+      </a>
+      <Nav dark />
 
       <HeroSpotlight>
-        <div className="hero-in">
-          <div className="eyebrow">
-            Science literacy · built by a high schooler
-          </div>
-          <h1 className="big">
-            Learn to read the science — and <em>judge</em> whether it&rsquo;s
-            any good.
-          </h1>
-          <p className="lede">
-            Every other tool makes research papers easier to believe. FirstPaper
-            makes you better at deciding whether to. Read a real paper, section
-            by section, at your level — then learn to catch what&rsquo;s weak in
-            it.
-          </p>
-          <div className="cta-row">
-            <Link className="btn lg glow-b" href="/library">
-              Read your first paper →
-            </Link>
-            <a className="btn lg ghost" href="#how">
-              How it works
-            </a>
-          </div>
-        </div>
+        <HeroCopy />
         <DemoStrip />
       </HeroSpotlight>
 
-      <div className="wrap">
-        <div className="sect" id="how">
-          <Reveal className="shead">
+      <main className="wrap">
+        <section className="sect" id="how">
+          <Rise className="shead">
             <div className="skick">The method</div>
             <h2 className="stitle">Three moves, on every paragraph.</h2>
             <p className="ssub">
               Most tools translate a paper and hand it back. That teaches you to
-              trust whatever gets simplified. This teaches you to interrogate
-              it.
+              trust whatever gets simplified. This teaches you to argue with it.
             </p>
-          </Reveal>
-          <div className="loop grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(250px,1fr))]">
-            {loop.map((card) => (
-              <Reveal key={card.n} className={`lc ${card.tone}`}>
-                <div className="lc-n">{card.n}</div>
-                <div className="lc-t">{card.t}</div>
-                <div className="lc-d">{card.d}</div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+          </Rise>
 
-        <div className="sect tight">
-          <Reveal className="strip grain">
+          <Stagger className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
+            {loop.map((card) => (
+              <RiseItem key={card.n} className="shell">
+                <article className={`lc ${card.tone}`}>
+                  <div className="lc-n">{card.n}</div>
+                  <h3 className="lc-t">{card.t}</h3>
+                  <p className="lc-d">{card.d}</p>
+                </article>
+              </RiseItem>
+            ))}
+          </Stagger>
+        </section>
+
+        <section className="sect tight">
+          <Rise className="strip">
             <div className="glow" />
             <div className="stats">
-              <div className="st">
-                <div className="v">
-                  <CountUp to={7} />
+              {stats.map((s, i) => (
+                <div className="st" key={s.l}>
+                  <div className="v">
+                    {s.count !== undefined ? (
+                      <CountUp to={s.count} delay={0.15 + i * 0.08} />
+                    ) : (
+                      s.text
+                    )}
+                  </div>
+                  <div className="l">{s.l}</div>
                 </div>
-                <div className="l">Things you learn to check</div>
-              </div>
-              <div className="st">
-                <div className="v">
-                  <CountUp to={3} />
-                </div>
-                <div className="l">Reading levels</div>
-              </div>
-              <div className="st">
-                <div className="v">$0</div>
-                <div className="l">Cost, forever</div>
-              </div>
-              <div className="st">
-                <div className="v">100%</div>
-                <div className="l">Open-access papers</div>
-              </div>
+              ))}
             </div>
-          </Reveal>
-        </div>
+          </Rise>
+        </section>
 
-        <div className="sect">
-          <Reveal className="origin">
-            <q>
-              I wanted to read real genetics research and couldn&rsquo;t get
-              past the first page. Nobody teaches you how. So I built the thing
-              I wish I&rsquo;d had.
-            </q>
-            <div className="who">— the founder, high school junior</div>
-            <div style={{ marginTop: 26 }}>
-              <Link className="btn pri lg" href="/library">
-                Start with one paper →
-              </Link>
+        <section className="sect">
+          <Rise className="origin">
+            <div className="origin-in">
+              <q>
+                I wanted to read real genetics research and couldn&rsquo;t get
+                past the first page. Nobody teaches you how. So I built the
+                thing I wish I&rsquo;d had.
+              </q>
+              <div className="who">— the founder, high school junior</div>
+              <div style={{ marginTop: 30 }}>
+                <BtnLink href="/library" variant="pri lg" icon="→">
+                  Start with one paper
+                </BtnLink>
+              </div>
             </div>
-          </Reveal>
-        </div>
-      </div>
+          </Rise>
+        </section>
+      </main>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Nav from "@/components/Nav";
+import { Rise } from "@/components/motion-primitives";
+import { BtnLink } from "@/components/Btn";
 
 export const metadata: Metadata = {
   title: "About — FirstPaper",
@@ -12,7 +13,7 @@ const steps = [
   {
     n: "01",
     h: "You read the real paper",
-    p: "Not a summary. The complete published text, verbatim, figures included, exactly as the scientists wrote it. Every paragraph has a green dot offering a plain-language translation at your reading level — but it asks you to try first.",
+    p: "Not a summary. The published text, verbatim, figures included, exactly as the scientists wrote it. Every paragraph has a green dot offering a plain-language translation at your reading level, but it asks you to try first.",
   },
   {
     n: "02",
@@ -22,7 +23,7 @@ const steps = [
   {
     n: "03",
     h: "You judge the science",
-    p: "Five harder questions on whether it holds up — controls, sample size, claim strength, funding. You commit to an answer, and say how confident you are, before you see the explanation.",
+    p: "Five harder questions on whether it holds up: controls, sample size, claim strength, funding. You commit to an answer, and say how confident you are, before you see the explanation.",
   },
   {
     n: "04",
@@ -34,7 +35,7 @@ const steps = [
 const faq = [
   {
     q: "Do I need to know biology already?",
-    a: "No. Explorer level assumes no background beyond middle-school science. The papers are chosen partly for being approachable to someone starting cold.",
+    a: "No. Explorer level assumes nothing past middle-school science. The papers are picked partly for being approachable to someone starting cold.",
   },
   {
     q: "Is the paper text really unedited?",
@@ -42,7 +43,7 @@ const faq = [
   },
   {
     q: "What if I get everything wrong?",
-    a: "Then you've found out what you didn't know, which is the whole point. Nothing is graded, nothing is recorded against you, and every explanation appears whether you got it right or not.",
+    a: "Then you've found out what you didn't know, which is the point. Nothing is graded, nothing is recorded against you, and every explanation appears whether you got it right or not.",
   },
   {
     q: "Can teachers use this with a class?",
@@ -50,30 +51,33 @@ const faq = [
   },
   {
     q: "How do you choose papers?",
-    a: "They have to be open-access, genuinely interesting, and approachable enough to be a real entry point. The library deliberately includes papers with weaknesses — you can't learn to spot weak science if everything you're shown is airtight.",
+    a: "They have to be open-access, genuinely interesting, and approachable enough to be a real entry point. The library deliberately includes papers with weaknesses. You can't learn to spot weak science if everything you're shown is airtight.",
   },
 ];
 
 export default function About() {
   return (
     <>
+      <a className="skip" href="#about-body">
+        Skip to content
+      </a>
       <Nav active="about" />
 
-      <div className="wrap">
-        <div className="sect" style={{ paddingTop: 56 }}>
-          <div className="ab-hero">
+      <main className="wrap">
+        <div className="sect" id="about-body" style={{ paddingTop: 28 }}>
+          <Rise className="ab-hero">
             <div className="ab-kick">About</div>
             <h1 className="stitle" style={{ maxWidth: "15ch" }}>
               Why FirstPaper exists.
             </h1>
             <p className="ssub" style={{ maxWidth: 600 }}>
               A free tool that teaches teenagers to read real scientific
-              research — and to judge whether it&rsquo;s any good. Built by a
+              research, and to judge whether it&rsquo;s any good. Built by a
               high schooler who couldn&rsquo;t do either.
             </p>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>The wall</h2>
             <p>
               There&rsquo;s a moment that happens to a lot of curious teenagers.
@@ -92,20 +96,20 @@ export default function About() {
             </p>
             <p>
               So you close the tab. <b>That&rsquo;s the wall.</b> And the thing
-              about the wall is that it doesn&rsquo;t feel like a missing skill
-              — it feels like a verdict about you.
+              about the wall is that it doesn&rsquo;t feel like a missing skill.
+              It feels like a verdict about you.
             </p>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <div className="ab-pull">
               Reading a research paper is a learnable skill. Almost nobody
               teaches it before university, and that gap decides who gets to
               participate in science.
             </div>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>Why the existing tools make it worse</h2>
             <p>
               There are AI tools that will explain a paper to you. They&rsquo;re
@@ -113,11 +117,11 @@ export default function About() {
               dense passage, and they hand back a simpler version.
             </p>
             <p>
-              That sounds helpful. It&rsquo;s actually the problem. A tool that
-              makes papers <b>easier to believe</b> is training the single most
-              dangerous habit in science — accepting a claim because someone
-              explained it confidently. You finish with an answer and no new
-              ability. Next paper, same wall.
+              That sounds helpful. It&rsquo;s the problem. A tool that makes
+              papers <b>easier to believe</b> trains the most dangerous habit in
+              science, which is accepting a claim because someone explained it
+              confidently. You finish with an answer and no new ability. Next
+              paper, same wall.
             </p>
             <div className="ab-cmp">
               <div className="ab-c bad">
@@ -131,23 +135,22 @@ export default function About() {
               <div className="ab-c good">
                 <div className="h">What FirstPaper does</div>
                 <p>
-                  Teaches you the moves — read it, check you got it, then
+                  Teaches you the moves: read it, check you got it, then
                   interrogate whether it holds up. The skill transfers to every
                   paper you ever open.
                 </p>
               </div>
             </div>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>The bet</h2>
             <p>
               FirstPaper is built on a claim that comprehension is the easy
-              half. The rarer, more valuable skill is <b>judgement</b>: knowing
-              whether the sample was big enough, whether a correlation got
-              dressed up as a cause, whether the conclusion outran the data,
-              whether the funder happens to sell the thing the paper
-              recommends.
+              half. The rarer skill is <b>judgement</b>: knowing whether the
+              sample was big enough, whether a correlation got dressed up as a
+              cause, whether the conclusion outran the data, whether the funder
+              happens to sell the thing the paper recommends.
             </p>
             <p>
               That skill isn&rsquo;t only for scientists. It&rsquo;s what stands
@@ -155,9 +158,9 @@ export default function About() {
               a study, a viral claim with a real-looking chart. Learning it on a
               genetics paper is just the cleanest place to practise.
             </p>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>How it works</h2>
             <div className="ab-steps">
               {steps.map((s) => (
@@ -170,9 +173,9 @@ export default function About() {
                 </div>
               ))}
             </div>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>Three reading levels</h2>
             <p>
               <b>Explorer</b> is plain language for a curious middle schooler.{" "}
@@ -182,17 +185,17 @@ export default function About() {
             </p>
             <p>
               You pick, and you can change it mid-paper. The paper itself never
-              changes — only the help does. That matters: you&rsquo;re always
+              changes, only the help does. That matters: you&rsquo;re always
               reading the real thing, never a watered-down version of it.
             </p>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>Why it tells you it might be wrong</h2>
             <p>
-              A tool whose entire subject is accuracy has no business pretending
-              to be infallible. The explanations here are generated with care
-              and checked, but they can be mistaken.
+              A tool whose whole subject is accuracy has no business pretending
+              to be infallible. The explanations here are written with care and
+              checked, and they can still be wrong.
             </p>
             <p>
               So FirstPaper says so, on every page, and links every section to
@@ -200,9 +203,9 @@ export default function About() {
               you finish a paper here and never once opened the source,
               you&rsquo;ve learned less than you think.
             </p>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>Free, and staying that way</h2>
             <p>
               No account, no paywall, no ads. Every paper in the library is
@@ -211,12 +214,12 @@ export default function About() {
               the authors who did the work.
             </p>
             <p>
-              Charging teenagers for access to science would undercut the entire
+              Charging teenagers for access to science would undercut the whole
               point of building this.
             </p>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <h2>Who made it</h2>
             <p>
               A high school junior who hit this exact wall trying to read
@@ -224,16 +227,16 @@ export default function About() {
               and built the tool he wished had existed.
             </p>
             <p>
-              Which is also why the judging layer is the centre of the product
-              rather than an afterthought —{" "}
+              Which is also why the judging layer sits at the centre of the
+              product instead of being bolted on at the end.{" "}
               <b>
-                learning to be appropriately skeptical was the harder half, and
+                Learning to be appropriately skeptical was the harder half, and
                 nobody was teaching it.
               </b>
             </p>
-          </div>
+          </Rise>
 
-          <div className="ab-sec">
+          <Rise className="ab-sec">
             <div className="ab-kick">Questions</div>
             <div className="ab-faq">
               {faq.map((item) => (
@@ -243,15 +246,15 @@ export default function About() {
                 </div>
               ))}
             </div>
-          </div>
+          </Rise>
 
-          <div style={{ maxWidth: 760 }}>
-            <Link className="btn pri lg" href="/library">
-              Read your first paper →
-            </Link>
-          </div>
+          <Rise style={{ maxWidth: 720 }}>
+            <BtnLink href="/library" variant="pri lg" icon="→">
+              Read your first paper
+            </BtnLink>
+          </Rise>
         </div>
-      </div>
+      </main>
     </>
   );
 }

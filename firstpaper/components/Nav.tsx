@@ -5,7 +5,7 @@ type NavProps = {
   /** Dark treatment — used on landing and paper pages, light everywhere else. */
   dark?: boolean;
   /** Which nav link reads as current. */
-  active?: "library" | "about" | "start";
+  active?: "library" | "about";
   /** Paper-page HUD (progress bar, XP/bonus chips) rendered in place of the links. */
   hud?: ReactNode;
 };
@@ -17,29 +17,34 @@ export default function Nav({ dark = false, active, hud }: NavProps) {
         <Link className="brand" href="/">
           First<span className="p">Paper</span>
         </Link>
+
         {hud ? (
           <div className="hud on">{hud}</div>
         ) : (
-          <div className="nav-links">
-            <Link
-              className={active === "library" ? "nlink on" : "nlink"}
-              href="/library"
-            >
-              Library
+          <>
+            <div className="nav-links">
+              <Link
+                className={`nlink hide-xs${active === "library" ? " on" : ""}`}
+                href="/library"
+                aria-current={active === "library" ? "page" : undefined}
+              >
+                <span>Library</span>
+              </Link>
+              <Link
+                className={`nlink${active === "about" ? " on" : ""}`}
+                href="/about"
+                aria-current={active === "about" ? "page" : undefined}
+              >
+                <span>About</span>
+              </Link>
+            </div>
+            <Link className="ncta" href="/library">
+              <span className="lbl">Start reading</span>
+              <span className="ic" aria-hidden="true">
+                →
+              </span>
             </Link>
-            <Link
-              className={active === "about" ? "nlink on" : "nlink"}
-              href="/about"
-            >
-              About
-            </Link>
-            <Link
-              className={active === "start" ? "nlink on" : "nlink"}
-              href="/library"
-            >
-              Start reading
-            </Link>
-          </div>
+          </>
         )}
       </div>
     </nav>

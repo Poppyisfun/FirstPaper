@@ -20,35 +20,41 @@ function SkillLine({ entry }: { entry: LibraryEntry }) {
 
 export default function PaperCard({ entry }: { entry: LibraryEntry }) {
   const ref = useRef<HTMLDivElement>(null);
+  const frame = useRef<number | null>(null);
 
-  // Feeds the radial-gradient sheen in .pc::after.
+  // Feeds the radial sheen in .pc-in::after, throttled to one write per frame.
   function trackGlow(e: MouseEvent<HTMLElement>) {
     const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+    if (!el || frame.current !== null) return;
+    const { clientX, clientY } = e;
+
+    frame.current = requestAnimationFrame(() => {
+      frame.current = null;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty("--mx", `${clientX - r.left}px`);
+      el.style.setProperty("--my", `${clientY - r.top}px`);
+    });
   }
 
   const body = (
-    <>
+    <div className="pc-in">
       <div className="pc-top">
         <span className={`tp ${topicClass[entry.topic]}`}>{entry.topic}</span>
         <span className="tier">{entry.tier}</span>
       </div>
-      <div className="pc-t">{entry.title}</div>
-      <div className="pc-s">
+      <h2 className="pc-t">{entry.title}</h2>
+      <p className="pc-s">
         <b>You&rsquo;ll practise:</b> <SkillLine entry={entry} />
-      </div>
+      </p>
       <div className="pc-f">
         <span>
-          <span className="dotst" />
+          <span className={entry.live ? "dotst live" : "dotst"} />
           {entry.live ? "Not started" : "Coming soon"}
         </span>
         <span>{entry.minutes} min</span>
         <span className="xpb">&#9670; {entry.xp} XP</span>
       </div>
-    </>
+    </div>
   );
 
   if (!entry.live) {
@@ -63,8 +69,8 @@ export default function PaperCard({ entry }: { entry: LibraryEntry }) {
     <div ref={ref} className="pc" onMouseMove={trackGlow}>
       <Link
         href={`/paper/${entry.slug}`}
-        className="absolute inset-0 z-1"
-        aria-label={entry.title}
+        className="absolute inset-0 z-1 rounded-[26px]"
+        aria-label={`${entry.title} — ${entry.tier} level, ${entry.minutes} minutes`}
       />
       {body}
     </div>

@@ -24,19 +24,34 @@ prefers-reduced-motion.
   on every learning screen. It is part of the product, not a footnote.
 
 ### Design system
+Source of truth is the `:root` block in app/globals.css. Tailwind tokens are
+mapped onto those same CSS variables via `@theme inline`, so never redefine a
+colour in one place only.
+
 Colors (semantic — use consistently):
-- bg #F4F6F2 · surface #FFFFFF · ink #1B2430 · ink-soft #55606E · line #E3E6DF
-- GREEN #0F7B5F = comprehension / "read" / passing a check (soft #E5F1EB, line #BFE0D2)
-- AMBER #B26B12 = scrutiny / "judge" / a flaw to notice (soft #F8EDD9, line #E9CE9E)
-- RED #B23A3A = a failed evaluation check, verdict only (soft #F7E4E1)
+- bg #FAF9F6 · surface #FFFFFF · ink #0A0E14 · ink-2 #28323D · soft #68737F
+- line #E6E4DC · line-2 #F0EEE7
+- GREEN #0B7A5C = comprehension / "read" / passing a check (soft #E3F1EA, line #B4DCCB)
+- AMBER #A9640D = scrutiny / "judge" / a flaw to notice (soft #FAEDD7, line #E8CB97)
+- VIOLET #5B4BD6 = the game layer: XP, wagers, badges (soft #EDEAFC, line #CCC4F5)
+- BLUE #22557E = figures and figure explanations (soft #E5EEF6, line #BFD4E5)
+- RED #AE3636 = a failed evaluation check, verdict only (soft #F8E4E1)
 Green always means "here's what it says"; amber always means "here's what to question."
 
-Fonts (via next/font/google):
-- Space Grotesk — all UI, headings, buttons, labels
-- Newsreader (serif) — reading content only: paper excerpts and "Read" explanations
+Fonts (via next/font/google, all variable):
+- Fraunces — display: hero, section titles, stat numbers. Set the axes with
+  --fv-xl / --fv-lg / --fv-sm; WONK 1 is what gives it its character.
+- Bricolage Grotesque — all UI: nav, buttons, labels, body chrome
+- Literata — reading content only: paper excerpts and "Read" explanations
+- Geist Mono — eyebrows, tags, HUD chips, numeric readouts
 
-Feel: generous whitespace, rounded cards (14–16px), one clear action per screen,
-calm and legible like a reading app — not a dashboard.
+Motion: Motion (framer-motion v13) drives everything. Use the shared primitives
+in components/motion-primitives.tsx (Rise, Stagger, RiseItem, springSoft,
+springSnappy) rather than hand-rolling variants, so timing stays consistent and
+prefers-reduced-motion is handled in one place.
+
+Feel: generous whitespace, nested "double-bezel" cards (26px outer / 20px inner),
+one clear action per screen, calm and legible like a reading app — not a dashboard.
 
 ### Pages
 - /                       landing
