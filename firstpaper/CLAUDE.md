@@ -90,3 +90,12 @@ You MAY NOT change, without me explicitly asking:
 6. The honesty notice, the CC-BY attribution, or the link to the original paper.
 
 If a content change seems necessary, say so and ask. Do not make it silently.
+## Paper content rules
+content/papers/** holds paper data. Two tiers:
+- LOCKED, never edit: the `t`, `h`, `cap` and `meta` fields. These are the
+  authors' published text reproduced verbatim under CC-BY.
+- EDITABLE ON REQUEST ONLY: `n` notes, quiz, judge, feedback, takeaways,
+  `x` figure explainers, `plain`. This is FirstPaper's teaching copy.
+Run `node scripts/verify-content.js` after touching this folder.
+The paper page itself (app/paper/**) is freely editable for design, layout,
+animation and UX — but not for content or flow order.

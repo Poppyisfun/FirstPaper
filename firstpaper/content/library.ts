@@ -1,3 +1,5 @@
+import { getPaper } from "@/content/papers";
+
 export type Topic = "Genetics" | "Evolution" | "Medicine" | "Ecology";
 export type Tier = "Explorer" | "Reader" | "Critic";
 
@@ -11,7 +13,10 @@ export const topicClass: Record<Topic, string> = {
 
 export type LibraryEntry = {
   slug: string;
-  /** false = listed but not yet built; card is disabled and unclickable. */
+  /**
+   * Derived, never hand-set: true when content/papers has a file for this
+   * slug. A card with no paper behind it is disabled and unclickable.
+   */
   live: boolean;
   topic: Topic;
   tier: Tier;
@@ -27,10 +32,13 @@ export type LibraryEntry = {
   xp: number;
 };
 
-export const LIBRARY: LibraryEntry[] = [
+/**
+ * Catalogue rows. `slug` must match the paper's own slug once one is built —
+ * that match is what makes the card live and what /paper/[slug] resolves.
+ */
+const ENTRIES: Omit<LibraryEntry, "live">[] = [
   {
-    slug: "engineered-proteins-dna-breakage",
-    live: true,
+    slug: "dna-breakage-gamgfp",
     topic: "Genetics",
     tier: "Reader",
     title:
@@ -42,7 +50,6 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     slug: "gene-variant-sleep-timing",
-    live: false,
     topic: "Genetics",
     tier: "Explorer",
     title:
@@ -54,7 +61,6 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     slug: "finch-beak-morphology-drought",
-    live: false,
     topic: "Evolution",
     tier: "Explorer",
     title: "Beak morphology shifts in a finch population after a drought season",
@@ -64,7 +70,6 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     slug: "supplement-cognitive-performance-trial",
-    live: false,
     topic: "Medicine",
     tier: "Critic",
     title:
@@ -75,7 +80,6 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     slug: "soil-microbiome-grassland",
-    live: false,
     topic: "Ecology",
     tier: "Reader",
     title: "Soil microbiome diversity across restored and undisturbed grassland",
@@ -85,7 +89,6 @@ export const LIBRARY: LibraryEntry[] = [
   },
   {
     slug: "crispr-off-target-sequencing",
-    live: false,
     topic: "Genetics",
     tier: "Critic",
     title: "CRISPR off-target effects measured by whole-genome sequencing",
@@ -94,6 +97,20 @@ export const LIBRARY: LibraryEntry[] = [
     xp: 440,
   },
 ];
+
+/**
+ * One source of truth: a row is live only if a paper file backs its slug, and
+ * a built paper's title comes from its own locked metadata rather than being
+ * retyped here, so the two can never drift.
+ */
+export const LIBRARY: LibraryEntry[] = ENTRIES.map((entry) => {
+  const paper = getPaper(entry.slug);
+  return {
+    ...entry,
+    live: paper !== undefined,
+    title: paper?.meta.title ?? entry.title,
+  };
+});
 
 export const FILTERS = [
   "All papers",

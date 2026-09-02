@@ -437,3 +437,54 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .reveal{opacity:1;transform:none;filter:none}
   .hero .spot{display:none}
 }
+
+/* ══ PAPER — static reading view ═══════════════════════════════════════════
+   Long-form reading surface. Deliberately quiet: no parallax, no scroll
+   scrubbing, nothing moving behind the authors' text. */
+@layer components{
+  .pp{max-width:760px;margin:0 auto;padding:8px 0 80px}
+
+  .pp-head{padding-bottom:34px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+  .pp-t{font-family:var(--rd);font-size:clamp(26px,3.6vw,38px);line-height:1.24;font-weight:600;
+    letter-spacing:-.014em;margin:0 0 16px}
+  .pp-authors{font-size:13.5px;line-height:1.66;color:var(--soft);margin:0 0 22px}
+
+  .pp-meta{display:flex;flex-wrap:wrap;gap:10px 40px;margin:0 0 22px}
+  .pp-meta dt{font-family:var(--mo);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--soft);margin-bottom:5px}
+  .pp-meta dd{margin:0;font-size:14px;color:var(--ink)}
+  .pp-meta a{color:var(--green);text-decoration:none;border-bottom:1px solid var(--green-l)}
+  .pp-meta a:hover{border-bottom-color:var(--green)}
+
+  .pp-licence{font-size:12px;line-height:1.62;color:var(--soft);margin:0;
+    background:var(--bg);border:1px dashed var(--line);border-radius:14px;padding:14px 16px}
+
+  .pp-sec{padding:38px 0;border-bottom:1px solid var(--line-2)}
+  .pp-sec:last-child{border-bottom:0}
+  .pp-sn{display:flex;align-items:baseline;gap:12px;font-family:var(--disp);
+    font-variation-settings:var(--fv-sm);font-size:26px;font-weight:500;letter-spacing:-.01em;
+    margin:0 0 20px;line-height:1.2}
+  .pp-sn-i{font-family:var(--mo);font-size:10px;letter-spacing:.14em;color:var(--green);
+    font-variation-settings:normal}
+
+  .pp-para{margin-bottom:20px}
+  .pp-para:last-child{margin-bottom:0}
+  .pp-para p{font-family:var(--rd);font-size:17px;line-height:1.82;color:var(--ink-2);margin:0}
+  .pp-h{font-family:var(--mo);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--green);margin:26px 0 10px}
+
+  /* Resting state. The highlighter only lights up later, when Judge unlocks. */
+  .pp-para mark,.pp-para mark.t{background:transparent;color:inherit;padding:0 1.5px;border-radius:3px}
+
+  .pp-fig{margin:30px 0 4px;padding:var(--r-pad);border-radius:var(--r-out);
+    background:var(--blue-s);border:1px solid var(--blue-l)}
+  .pp-fig img{display:block;border-radius:var(--r-in);background:#fff;border:1px solid var(--blue-l)}
+  .pp-fig figcaption{font-size:13px;line-height:1.66;color:#1B384F;padding:14px 12px 8px}
+  .pp-fig figcaption b{color:var(--blue)}
+
+  @media(max-width:860px){
+    .pp{padding-bottom:56px}
+    .pp-sec{padding:30px 0}
+    .pp-para p{font-size:16.5px;line-height:1.78}
+  }
+}
