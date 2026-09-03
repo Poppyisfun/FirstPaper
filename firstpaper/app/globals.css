@@ -491,24 +491,26 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   /* ══ INTRO ══ */
   .intro{max-width:900px;margin:0 auto}
   .intro-head{margin-bottom:40px}
-  .intro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:34px}
-  .ic{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--sh1)}
-  .ic-h{font-family:var(--mo);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+  .intro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;margin-bottom:38px}
+  .icard{display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);
+    border-radius:18px;padding:24px;box-shadow:var(--sh1);position:relative;overflow:hidden}
+  .icard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green)}
+  .icard-h{font-family:var(--mo);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
     color:var(--green);margin:0 0 12px;font-weight:500}
-  .ic p{font-size:14px;line-height:1.66;color:var(--ink-2);margin:0}
-  .ic-list{margin:0;padding-left:16px;font-size:14px;line-height:1.72;color:var(--ink-2)}
-  .ic-list li{margin-bottom:4px}
+  .icard p{font-size:14px;line-height:1.66;color:var(--ink-2);margin:0}
+  .icard-list{margin:0;padding-left:16px;font-size:14px;line-height:1.72;color:var(--ink-2)}
+  .icard-list li{margin-bottom:4px}
 
   /* The green-dot explainer — the most important block on the intro. */
   .dot-x{background:var(--green-s);border:1px solid var(--green-l);border-left:3px solid var(--green);
     border-radius:0 20px 20px 0;padding:28px 30px;margin-bottom:34px}
-  .dot-x-top{display:flex;gap:18px;align-items:flex-start;margin-bottom:16px}
+  .dot-x-top{display:flex;gap:20px;align-items:center;margin-bottom:18px}
   .dot-x-h{font-family:var(--disp);font-variation-settings:var(--fv-sm);font-size:24px;font-weight:500;
     margin:0 0 8px;letter-spacing:-.01em}
   .dot-x p{font-size:14.5px;line-height:1.7;color:#0F3C31;margin:0 0 14px}
-  .dot-demo{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
-    background:#fff;border:1.5px solid var(--green);color:var(--green);font-weight:700;font-size:15px;
-    animation:bob 2.4s ease-in-out infinite}
+  .dot-demo{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+    background:#fff;border:2px solid var(--green);color:var(--green);font-weight:700;font-size:19px;
+    box-shadow:0 0 0 6px rgba(11,122,92,.13);animation:bob 2.4s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
   .dot-x-list{margin:0 0 16px;padding-left:18px;font-size:14.5px;line-height:1.74;color:#0F3C31}
   .dot-x-list b.g{color:var(--green)}
@@ -540,10 +542,10 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .rp-t:focus{outline:none}
 
   .sheet{background:var(--surf);border:1px solid var(--line);border-radius:20px;
-    box-shadow:var(--sh2);padding:36px 36px 30px}
+    box-shadow:var(--sh2);padding:38px 38px 32px 54px}
 
-  .rp-row{display:grid;grid-template-columns:minmax(0,1fr) 268px;gap:28px;align-items:start;
-    margin-bottom:22px}
+  .rp-row{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:34px;align-items:start;
+    margin-bottom:30px}
   .rp-main{min-width:0}
   .rp-para{position:relative}
   .rp-para p{font-family:var(--rd);font-size:17px;line-height:1.78;color:var(--ink-2);margin:0;
@@ -551,14 +553,28 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .rp-main.resolved .rp-para p{color:var(--ink)}
 
   /* Green dot — help that asks you to try first. */
-  .dot{position:absolute;left:-29px;top:3px;width:21px;height:21px;border-radius:50%;
-    border:1.5px solid var(--green-l);background:var(--green-s);color:var(--green);
-    font-size:11px;font-weight:700;display:grid;place-items:center;padding:0;line-height:1;
-    transition:transform .22s var(--ez),background .22s var(--ez),border-color .22s var(--ez)}
-  .dot:hover:not(:disabled){transform:scale(1.25)}
-  .dot:disabled{cursor:default}
-  .dot.read{background:var(--green);color:#fff;border-color:var(--green)}
-  .dot.solo{background:#fff;border-color:var(--violet);color:var(--violet)}
+  .dot{position:absolute;left:-38px;top:0;width:28px;height:28px;border-radius:50%;
+    border:2px solid var(--green);background:#fff;color:var(--green);
+    font-size:14px;font-weight:700;display:grid;place-items:center;padding:0;line-height:1;
+    box-shadow:0 0 0 4px var(--green-s);
+    transition:transform .22s var(--ez),background .22s var(--ez),box-shadow .22s var(--ez)}
+  /* Hovering anywhere on the paragraph lights its dot, so the pairing is obvious. */
+  .rp-row:hover .dot:not(:disabled){box-shadow:0 0 0 7px var(--green-s)}
+  .dot:hover:not(:disabled){transform:scale(1.16);background:var(--green);color:#fff}
+  .dot:disabled{cursor:default;box-shadow:none}
+
+  /* Tooltip reuses the button's own accessible name — no new copy. */
+  .dot::after{content:attr(data-hint);position:absolute;left:50%;bottom:calc(100% + 9px);
+    transform:translateX(-50%) translateY(4px);white-space:nowrap;z-index:5;
+    background:var(--ink);color:#fff;font-family:var(--ui);font-size:11.5px;font-weight:600;
+    letter-spacing:0;text-transform:none;padding:6px 11px;border-radius:8px;
+    box-shadow:var(--sh2);opacity:0;pointer-events:none;
+    transition:opacity .2s var(--ez),transform .2s var(--ez)}
+  .dot:hover:not(:disabled)::after,.dot:focus-visible::after{opacity:1;transform:translateX(-50%)}
+
+  /* Resolved: filled, so a glance down the margin shows what you did. */
+  .dot.read{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 0 0 4px var(--green-s)}
+  .dot.solo{background:var(--violet);color:#fff;border-color:var(--violet);box-shadow:0 0 0 4px var(--violet-s)}
 
   /* The highlighter sweep — the one richly animated beat in the reader. */
   .rp-para mark,.rp-para mark.t{background:transparent;border-radius:3px;padding:0 1.5px;
@@ -581,7 +597,10 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .tb.solo{background:var(--violet);color:#fff;border-color:var(--violet)}
 
   /* The note — green, comprehension. */
-  .rp-margin{min-width:0}
+  /* A faint notebook rule so the margin reads as a designed space, not a void. */
+  .rp-margin{min-width:0;position:relative}
+  .rp-margin::before{content:"";position:absolute;left:-17px;top:2px;bottom:2px;width:1px;
+    background:repeating-linear-gradient(180deg,var(--line) 0 3px,transparent 3px 9px);opacity:.75}
   .note{background:var(--green-s);border:1px solid var(--green-l);border-left:3px solid var(--green);
     border-radius:0 12px 12px 0;padding:14px 16px;font-family:var(--rd);font-size:14px;
     line-height:1.66;color:#0F3C31;margin:0}
@@ -724,10 +743,13 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 
   /* ── Mobile: margin notes collapse inline, dot moves into the flow ── */
   @media(max-width:900px){
-    .rp-row{grid-template-columns:1fr;gap:0}
-    .rp-para{padding-left:28px}
-    .dot{left:0}
-    .note{margin-top:12px}
+    .rp-row{grid-template-columns:1fr;gap:0;margin-bottom:24px}
+    .rp-para{padding-left:38px}
+    .dot{left:0;top:-1px}
+    .dot::after{left:0;transform:translateX(0) translateY(4px)}
+    .dot:hover:not(:disabled)::after,.dot:focus-visible::after{transform:translateX(0)}
+    .rp-margin::before{display:none}
+    .note{margin-top:14px}
     .sheet{padding:22px 18px}
     .rp-bar{top:66px;border-radius:18px;padding:10px 12px}
     .dot-x{padding:22px 20px}

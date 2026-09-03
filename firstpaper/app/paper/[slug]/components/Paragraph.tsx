@@ -57,6 +57,7 @@ export default function Paragraph({
             onClick={onOpenPrompt}
             disabled={resolved}
             aria-label="Explain this paragraph"
+            data-hint="Explain this paragraph"
             aria-expanded={promptOpen}
           >
             {state === "solo" ? "✓" : state === "peek" ? "◆" : "?"}

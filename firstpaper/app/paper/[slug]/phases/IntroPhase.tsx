@@ -31,17 +31,17 @@ export default function IntroPhase({
       </header>
 
       <div className="intro-grid">
-        <section className="ic">
-          <h2 className="ic-h">What makes this different</h2>
+        <section className="icard">
+          <h2 className="icard-h">What makes this different</h2>
           <p>
             Every other AI tool makes papers easier to <b>believe</b>. This
             teaches you to <b>judge</b> whether a paper deserves believing.
           </p>
         </section>
 
-        <section className="ic">
-          <h2 className="ic-h">What you&rsquo;ll actually do</h2>
-          <ul className="ic-list">
+        <section className="icard">
+          <h2 className="icard-h">What you&rsquo;ll actually do</h2>
+          <ul className="icard-list">
             <li>
               <b>Read</b> — the paper itself, section by section.
             </li>
@@ -57,9 +57,9 @@ export default function IntroPhase({
           </ul>
         </section>
 
-        <section className="ic">
-          <h2 className="ic-h">What you&rsquo;ll walk away able to do</h2>
-          <ul className="ic-list">
+        <section className="icard">
+          <h2 className="icard-h">What you&rsquo;ll walk away able to do</h2>
+          <ul className="icard-list">
             <li>Read a verb as a hedge</li>
             <li>Say what a control is for</li>
             <li>Spot a small sample, and what rescues it</li>
@@ -108,7 +108,7 @@ export default function IntroPhase({
       </section>
 
       <section className="intro-tier">
-        <h2 className="ic-h">Choose your reading level</h2>
+        <h2 className="icard-h">Choose your reading level</h2>
         <TierDial tier={tier} onChange={onTier} size="full" idPrefix="intro" />
       </section>
 
