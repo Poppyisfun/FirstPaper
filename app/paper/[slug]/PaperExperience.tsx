@@ -15,6 +15,7 @@ import {
   type Phase,
   type Wager,
 } from "@/lib/scoring";
+import { allObservations, collectedObservations } from "@/lib/observations";
 import ProgressHUD from "./components/ProgressHUD";
 import type { ParaState } from "./components/Paragraph";
 import IntroPhase from "./phases/IntroPhase";
@@ -51,11 +52,40 @@ export default function PaperExperience({ paper }: { paper: Paper }) {
   /** The bonus is banked once, so revisiting the gate cannot pay twice. */
   const [banked, setBanked] = useState(0);
   const [hasBanked, setHasBanked] = useState(false);
+  /** Consecutive reveals, reset by any "I've got it". Drives the level nudge. */
+  const [revealStreak, setRevealStreak] = useState(0);
+  const [nudgeOff, setNudgeOff] = useState(false);
 
   const totalParas = useMemo(
     () => paper.sections.reduce((a, s) => a + s.paras.length, 0),
     [paper],
   );
+
+  /* Marked phrases live in the paper text already; these surface the ones the
+     reader has earned by resolving the paragraph around them. */
+  const marks = useMemo(() => allObservations(paper), [paper]);
+  const observations = useMemo(
+    () => collectedObservations(marks, (k) => solo.has(k) || peek.has(k)),
+    [marks, solo, peek],
+  );
+
+  const resolvedIn = useCallback(
+    (s: number) => {
+      const n = paper.sections[s]?.paras.length ?? 0;
+      let count = 0;
+      for (let p = 0; p < n; p++) {
+        const key = `${s}-${p}`;
+        if (solo.has(key) || peek.has(key)) count++;
+      }
+      return count;
+    },
+    [paper, solo, peek],
+  );
+
+  /* Only ever offer a level below the current one, and only after three
+     reveals in a row. Never applied automatically. */
+  const nudgeTier: Tier | null =
+    !nudgeOff && revealStreak >= 3 && tier !== "e" ? (tier === "c" ? "r" : "e") : null;
 
   /* Move focus to the new heading so keyboard and screen-reader users are not
      stranded at the top of an apparently unchanged document. */
@@ -84,6 +114,7 @@ export default function PaperExperience({ paper }: { paper: Paper }) {
       return next;
     });
     setXp((v) => floor0(v + SOLO_XP));
+    setRevealStreak(0);
     setPromptKey(null);
   }, []);
 
@@ -96,6 +127,7 @@ export default function PaperExperience({ paper }: { paper: Paper }) {
     });
     // Costs the insight bonus only. Never XP, never below zero.
     setBonus((v) => floor0(v - PEEK_COST));
+    setRevealStreak((v) => v + 1);
     setPromptKey(null);
   }, []);
 
@@ -190,6 +222,8 @@ export default function PaperExperience({ paper }: { paper: Paper }) {
     setEarned(new Set());
     setBanked(0);
     setHasBanked(false);
+    setRevealStreak(0);
+    setNudgeOff(false);
   }
 
   const label =
@@ -261,6 +295,16 @@ export default function PaperExperience({ paper }: { paper: Paper }) {
               onSolo={markSolo}
               onPeek={markPeek}
               tally={tally}
+              resolvedIn={resolvedIn}
+              observations={observations}
+              nudgeTier={nudgeTier}
+              onAcceptNudge={() => {
+                if (nudgeTier) setTier(nudgeTier);
+                setRevealStreak(0);
+              }}
+              onDismissNudge={() => setNudgeOff(true)}
+              anyResolved={solo.size + peek.size > 0}
+              onJumpSection={(s) => setSec(s)}
               onBack={() => setSec((v) => Math.max(0, v - 1))}
               onNext={() => {
                 if (sec < paper.sections.length - 1) setSec((v) => v + 1);
@@ -299,6 +343,7 @@ export default function PaperExperience({ paper }: { paper: Paper }) {
               onWager={setWager}
               onChoose={answerJudge}
               onNext={nextJudge}
+              observations={observations}
             />
           )}
 

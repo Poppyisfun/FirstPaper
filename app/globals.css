@@ -528,60 +528,20 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     color:var(--soft);margin:16px 0 0}
 
   /* ══ READ ══ */
-  .read{max-width:1080px;margin:0 auto}
-  .rp-bar{position:sticky;top:74px;z-index:60;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-    padding:10px 14px;margin-bottom:26px;border-radius:99px;
-    background:rgba(250,249,246,.86);backdrop-filter:blur(14px);border:1px solid var(--line);
-    box-shadow:var(--sh1)}
-  .rp-tally{margin-left:auto;font-family:var(--mo);font-size:9.5px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--soft);white-space:nowrap}
 
-  .rp-head{margin-bottom:20px}
   .rp-t{font-family:var(--disp);font-variation-settings:var(--fv-lg);font-size:clamp(26px,3.4vw,34px);
     font-weight:400;letter-spacing:-.016em;margin:6px 0 0;line-height:1.12}
   .rp-t:focus{outline:none}
 
-  .sheet{background:var(--surf);border:1px solid var(--line);border-radius:20px;
-    box-shadow:var(--sh2);padding:38px 38px 32px 54px}
 
-  .rp-row{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:34px;align-items:start;
-    margin-bottom:30px}
-  .rp-main{min-width:0}
-  .rp-para{position:relative}
-  .rp-para p{font-family:var(--rd);font-size:17px;line-height:1.78;color:var(--ink-2);margin:0;
-    transition:color .3s var(--ez)}
-  .rp-main.resolved .rp-para p{color:var(--ink)}
-
-  /* Green dot — help that asks you to try first. */
-  .dot{position:absolute;left:-38px;top:0;width:28px;height:28px;border-radius:50%;
-    border:2px solid var(--green);background:#fff;color:var(--green);
-    font-size:14px;font-weight:700;display:grid;place-items:center;padding:0;line-height:1;
-    box-shadow:0 0 0 4px var(--green-s);
-    transition:transform .22s var(--ez),background .22s var(--ez),box-shadow .22s var(--ez)}
-  /* Hovering anywhere on the paragraph lights its dot, so the pairing is obvious. */
-  .rp-row:hover .dot:not(:disabled){box-shadow:0 0 0 7px var(--green-s)}
-  .dot:hover:not(:disabled){transform:scale(1.16);background:var(--green);color:#fff}
-  .dot:disabled{cursor:default;box-shadow:none}
-
-  /* Tooltip reuses the button's own accessible name — no new copy. */
-  .dot::after{content:attr(data-hint);position:absolute;left:50%;bottom:calc(100% + 9px);
-    transform:translateX(-50%) translateY(4px);white-space:nowrap;z-index:5;
-    background:var(--ink);color:#fff;font-family:var(--ui);font-size:11.5px;font-weight:600;
-    letter-spacing:0;text-transform:none;padding:6px 11px;border-radius:8px;
-    box-shadow:var(--sh2);opacity:0;pointer-events:none;
-    transition:opacity .2s var(--ez),transform .2s var(--ez)}
-  .dot:hover:not(:disabled)::after,.dot:focus-visible::after{opacity:1;transform:translateX(-50%)}
-
-  /* Resolved: filled, so a glance down the margin shows what you did. */
-  .dot.read{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 0 0 4px var(--green-s)}
-  .dot.solo{background:var(--violet);color:#fff;border-color:var(--violet);box-shadow:0 0 0 4px var(--violet-s)}
 
   /* The highlighter sweep — the one richly animated beat in the reader. */
+  .rp-para.resolved mark,.rp-para.resolved mark.t{
+    background:var(--hl);box-shadow:0 0 0 2px var(--hl)}
   .rp-para mark,.rp-para mark.t{background:transparent;border-radius:3px;padding:0 1.5px;
     color:inherit;box-shadow:0 0 0 0 transparent;
     transition:background .55s var(--ez),box-shadow .55s var(--ez)}
-  .rp-main.resolved .rp-para mark,.rp-main.resolved .rp-para mark.t{
-    background:var(--hl);box-shadow:0 0 0 2px var(--hl)}
+
 
   /* Think prompt — violet, because it belongs to the game layer. */
   .think{background:var(--violet-s);border:1px solid var(--violet-l);border-left:3px solid var(--violet);
@@ -596,16 +556,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .tb:hover{transform:translateY(-1px)}
   .tb.solo{background:var(--violet);color:#fff;border-color:var(--violet)}
 
-  /* The note — green, comprehension. */
-  /* A faint notebook rule so the margin reads as a designed space, not a void. */
-  .rp-margin{min-width:0;position:relative}
-  .rp-margin::before{content:"";position:absolute;left:-17px;top:2px;bottom:2px;width:1px;
-    background:repeating-linear-gradient(180deg,var(--line) 0 3px,transparent 3px 9px);opacity:.75}
-  .note{background:var(--green-s);border:1px solid var(--green-l);border-left:3px solid var(--green);
-    border-radius:0 12px 12px 0;padding:14px 16px;font-family:var(--rd);font-size:14px;
-    line-height:1.66;color:#0F3C31;margin:0}
-  .note b{display:block;font-family:var(--mo);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
-    color:var(--green);margin-bottom:7px;font-weight:500}
 
   .fig-x{background:rgba(255,255,255,.86);border-left:3px solid var(--blue);border-radius:0 12px 12px 0;
     padding:14px 16px;margin-top:12px;font-size:13.5px;line-height:1.68;color:#1B384F}
@@ -743,14 +693,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 
   /* ── Mobile: margin notes collapse inline, dot moves into the flow ── */
   @media(max-width:900px){
-    .rp-row{grid-template-columns:1fr;gap:0;margin-bottom:24px}
-    .rp-para{padding-left:38px}
-    .dot{left:0;top:-1px}
-    .dot::after{left:0;transform:translateX(0) translateY(4px)}
-    .dot:hover:not(:disabled)::after,.dot:focus-visible::after{transform:translateX(0)}
-    .rp-margin::before{display:none}
-    .note{margin-top:14px}
-    .sheet{padding:22px 18px}
     .rp-bar{top:66px;border-radius:18px;padding:10px 12px}
     .dot-x{padding:22px 20px}
     .px-src{margin-left:0}
@@ -770,4 +712,233 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .dial-b.on{background:var(--green);border-radius:99px}
   .dot-demo{animation:none}
   .fly{animation:none;opacity:0}
+}
+
+/* ══ READING LAYOUT v2 ═════════════════════════════════════════════════════
+   The sheet is a single centred measure. Nothing is reserved for notes: a
+   revealed note is lifted into the right-hand gutter by CSS, so the text
+   column never reflows and the default state has matching whitespace on both
+   sides. Below the rail breakpoint the same node simply stays inline. */
+@layer components{
+  .read{max-width:1240px;margin:0 auto}
+
+  .sheet{background:var(--surf);border:1px solid var(--line);border-radius:20px;
+    box-shadow:var(--sh2);padding:38px 0 32px}
+
+  /* The measure. --gut is the dot gutter, mirrored on the right so the text
+     block is optically centred rather than merely centred-then-indented. */
+  .rp-col{--gut:44px;
+    width:100%;max-width:calc(66ch + var(--gut) * 2);margin:0 auto;
+    padding-left:var(--gut);padding-right:var(--gut);
+    box-sizing:border-box}
+
+  /* Everything in the column shares one left edge. */
+  .rp-head{margin:0 0 24px}
+  .rp-block{margin-bottom:30px}
+  .rp-block:last-of-type{margin-bottom:0}
+
+  .rp-para{position:relative}
+  .rp-para p{font-family:var(--rd);font-size:17px;line-height:1.78;color:var(--ink-2);margin:0;
+    transition:color .3s var(--ez),background .3s var(--ez)}
+  .rp-para.resolved p{color:var(--ink)}
+  /* Hovering the paragraph warms it slightly; the text stays selectable. */
+  .rp-para:hover p{background:rgba(11,122,92,.035);
+    box-shadow:0 0 0 6px rgba(11,122,92,.035);border-radius:3px}
+
+  /* ── The dot ── */
+  .dot-wrap{position:absolute;left:calc(var(--gut,44px) * -1);top:1px;
+    display:flex;align-items:center;gap:8px;z-index:3}
+  .dot{position:relative;width:28px;height:28px;flex:none;border-radius:50%;
+    border:2px solid var(--green);background:#fff;color:var(--green);
+    font-size:14px;font-weight:700;display:grid;place-items:center;padding:0;line-height:1;
+    box-shadow:0 0 0 4px var(--green-s);
+    transition:transform .2s var(--ez),background .2s var(--ez),box-shadow .2s var(--ez)}
+  .rp-para:hover .dot:not(:disabled){transform:scale(1.12);box-shadow:0 0 0 7px var(--green-s)}
+  .dot:hover:not(:disabled){background:var(--green);color:#fff}
+  .dot:disabled{cursor:default;box-shadow:none}
+  .dot.read{background:var(--green);color:#fff;border-color:var(--green)}
+  .dot.solo{background:var(--violet);color:#fff;border-color:var(--violet)}
+
+  /* Three iterations then stop; only the first unresolved dot ever gets it. */
+  .dot.pulse{animation:dotpulse 2.4s var(--ez) 3}
+  @keyframes dotpulse{
+    0%,100%{box-shadow:0 0 0 4px var(--green-s)}
+    50%{box-shadow:0 0 0 11px rgba(11,122,92,.16)}}
+
+  /* "Stuck?" label — pointer devices only, so touch never gets a stuck tip. */
+  .dot-lbl{display:none;font-family:var(--ui);font-size:11.5px;font-weight:700;
+    color:var(--green);background:var(--green-s);border:1px solid var(--green-l);
+    padding:3px 9px;border-radius:99px;white-space:nowrap;
+    opacity:0;transform:translateX(-4px);pointer-events:none;
+    transition:opacity .15s var(--ez),transform .15s var(--ez)}
+  @media(hover:hover){
+    .dot-lbl{display:block}
+    .dot:hover+.dot-lbl,.dot:focus-visible+.dot-lbl{opacity:1;transform:none}
+  }
+
+  /* First-run coach-mark, amber because it is a nudge, not comprehension. */
+  .coach{position:absolute;left:0;top:38px;width:230px;z-index:6;
+    background:var(--amber-s);border:1px solid var(--amber-l);border-radius:12px;
+    padding:12px 30px 12px 13px;font-family:var(--ui);font-size:12.5px;line-height:1.5;
+    color:#5C3A08;box-shadow:var(--sh2)}
+  .coach::before{content:"";position:absolute;left:9px;top:-6px;width:10px;height:10px;
+    background:var(--amber-s);border-left:1px solid var(--amber-l);border-top:1px solid var(--amber-l);
+    transform:rotate(45deg)}
+  .coach-x{position:absolute;top:6px;right:7px;border:0;background:none;color:inherit;
+    font-size:12px;line-height:1;padding:4px;border-radius:6px;opacity:.65}
+  .coach-x:hover{opacity:1}
+
+  /* ── The note, lifted into the right gutter on wide viewports ── */
+  .note{background:var(--green-s);border:1px solid var(--green-l);border-left:3px solid var(--green);
+    border-radius:0 12px 12px 0;padding:14px 16px;font-family:var(--rd);font-size:14px;
+    line-height:1.66;color:#0F3C31;margin:14px 0 0}
+  .note b{display:block;font-family:var(--mo);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--green);margin-bottom:7px;font-weight:500}
+
+  @media(min-width:1080px){
+    .note{position:absolute;left:calc(100% + 34px);top:0;width:260px;margin:0;
+      border-radius:12px;border-left-width:3px}
+  }
+
+  /* ── Figures ── */
+  .fig-open{display:block;width:100%;padding:0;border:0;background:none;position:relative;
+    cursor:zoom-in;border-radius:var(--r-in);overflow:hidden}
+  .fig-open img{display:block;border-radius:var(--r-in);background:#fff;border:1px solid var(--blue-l)}
+  .fig-chip{position:absolute;right:10px;bottom:10px;font-family:var(--mo);font-size:9px;
+    letter-spacing:.12em;text-transform:uppercase;background:rgba(10,14,20,.78);color:#fff;
+    padding:6px 10px;border-radius:99px;backdrop-filter:blur(4px);
+    transition:background .2s var(--ez)}
+  .fig-open:hover .fig-chip{background:var(--blue)}
+
+  /* ── Reading bar ── */
+  .rp-barwrap{position:sticky;top:74px;z-index:60;margin-bottom:26px}
+  .rp-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:10px 14px;border-radius:99px;
+    background:rgba(250,249,246,.88);backdrop-filter:blur(14px);border:1px solid var(--line);
+    box-shadow:var(--sh1)}
+  .bar-b{font-family:var(--mo);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+    background:var(--surf);border:1px solid var(--line);color:var(--soft);
+    padding:8px 12px;border-radius:99px;white-space:nowrap;
+    transition:color .2s var(--ez),border-color .2s var(--ez),background .2s var(--ez)}
+  .bar-b:hover:not(:disabled){color:var(--ink);border-color:var(--soft)}
+  .bar-b.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .bar-b:disabled{opacity:.45;cursor:default}
+  .obs-chip.on,.obs-chip:not(:disabled){color:var(--violet);border-color:var(--violet-l)}
+  .obs-chip.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+  .rp-tally{margin-left:auto;font-family:var(--mo);font-size:9.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--soft);white-space:nowrap}
+
+  /* ── Section map ── */
+  .smap{margin-top:8px;background:var(--surf);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--sh2);padding:8px;max-height:min(52vh,420px);overflow:auto}
+  .smap ul{list-style:none;margin:0;padding:0}
+  .smap-r{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+    background:none;border:0;padding:9px 11px;border-radius:10px;
+    transition:background .18s var(--ez)}
+  .smap-r:hover{background:var(--bg)}
+  .smap-r.on{background:var(--green-s)}
+  .smap-i{font-family:var(--mo);font-size:9px;letter-spacing:.1em;color:var(--green)}
+  .smap-n{font-size:13.5px;color:var(--ink);flex:1;min-width:0}
+  .smap-c{font-family:var(--mo);font-size:9px;letter-spacing:.08em;color:var(--soft)}
+
+  /* ── Observations ── */
+  .obs{margin-top:8px;background:var(--surf);border:1px solid var(--violet-l);border-radius:16px;
+    box-shadow:var(--sh2);padding:16px 18px;max-height:min(56vh,460px);overflow:auto}
+  .obs.judge{border-color:var(--amber-l)}
+  .obs-top{display:flex;gap:12px;align-items:flex-start}
+  .obs-h{font-size:12.5px;line-height:1.6;color:var(--soft);margin:0;flex:1}
+  .obs-x{border:0;background:none;color:var(--soft);font-size:13px;padding:2px 6px;border-radius:6px}
+  .obs-x:hover{color:var(--ink)}
+  .obs-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+  .obs-item{display:block;width:100%;text-align:left;background:var(--violet-s);
+    border:1px solid var(--violet-l);border-radius:11px;padding:11px 13px;
+    transition:transform .18s var(--ez)}
+  .obs-item:hover:not(.static){transform:translateX(3px)}
+  .obs-item.static{cursor:default}
+  .obs .judge .obs-item,.obs.judge .obs-item{background:var(--amber-s);border-color:var(--amber-l)}
+  .obs-sec{display:block;font-family:var(--mo);font-size:8.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--violet);margin-bottom:5px}
+  .obs.judge .obs-sec{color:var(--amber)}
+  .obs-p{display:block;font-family:var(--rd);font-size:13.5px;line-height:1.55;color:var(--ink)}
+  .judge-obs{max-width:780px;margin:0 auto 18px}
+
+  /* ── Level nudge ── */
+  .nudge{margin-top:8px;background:var(--green-s);border:1px solid var(--green-l);
+    border-radius:16px;padding:15px 17px;box-shadow:var(--sh1)}
+  .nudge p{font-size:13.5px;line-height:1.62;color:#0F3C31;margin:0 0 12px}
+  .nudge-row{display:flex;gap:8px;flex-wrap:wrap}
+  .nudge .tb{border-color:var(--green-l);color:var(--green)}
+  .nudge .tb.solo{background:var(--green);color:#fff;border-color:var(--green)}
+
+  .keytip{position:relative;margin:8px 0 0;font-family:var(--mo);font-size:9px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--soft);
+    background:var(--surf);border:1px dashed var(--line);border-radius:99px;
+    padding:8px 34px 8px 14px}
+  .keytip-x{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    border:0;background:none;color:var(--soft);font-size:11px;padding:4px;border-radius:6px}
+
+  /* ── Shortcuts overlay ── */
+  .keys{position:fixed;right:24px;bottom:24px;z-index:120;width:min(340px,calc(100vw - 48px));
+    background:var(--surf);border:1px solid var(--line);border-radius:18px;
+    box-shadow:var(--sh3);padding:18px 20px}
+  .keys-h{position:relative;font-family:var(--mo);font-size:9.5px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--green);margin-bottom:14px;padding-right:24px}
+  .keys dl{margin:0;display:flex;flex-direction:column;gap:9px}
+  .keys dl>div{display:flex;gap:14px;align-items:baseline}
+  .keys dt{font-family:var(--mo);font-size:10px;color:var(--ink);background:var(--bg);
+    border:1px solid var(--line);border-radius:6px;padding:4px 8px;white-space:nowrap;min-width:96px}
+  .keys dd{margin:0;font-size:13px;color:var(--soft);line-height:1.5}
+
+  /* ── Figure lightbox ── */
+  .lb{position:fixed;inset:0;z-index:200;background:rgba(6,9,13,.86);
+    backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px}
+  .lb-panel{display:flex;flex-direction:column;width:min(1240px,100%);height:min(92vh,100%);
+    background:var(--surf);border-radius:20px;overflow:hidden;box-shadow:var(--sh3)}
+  .lb-bar{display:flex;align-items:center;gap:12px;padding:12px 14px;
+    border-bottom:1px solid var(--line);background:var(--bg);flex:none}
+  .lb-n{font-family:var(--mo);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+  .lb-zoom{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .lb-b{font-family:var(--mo);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    background:var(--surf);border:1px solid var(--line);color:var(--ink);
+    padding:6px 11px;border-radius:99px;min-width:34px}
+  .lb-b:hover{border-color:var(--soft)}
+  .lb-pct{font-family:var(--mo);font-size:10px;color:var(--soft);min-width:46px;text-align:center}
+  .lb-x{width:34px;height:34px;border-radius:99px;border:1px solid var(--line);
+    background:var(--surf);color:var(--ink);font-size:14px;line-height:1}
+  .lb-x:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .lb-stage{flex:1;min-height:0;overflow:hidden;display:grid;place-items:center;
+    background:#0E141B;touch-action:none}
+  .lb-stage img{max-width:100%;max-height:100%;width:auto;height:auto;
+    -webkit-user-select:none;user-select:none}
+  .lb-read{flex:none;max-height:32vh;overflow:auto;padding:16px 20px;
+    border-top:1px solid var(--line);background:var(--blue-s)}
+  .lb-cap{font-family:var(--rd);font-size:13.5px;line-height:1.68;color:#1B384F}
+  .lb-cap b{color:var(--blue)}
+  .lb-x-note{margin-top:0}
+  .lb-x{flex:none}
+  .lb-read .lb-x{all:unset}
+  .lb-read>.lb-x{display:block;background:rgba(255,255,255,.86);border-left:3px solid var(--blue);
+    border-radius:0 12px 12px 0;padding:13px 15px;margin-top:12px;
+    font-size:13.5px;line-height:1.68;color:#1B384F}
+  .lb-read>.lb-x b{color:var(--blue)}
+
+  /* ── Mobile ── */
+  @media(max-width:900px){
+    .rp-col{--gut:28px}
+    .sheet{padding:22px 0}
+    .rp-barwrap{top:66px}
+    .rp-bar{border-radius:18px;padding:10px 12px}
+    .rp-tally{margin-left:0;width:100%}
+    .coach{width:min(230px,calc(100vw - 90px))}
+    .keys{right:12px;left:12px;bottom:12px;width:auto}
+    .lb{padding:0}
+    .lb-panel{height:100%;border-radius:0}
+    .lb-read{max-height:38vh}
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .dot.pulse{animation:none}
+  .note,.obs,.smap,.nudge{transition:none!important}
+  .rp-para:hover p{background:none;box-shadow:none}
 }

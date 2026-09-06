@@ -1,6 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import type { Paper } from "@/lib/types";
+import type { Observation } from "@/lib/observations";
+import ObservationsPanel from "../components/ObservationsPanel";
 import type { Wager } from "@/lib/scoring";
 import QuestionCard from "../components/QuestionCard";
 
@@ -13,6 +16,7 @@ export default function JudgePhase({
   onWager,
   onChoose,
   onNext,
+  observations,
 }: {
   paper: Paper;
   idx: number;
@@ -21,9 +25,12 @@ export default function JudgePhase({
   onWager: (w: Wager) => void;
   onChoose: (i: number) => void;
   onNext: () => void;
+  /** Carried in from the reading phase, so flagged phrases stay consultable. */
+  observations: Observation[];
 }) {
   const total = paper.judge.length;
   const last = idx === total - 1;
+  const [obsOpen, setObsOpen] = useState(false);
 
   return (
     <div className="qwrap">
@@ -39,6 +46,24 @@ export default function JudgePhase({
             />
           ))}
         </div>
+      </div>
+
+      <div className="judge-obs">
+        <button
+          type="button"
+          className={obsOpen ? "bar-b obs-chip on" : "bar-b obs-chip"}
+          onClick={() => setObsOpen((v) => !v)}
+          aria-expanded={obsOpen}
+        >
+          &#9670; {observations.length} observation
+          {observations.length === 1 ? "" : "s"} from your reading
+        </button>
+        <ObservationsPanel
+          open={obsOpen}
+          items={observations}
+          onClose={() => setObsOpen(false)}
+          variant="judge"
+        />
       </div>
 
       <QuestionCard
