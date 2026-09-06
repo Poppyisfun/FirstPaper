@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Node CommonJS build script, not application code.
     "scripts/**",
+    // Design/content source material kept alongside the app, not built.
+    "refrence/**",
   ]),
 ]);
 
