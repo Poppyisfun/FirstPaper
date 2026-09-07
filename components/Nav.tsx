@@ -5,7 +5,7 @@ type NavProps = {
   /** Dark treatment — used on landing and paper pages, light everywhere else. */
   dark?: boolean;
   /** Which nav link reads as current. */
-  active?: "library" | "about";
+  active?: "library" | "about" | "account";
   /** Paper-page HUD (progress bar, XP/bonus chips) rendered in place of the links. */
   hud?: ReactNode;
 };
@@ -31,11 +31,18 @@ export default function Nav({ dark = false, active, hud }: NavProps) {
                 <span>Library</span>
               </Link>
               <Link
-                className={`nlink${active === "about" ? " on" : ""}`}
+                className={`nlink hide-xs${active === "about" ? " on" : ""}`}
                 href="/about"
                 aria-current={active === "about" ? "page" : undefined}
               >
                 <span>About</span>
+              </Link>
+              <Link
+                className={`nlink${active === "account" ? " on" : ""}`}
+                href="/account"
+                aria-current={active === "account" ? "page" : undefined}
+              >
+                <span>Account</span>
               </Link>
             </div>
             <Link className="ncta" href="/library">

@@ -16,7 +16,7 @@ export default function DemoStrip() {
 
   return (
     <div className="demo">
-      <div className="demo-l">Try it · one line from a real study</div>
+      <div className="demo-l">Try it. One sentence from a real study.</div>
 
       <div className="demo-shell">
         <div className="demo-card">
@@ -68,11 +68,10 @@ export default function DemoStrip() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: EZ, delay: 0.28 }}
               >
-                <b>The verb doesn&rsquo;t match the design.</b> They measured a{" "}
-                <i>correlation</i> — two things lining up. But
-                &ldquo;drives&rdquo; claims a <i>cause</i>, and nothing in a
-                study built like this can carry that word. Once you start
-                reading verbs this way you can&rsquo;t stop. That&rsquo;s the
+                The verb does not match the evidence. The study found a
+                pattern, two things lining up. But the word drives claims a
+                cause. A study like this cannot support that word. Once you
+                start reading verbs this way, you cannot stop. That is the
                 whole skill.
               </motion.div>
             )}

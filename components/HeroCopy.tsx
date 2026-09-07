@@ -36,19 +36,19 @@ export default function HeroCopy() {
     >
       <motion.div className="eyebrow" variants={v}>
         <i aria-hidden="true" />
-        Science literacy · built by a high schooler
+        For anyone who has opened a research paper and closed it again
       </motion.div>
 
       <motion.h1 className="big" variants={v}>
-        Learn to read the science — and <em>judge</em> whether it&rsquo;s any
-        good.
+        Read any research paper. Understand it. Know if you can{" "}
+        <em>trust</em> it.
       </motion.h1>
 
       <motion.p className="lede" variants={v}>
-        Every other tool makes research papers easier to believe. FirstPaper
-        makes you better at deciding whether to. You read a real paper, section
-        by section, at your level. Then you learn to find what&rsquo;s weak in
-        it.
+        Research papers are where real knowledge lives. Almost nobody is taught
+        how to read them. FirstPaper walks you through a real paper, explains
+        every part in plain words, and shows you how to judge whether the
+        science holds up.
       </motion.p>
 
       <motion.div className="cta-row" variants={v}>
@@ -56,7 +56,7 @@ export default function HeroCopy() {
           Read your first paper
         </BtnLink>
         <BtnAnchor href="#how" variant="lg ghost">
-          How it works
+          See how it works
         </BtnAnchor>
       </motion.div>
     </motion.div>

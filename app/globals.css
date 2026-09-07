@@ -942,3 +942,107 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .note,.obs,.smap,.nudge{transition:none!important}
   .rp-para:hover p{background:none;box-shadow:none}
 }
+
+/* ══ HOME PAGE ═════════════════════════════════════════════════════════════
+   Sections read top to bottom as one argument, so the rhythm alternates light
+   and dark rather than stacking cards. Phase colours match the paper itself:
+   green comprehension, amber scrutiny, violet the game layer. */
+@layer components{
+
+  /* Prose inside the dark strips. */
+  .strip-prose{position:relative;z-index:1;max-width:62ch}
+  .skick.on-dark{background:rgba(95,204,168,.12);border-color:rgba(95,204,168,.28);color:#8FE3C2}
+  .strip-h{font-family:var(--disp);font-variation-settings:var(--fv-lg);
+    font-size:clamp(27px,3.8vw,38px);line-height:1.12;font-weight:400;letter-spacing:-.018em;
+    margin:0 0 20px;color:#fff}
+  .strip-prose p{font-size:16px;line-height:1.75;color:#A9B7C2;margin:0 0 16px}
+  .strip-prose p:last-child{margin:0}
+
+  /* ── What you get ── */
+  .gains{display:flex;flex-direction:column;gap:12px;max-width:760px}
+  .gain{display:flex;gap:16px;align-items:flex-start;
+    background:var(--surf);border:1px solid var(--line);border-radius:16px;
+    padding:20px 22px;box-shadow:var(--sh1);
+    transition:transform .45s var(--ez),box-shadow .45s var(--ez)}
+  .gain:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+  .gain-c{flex:none;width:26px;height:26px;border-radius:99px;display:grid;place-items:center;
+    background:var(--green-s);border:1px solid var(--green-l);color:var(--green);
+    font-size:12px;font-weight:700;margin-top:2px}
+  .gain p{margin:0;font-size:16.5px;line-height:1.6;color:var(--ink)}
+
+  /* ── The journey ── */
+  .jrn{position:relative;display:flex;flex-direction:column;gap:4px;max-width:820px}
+  /* The connecting line sits behind the markers and stops at the last one. */
+  .jrn::before{content:"";position:absolute;left:21px;top:26px;bottom:38px;width:2px;
+    background:linear-gradient(180deg,var(--green-l),var(--amber-l) 62%,var(--violet-l));
+    opacity:.6}
+  .jrn-step{display:flex;gap:22px;align-items:flex-start;padding:14px 0;position:relative}
+  .jrn-m{flex:none;width:44px;height:44px;border-radius:99px;display:grid;place-items:center;
+    font-family:var(--mo);font-size:14px;font-weight:700;background:var(--surf);
+    border:2px solid var(--line);color:var(--soft);position:relative;z-index:1;
+    box-shadow:0 0 0 5px var(--bg)}
+  .jrn-m.g{border-color:var(--green);color:var(--green);background:var(--green-s)}
+  .jrn-m.a{border-color:var(--amber);color:var(--amber);background:var(--amber-s)}
+  .jrn-m.v{border-color:var(--violet);color:var(--violet);background:var(--violet-s)}
+  .jrn-b{padding-top:4px;min-width:0}
+  .jrn-t{font-family:var(--disp);font-variation-settings:var(--fv-sm);font-size:23px;
+    font-weight:500;letter-spacing:-.008em;margin:0 0 8px;line-height:1.2}
+  .jrn-b p{margin:0;font-size:15.5px;line-height:1.7;color:var(--soft);max-width:60ch}
+
+  /* ── XP and bonus ── */
+  .xpg{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:34px;align-items:start}
+  .xp-col{display:flex;flex-direction:column;gap:12px}
+  .xp-b{background:var(--surf);border:1px solid var(--line);border-left:3px solid var(--line);
+    border-radius:0 16px 16px 0;padding:20px 22px;box-shadow:var(--sh1)}
+  .xp-b.v{border-left-color:var(--violet);background:var(--violet-s);border-color:var(--violet-l)}
+  .xp-b.a{border-left-color:var(--amber);background:var(--amber-s);border-color:var(--amber-l)}
+  .xp-b h3{font-family:var(--mo);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+    margin:0 0 10px;color:var(--soft);font-weight:500}
+  .xp-b.v h3{color:var(--violet)}
+  .xp-b.a h3{color:var(--amber)}
+  .xp-b p{margin:0;font-size:14.5px;line-height:1.7;color:var(--ink-2)}
+
+  /* Rank ladder, lowest rung at the bottom. */
+  .ladder{position:sticky;top:96px}
+  .ladder ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;
+    align-items:stretch;gap:0}
+  .ladder li{display:flex;flex-direction:column;align-items:center}
+  .rung{width:100%;background:var(--surf);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;text-align:center;box-shadow:var(--sh1);
+    transition:transform .4s var(--ez),box-shadow .4s var(--ez)}
+  .rung:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+  .rung-n{display:block;font-family:var(--disp);font-variation-settings:var(--fv-sm);
+    font-size:20px;font-weight:500;letter-spacing:-.008em;color:var(--ink)}
+  .rung.on{background:var(--violet-s);border-color:var(--violet-l);box-shadow:var(--sh2)}
+  .rung.on .rung-n{color:var(--violet)}
+  .rung-tag{display:block;font-family:var(--mo);font-size:8.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--violet);margin-top:6px}
+  /* Chevron between rungs. Never a hyphen. */
+  .rung-c{display:block;color:var(--violet-l);font-size:15px;line-height:1;padding:7px 0}
+
+  /* ── Account ── */
+  .acct{background:var(--violet-s);border:1px solid var(--violet-l);border-radius:var(--r-out);
+    padding:clamp(28px,4.4vw,44px);max-width:820px;margin:0 auto;text-align:center}
+  .acct .skick{background:#fff;border-color:var(--violet-l);color:var(--violet)}
+  .acct .stitle{margin-bottom:14px}
+  .acct p{font-size:16px;line-height:1.72;color:#3A2E9E;margin:0 auto 26px;max-width:56ch}
+  .acct-page{max-width:720px;margin:0 auto;text-align:center;padding-top:28px}
+  .acct-page .ssub{margin:0 auto;max-width:54ch}
+  .acct-cta{margin-top:30px}
+
+  /* ── Final call ── */
+  .final{text-align:center}
+  .final .ssub{margin:0 auto;max-width:46ch}
+  .final-cta{margin-top:30px}
+
+  @media(max-width:900px){
+    .xpg{grid-template-columns:1fr;gap:24px}
+    .ladder{position:static}
+    .jrn::before{left:17px}
+    .jrn-m{width:36px;height:36px;font-size:12.5px}
+    .jrn-step{gap:16px}
+    .jrn-t{font-size:20px}
+    .gain{padding:17px 18px;gap:13px}
+    .gain p{font-size:15.5px}
+  }
+}
