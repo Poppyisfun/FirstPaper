@@ -1046,3 +1046,137 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     .gain p{font-size:15.5px}
   }
 }
+
+/* ══ THE READER ════════════════════════════════════════════════════════════
+   The core screen. Someone sits here for twenty minutes, so everything that
+   is not the paper or the explanation is deliberately quiet.
+
+   The serif/sans split is the information architecture: Literata is the
+   scientists, Bricolage is us. Green belongs to the explanation and appears
+   nowhere else on this screen. No cards, no shadows, one hairline. */
+@layer components{
+
+  /* A real scale for this screen, rather than numbers scattered inline. */
+  .rd{
+    --rd-paper: 17px;        /* the paper's own words            */
+    --rd-paper-lh: 1.7;
+    --rd-expl: 15px;         /* our explanation                  */
+    --rd-expl-lh: 1.62;
+    --rd-ui: 13px;           /* buttons and controls             */
+    --rd-meta: 10px;         /* counts, section name, bonus      */
+    --rd-measure: 62ch;      /* never wider; long lines lose people */
+    --rd-gap: clamp(28px, 5vw, 72px);
+
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+
+  /* ── Header ── */
+  .rd-head{position:sticky;top:0;z-index:40;background:rgba(250,249,246,.92);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .rd-head-in{max-width:1180px;margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+
+  .rd-where{display:flex;align-items:baseline;gap:16px;min-width:0;flex-wrap:wrap}
+  .rd-back{font-family:var(--ui);font-size:var(--rd-meta);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--soft);text-decoration:none;white-space:nowrap}
+  .rd-back:hover{color:var(--ink)}
+  .rd-count{font-family:var(--mo);font-size:var(--rd-meta);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink);white-space:nowrap}
+  .rd-sec{font-family:var(--ui);font-size:12.5px;color:var(--soft);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .rd-controls{display:flex;align-items:center;gap:14px;margin-left:auto}
+  .rd-bonus{font-family:var(--mo);font-size:var(--rd-meta);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--soft);white-space:nowrap}
+  .rd-bonus-n{color:var(--ink);font-weight:700}
+
+  .rd-levels{display:inline-flex;gap:2px;padding:3px;border-radius:99px;
+    border:1px solid var(--line);background:var(--surf)}
+  .rd-lvl{border:0;background:none;border-radius:99px;padding:6px 13px;
+    font-family:var(--ui);font-size:12px;font-weight:600;color:var(--soft);
+    transition:color .2s var(--ez),background .2s var(--ez)}
+  .rd-lvl:hover{color:var(--ink)}
+  .rd-lvl.on{background:var(--ink);color:#fff}
+
+  /* Thin, and neutral: the only colour on this screen is the explanation. */
+  .rd-bar{height:2px;background:var(--line-2)}
+  .rd-bar i{display:block;height:100%;background:var(--ink);
+    transition:width .35s var(--ez)}
+
+  /* ── Body ── */
+  .rd-body{flex:1;width:100%;max-width:1180px;margin:0 auto;
+    padding:clamp(34px,6vw,64px) 24px clamp(40px,6vw,72px);
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,26rem);
+    gap:var(--rd-gap);align-items:start}
+
+  /* The serif is set on the container too, so the ch unit in --rd-measure
+     resolves against the font the reader actually sees. Inheriting the sans
+     here silently widened the column by three characters. */
+  .rd-paper{min-width:0;font-family:var(--rd);font-size:var(--rd-paper);
+    max-width:var(--rd-measure)}
+  .rd-paper p{font-family:var(--rd);font-size:var(--rd-paper);
+    line-height:var(--rd-paper-lh);color:var(--ink);margin:0;
+    text-wrap:pretty}
+  /* The paper's own emphasis and highlights, left alone. */
+  .rd-paper mark{background:transparent;color:inherit;padding:0}
+
+  .rd-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+  .rd-act{font-family:var(--ui);font-size:var(--rd-ui);font-weight:600;
+    padding:10px 18px;border-radius:99px;border:1px solid var(--line);
+    background:var(--surf);color:var(--ink);
+    transition:border-color .2s var(--ez),color .2s var(--ez)}
+  .rd-act:hover:not(:disabled){border-color:var(--soft)}
+  .rd-act:disabled{color:var(--soft);cursor:default}
+  .rd-act-explain{color:var(--soft)}
+  .rd-act-explain:hover:not(:disabled){color:var(--ink)}
+
+  /* ── Explanation. The hairline, and the only colour. ── */
+  .rd-expl{min-width:0;position:relative;padding-left:var(--rd-gap);
+    border-left:1px solid var(--line)}
+  .rd-expl-in{border-left:2px solid var(--green);padding-left:16px}
+  .rd-expl-t{font-family:var(--ui);font-size:var(--rd-expl);
+    line-height:var(--rd-expl-lh);color:#0F3C31;margin:0}
+  .rd-expl-note{font-family:var(--ui);font-size:11.5px;line-height:1.5;
+    color:var(--soft);margin:12px 0 0}
+  .rd-expl-idle{font-family:var(--ui);font-size:13.5px;line-height:1.6;
+    color:var(--soft);margin:0;max-width:34ch}
+
+  .rd-honest{font-family:var(--ui);font-size:11.5px;line-height:1.6;
+    color:var(--soft);margin:30px 0 0;padding-top:18px;
+    border-top:1px dashed var(--line)}
+  .rd-honest b{color:var(--ink);font-weight:600}
+
+  /* ── Footer ── */
+  .rd-foot{border-top:1px solid var(--line);background:var(--surf)}
+  .rd-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:16px 24px;max-width:1180px;margin:0 auto;width:100%}
+  .rd-nav{font-family:var(--ui);font-size:var(--rd-ui);font-weight:600;
+    padding:9px 16px;border-radius:99px;border:1px solid var(--line);
+    background:var(--bg);color:var(--ink);
+    transition:border-color .2s var(--ez)}
+  .rd-nav:hover:not(:disabled){border-color:var(--soft)}
+  .rd-nav:disabled{color:var(--soft);cursor:default;opacity:.55}
+  .rd-orig{margin:0 auto;font-family:var(--ui);font-size:12.5px;
+    color:var(--soft);text-decoration:none;text-align:center}
+  .rd-orig:hover{color:var(--ink);text-decoration:underline}
+
+  /* ── Mobile: stack, paper first, hairline becomes a rule above us ── */
+  @media(max-width:900px){
+    .rd-body{grid-template-columns:1fr;gap:34px;padding-top:28px}
+    .rd-paper{max-width:100%}
+    .rd-expl{padding-left:0;border-left:0;padding-top:28px;
+      border-top:1px solid var(--line)}
+    .rd-head-in{padding:12px 16px;gap:12px}
+    .rd-controls{width:100%;margin-left:0;justify-content:space-between}
+    .rd-sec{width:100%}
+    .rd-foot{padding:14px 16px}
+    .rd-orig{order:3;width:100%;margin:4px 0 0}
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .rd-bar i{transition:none}
+}
