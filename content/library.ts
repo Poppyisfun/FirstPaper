@@ -1,7 +1,6 @@
 import { getAllPapers } from "@/lib/content";
 
 export type Topic = "Genetics" | "Evolution" | "Medicine" | "Ecology";
-export type Tier = "Explorer" | "Reader" | "Critic";
 
 /** Maps a topic to its pill colour class (see .tp.* in globals.css). */
 export const topicClass: Record<Topic, string> = {
@@ -13,118 +12,42 @@ export const topicClass: Record<Topic, string> = {
 
 export type LibraryEntry = {
   slug: string;
-  /**
-   * Derived, never hand-set: true when content/papers has a file for this
-   * slug. A card with no paper behind it is disabled and unclickable.
-   */
-  live: boolean;
   topic: Topic;
-  tier: Tier;
+  /** Reading level this paper is pitched at. */
+  level: string;
   title: string;
   /**
-   * The skill practised — never the verdict. A card must not reveal whether a
+   * The skill practised, never the verdict. A card must not reveal whether a
    * paper is flawed or what its flaw is; finding that out is the product.
-   * Supports one <b> emphasis, rendered via `skillEmphasis`.
    */
-  skill: string;
-  skillEmphasis?: string;
+  practiceGoal: string;
   minutes: number;
   xp: number;
 };
 
 /**
- * Catalogue rows. `slug` must match the paper's own slug once one is built —
- * that match is what makes the card live and what /paper/[slug] resolves.
+ * Topic is the one thing a paper file does not carry, because it describes the
+ * paper rather than how the library shelves it. Anything not listed here falls
+ * back to Genetics.
  */
-const ENTRIES: Omit<LibraryEntry, "live">[] = [
-  {
-    slug: "dna-breakage-gamgfp",
-    topic: "Genetics",
-    tier: "Reader",
-    title:
-      "Engineered proteins detect spontaneous DNA breakage in human and bacterial cells",
-    skill: "Tracing a claim back to the experiment that earned it, and reading what a control is for",
-    skillEmphasis: "for",
-    minutes: 18,
-    xp: 350,
-  },
-  {
-    slug: "gene-variant-sleep-timing",
-    topic: "Genetics",
-    tier: "Explorer",
-    title:
-      "A single gene variant and its association with self-reported sleep timing",
-    skill: "Telling a correlation from a cause when the authors blur them",
-    skillEmphasis: "correlation",
-    minutes: 12,
-    xp: 240,
-  },
-  {
-    slug: "finch-beak-morphology-drought",
-    topic: "Evolution",
-    tier: "Explorer",
-    title: "Beak morphology shifts in a finch population after a drought season",
-    skill: "Reading a figure before you read the conclusion",
-    minutes: 14,
-    xp: 260,
-  },
-  {
-    slug: "supplement-cognitive-performance-trial",
-    topic: "Medicine",
-    tier: "Critic",
-    title:
-      "A randomised trial of a dietary supplement on cognitive performance",
-    skill: "Finding who paid, and whether it shows in the conclusion",
-    minutes: 22,
-    xp: 420,
-  },
-  {
-    slug: "soil-microbiome-grassland",
-    topic: "Ecology",
-    tier: "Reader",
-    title: "Soil microbiome diversity across restored and undisturbed grassland",
-    skill: "Judging whether a sample really represents what it claims to",
-    minutes: 16,
-    xp: 300,
-  },
-  {
-    slug: "crispr-off-target-sequencing",
-    topic: "Genetics",
-    tier: "Critic",
-    title: "CRISPR off-target effects measured by whole-genome sequencing",
-    skill: "Spotting the limits an author states — and the ones they don't",
-    minutes: 24,
-    xp: 440,
-  },
-];
+const TOPICS: Record<string, Topic> = {
+  "crispr-human-cells": "Genetics",
+};
 
 /**
- * The catalogue, assembled from getAllPapers() plus the rows above.
- *
- * Everything the paper data knows comes from the paper data: which slugs are
- * real, and the exact title of each. A row is live only when getAllPapers()
- * returns a paper for its slug, so a card can never claim a paper that is not
- * there, and a built title can never drift from the authors' own metadata.
- *
- * The rows above still carry topic, tier, minutes, xp and skill. Those are
- * catalogue judgements with no equivalent in the paper files, so they cannot
- * be derived; a paper file describes the paper, not how it is shelved.
+ * The catalogue, built entirely from getAllPapers(). Every row is a paper that
+ * exists, so a card can never advertise something that is not there and a
+ * title can never drift from the paper's own metadata.
  */
-export const LIBRARY: LibraryEntry[] = (() => {
-  const built = new Map(getAllPapers().map((p) => [p.slug, p]));
-
-  return ENTRIES.map((entry) => {
-    const paper = built.get(entry.slug);
-    return {
-      ...entry,
-      live: paper !== undefined,
-      title: paper?.meta.title ?? entry.title,
-    };
-  });
-})();
-
-/** Catalogue rows that have a paper behind them, straight from getAllPapers(). */
-export const LIVE_LIBRARY: LibraryEntry[] = LIBRARY.filter((e) => e.live);
+export const LIBRARY: LibraryEntry[] = getAllPapers().map((paper) => ({
+  slug: paper.meta.slug,
+  topic: TOPICS[paper.meta.slug] ?? "Genetics",
+  level: paper.meta.level,
+  title: paper.meta.title,
+  practiceGoal: paper.meta.practiceGoal,
+  minutes: paper.meta.minutes,
+  xp: paper.meta.xp,
+}));
 
 export const FILTERS = [
   "All papers",
@@ -141,5 +64,5 @@ export type Filter = (typeof FILTERS)[number];
 
 export function matchesFilter(entry: LibraryEntry, filter: Filter): boolean {
   if (filter === "All papers") return true;
-  return entry.topic === filter || entry.tier === filter;
+  return entry.topic === filter || entry.level === filter;
 }

@@ -5,19 +5,6 @@ import { useRef } from "react";
 import type { MouseEvent } from "react";
 import { topicClass, type LibraryEntry } from "@/content/library";
 
-/** Renders the skill line with its one emphasised term, if the entry has one. */
-function SkillLine({ entry }: { entry: LibraryEntry }) {
-  if (!entry.skillEmphasis) return <>{entry.skill}</>;
-  const [before, ...rest] = entry.skill.split(entry.skillEmphasis);
-  return (
-    <>
-      {before}
-      <b>{entry.skillEmphasis}</b>
-      {rest.join(entry.skillEmphasis)}
-    </>
-  );
-}
-
 export default function PaperCard({ entry }: { entry: LibraryEntry }) {
   const ref = useRef<HTMLDivElement>(null);
   const frame = useRef<number | null>(null);
@@ -36,43 +23,30 @@ export default function PaperCard({ entry }: { entry: LibraryEntry }) {
     });
   }
 
-  const body = (
-    <div className="pc-in">
-      <div className="pc-top">
-        <span className={`tp ${topicClass[entry.topic]}`}>{entry.topic}</span>
-        <span className="tier">{entry.tier}</span>
-      </div>
-      <h2 className="pc-t">{entry.title}</h2>
-      <p className="pc-s">
-        <b>You&rsquo;ll practise:</b> <SkillLine entry={entry} />
-      </p>
-      <div className="pc-f">
-        <span>
-          <span className={entry.live ? "dotst live" : "dotst"} />
-          {entry.live ? "Not started" : "Coming soon"}
-        </span>
-        <span>{entry.minutes} min</span>
-        <span className="xpb">&#9670; {entry.xp} XP</span>
-      </div>
-    </div>
-  );
-
-  if (!entry.live) {
-    return (
-      <div ref={ref} className="pc soon" aria-disabled="true">
-        {body}
-      </div>
-    );
-  }
-
   return (
     <div ref={ref} className="pc" onMouseMove={trackGlow}>
+      {/* Reading starts at the first phase, not at a separate intro screen. */}
       <Link
-        href={`/paper/${entry.slug}`}
+        href={`/paper/${entry.slug}/read`}
         className="absolute inset-0 z-1 rounded-[26px]"
-        aria-label={`${entry.title} — ${entry.tier} level, ${entry.minutes} minutes`}
+        aria-label={`${entry.title} — ${entry.level} level, ${entry.minutes} minutes`}
       />
-      {body}
+      <div className="pc-in">
+        <div className="pc-top">
+          <span className={`tp ${topicClass[entry.topic]}`}>{entry.topic}</span>
+          <span className="tier">{entry.level}</span>
+        </div>
+        <h2 className="pc-t">{entry.title}</h2>
+        <p className="pc-s">{entry.practiceGoal}</p>
+        <div className="pc-f">
+          <span>
+            <span className="dotst live" />
+            Not started
+          </span>
+          <span>{entry.minutes} min</span>
+          <span className="xpb">&#9670; {entry.xp} XP</span>
+        </div>
+      </div>
     </div>
   );
 }
