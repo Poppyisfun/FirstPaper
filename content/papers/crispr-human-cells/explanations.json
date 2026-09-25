@@ -1,0 +1,82 @@
+{
+  "PMC3557905-s0-p0": {
+    "explorer": "",
+    "reader": "Cutting both strands of DNA at a chosen spot, a double-strand break, is how you edit a genome: the cell repairs the cut and you steer the repair. Two earlier tools did it, zinc-finger nucleases and TALENs, a nuclease being a protein that cuts DNA. Both needed a new protein built for every target, and both sometimes cut the wrong place.",
+    "critic": ""
+  },
+  "PMC3557905-s0-p1": {
+    "explorer": "",
+    "reader": "Bacteria defend themselves against viruses with a system called CRISPR, which stores scraps of invader DNA and destroys that DNA if it returns. One version needs a single protein, Cas9, to do the cutting. A short piece of RNA, a single-stranded relative of DNA, tells Cas9 where: a 20-letter guide sequence matching the target. Researchers had already simplified that guide into one piece, the sgRNA. That is what makes it useful. One protein plus one short RNA cuts DNA wherever you choose, provided the target sits beside a short landing signal called a PAM. Change the RNA, change the target. Whether any of it worked in human cells was still unknown.",
+    "critic": ""
+  },
+  "PMC3557905-s0-p2": {
+    "explorer": "",
+    "reader": "This is the authors saying what they will show. Cas9 can be made inside a human cell, reach the nucleus where the DNA sits, and pair with its guide RNA. Together they cut, and the cell patches the break by glueing the ends back together, often losing or adding a few letters. Nothing happens unless both parts are present. Treat it as a promise: the experiments that follow decide whether it holds.",
+    "critic": ""
+  },
+  "PMC3557905-s1-p0": {
+    "explorer": "",
+    "reader": "First they had to show the parts work at all. They picked one human gene, CLTA, to aim at, because an older tool had already been made to cut there, which gives them something to compare against. They put Cas9 into a line of human cells grown in the lab, tagged with a glowing green marker so they could see where it went, and with a short address label attached that tells the cell to carry it into the nucleus. Figure 1B shows it arriving there, and Figure 1A shows the protein is whole rather than chopped up. They then supplied the guide RNA: 20 letters that match the target, plus a folded tail Cas9 grips. Figure 1D shows the guide is made, and that more of it survives when Cas9 is present, which hints the two hold on to each other.",
+    "critic": ""
+  },
+  "PMC3557905-s1-p1": {
+    "explorer": "",
+    "reader": "Now the real question: does anything actually get cut? You cannot watch a cut happen, so they looked for its scar. When a cell repairs a double-strand break by glueing the ends together, it often loses or gains a few letters. They copied the target region from many cells, mixed the copies, and used an enzyme that only cuts where two strands fail to match. A signal means some copies differ from the rest, which means the site was cut and clumsily repaired. Figure 1E shows that signal. The older tool was run alongside as a positive control, so a blank result would have meant a broken experiment rather than a broken Cas9.",
+    "critic": ""
+  },
+  "PMC3557905-s1-p2": {
+    "explorer": "",
+    "reader": "Editing worked, but weakly, so they asked which ingredient was running short. They broke the cells open and gave the soup a piece of target DNA to cut. Soup from cells given only Cas9 did nothing. Add guide RNA made in a tube and it cut well (Figure 2A). Soup from cells given both did cut, and cut still harder when extra guide RNA was added on top (Figure 2B). That last result is the informative one. If Cas9 were the shortage, spare guide RNA would change nothing. It changed a lot, so the bottleneck is the guide RNA: either the cell makes too little, or too little of it gets loaded into Cas9.",
+    "critic": ""
+  },
+  "PMC3557905-s1-p3": {
+    "explorer": "",
+    "reader": "If loading the guide is the bottleneck, a guide that grips better should work better. They built two longer versions, adding 4 or 10 extra paired letters to the part Cas9 holds, plus five more letters at the end, copying the shape the bacterium uses naturally (Figure 3A). The longer guides cut more (Figure 3B). Note the authors' own hedge at the end: they say more careful measurement is needed before anyone treats this as settled. A gel showing a stronger band is a direction, not a measurement.",
+    "critic": ""
+  },
+  "PMC3557905-s2-p0": {
+    "explorer": "",
+    "reader": "Here they weigh up what they have. The honest number is 6 to 8 percent: out of every hundred copies of the target gene, six to eight carried an edit. That is lower than the older tool aimed at a nearby site, though inside the range those tools usually manage, so it is respectable rather than impressive. They repeat that the guide RNA, not Cas9, is the limit, and list untested ideas for fixing it: better guide design, more of it, protective caps on its ends. Those are proposals, not results. The claim worth watching is the last one. They argue their system is better because retargeting means rewriting a short RNA instead of engineering a new protein. That is a fair point about convenience, and they slide it next to efficiency numbers where they lose. Easier to aim is not the same as better at cutting.",
+    "critic": ""
+  },
+  "PMC3557905-s2-p1": {
+    "explorer": "",
+    "reader": "The closing paragraph reaches furthest. They suggest one cell could be given several guide RNAs at once, to hit one gene harder or many genes together, which would matter for studying whole genomes or building models of diseases caused by several genes. Read the phrase they include: not tested explicitly in this study. None of this was done here. It is a plausible next step written in the language of a finding.",
+    "critic": ""
+  },
+  "PMC3557905-s3-p0": {
+    "explorer": "",
+    "reader": "Building the tools. The bacterial Cas9 gene was rewritten letter by letter so human cells would read it efficiently, since the same protein can be spelled many ways and bacteria and humans favour different spellings. Three things were bolted on: a tag for detecting the protein, an address label sending it to the nucleus, and a glowing marker for seeing it. Each was ordered as synthetic DNA and slotted into rings of DNA that human cells will read from.",
+    "critic": ""
+  },
+  "PMC3557905-s3-p1": {
+    "explorer": "",
+    "reader": "Growing and treating the cells. They used HEK293T, a human cell line that grows reliably and takes up foreign DNA easily, which is why it is the standard choice for a first test. Cells were fed a nutrient broth at body temperature, then given the DNA rings using a reagent that ferries DNA across the cell membrane. They deliberately supplied four times more guide RNA DNA than Cas9 DNA. Between 30 and 90 percent of cells took it up, which matters: a low edit rate later could mean poor delivery rather than poor cutting. After two days the cells were burst open and the contents split for the tests that follow.",
+    "critic": ""
+  },
+  "PMC3557905-s3-p2": {
+    "explorer": "",
+    "reader": "Checking Cas9 is really there and whole. Proteins from burst cells were sorted by size on a gel, then stained with something that sticks to the tag they added. The right-sized band means success.",
+    "critic": ""
+  },
+  "PMC3557905-s3-p3": {
+    "explorer": "",
+    "reader": "How the edits were counted. They copied the target region from the cells' DNA, heated the copies until the strands separated, then let them cool so strands paired up at random. An edited strand pairing with an unedited one leaves a bulge, and the enzyme they add cuts only at bulges. Running that through a gel gives a cut band whose brightness, divided by total DNA, is the edit rate. The weakness is built in: this measures how much DNA looks mismatched, not what the edits were. So they also read individual copies letter by letter, by growing each one separately in bacteria first, which is how they knew exactly which letters were lost or gained.",
+    "critic": ""
+  },
+  "PMC3557905-s3-p4": {
+    "explorer": "",
+    "reader": "Making guide RNA in a tube, not in cells. Two DNA strands formed a template, an enzyme copied it into RNA, and a gel cleaned it up. This is the spare guide.",
+    "critic": ""
+  },
+  "PMC3557905-s3-p5": {
+    "explorer": "",
+    "reader": "Checking the guide RNA is present, and how much. Small RNAs were pulled out of the cells, sorted by size on a gel, and moved onto a membrane where they were fixed in place. A short radioactive DNA probe, built to stick only to the guide sequence, was washed over it. Wherever the probe stuck, the film darkens. This is the test behind the earlier claim that the guide survives better when Cas9 is around.",
+    "critic": ""
+  },
+  "PMC3557905-s3-p6": {
+    "explorer": "",
+    "reader": "The cut-in-a-tube test. Contents of burst cells were mixed with a ring of DNA carrying the target, held at body temperature for an hour, then cut with a second enzyme at a known spot. That second cut is the trick: it turns a successful Cas9 cut into two fragments of predictable size, so seeing those two sizes on a gel means Cas9 cut where it was supposed to, not somewhere random.",
+    "critic": ""
+  }
+}
