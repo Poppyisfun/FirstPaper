@@ -1,4 +1,4 @@
-import { getPaper } from "@/content/papers";
+import { getAllPapers } from "@/lib/content";
 
 export type Topic = "Genetics" | "Evolution" | "Medicine" | "Ecology";
 export type Tier = "Explorer" | "Reader" | "Critic";
@@ -99,18 +99,32 @@ const ENTRIES: Omit<LibraryEntry, "live">[] = [
 ];
 
 /**
- * One source of truth: a row is live only if a paper file backs its slug, and
- * a built paper's title comes from its own locked metadata rather than being
- * retyped here, so the two can never drift.
+ * The catalogue, assembled from getAllPapers() plus the rows above.
+ *
+ * Everything the paper data knows comes from the paper data: which slugs are
+ * real, and the exact title of each. A row is live only when getAllPapers()
+ * returns a paper for its slug, so a card can never claim a paper that is not
+ * there, and a built title can never drift from the authors' own metadata.
+ *
+ * The rows above still carry topic, tier, minutes, xp and skill. Those are
+ * catalogue judgements with no equivalent in the paper files, so they cannot
+ * be derived; a paper file describes the paper, not how it is shelved.
  */
-export const LIBRARY: LibraryEntry[] = ENTRIES.map((entry) => {
-  const paper = getPaper(entry.slug);
-  return {
-    ...entry,
-    live: paper !== undefined,
-    title: paper?.meta.title ?? entry.title,
-  };
-});
+export const LIBRARY: LibraryEntry[] = (() => {
+  const built = new Map(getAllPapers().map((p) => [p.slug, p]));
+
+  return ENTRIES.map((entry) => {
+    const paper = built.get(entry.slug);
+    return {
+      ...entry,
+      live: paper !== undefined,
+      title: paper?.meta.title ?? entry.title,
+    };
+  });
+})();
+
+/** Catalogue rows that have a paper behind them, straight from getAllPapers(). */
+export const LIVE_LIBRARY: LibraryEntry[] = LIBRARY.filter((e) => e.live);
 
 export const FILTERS = [
   "All papers",
