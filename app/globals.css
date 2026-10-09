@@ -1057,6 +1057,9 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 @layer components{
 
   /* A real scale for this screen, rather than numbers scattered inline. */
+  /* Header height plus a gap. The sticky panel hangs from this. */
+  :root{--rd-sticky:84px}
+
   .rd{
     --rd-paper: 17px;        /* the paper's own words            */
     --rd-paper-lh: 1.7;
@@ -1074,7 +1077,10 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   }
 
   /* ── Header ── */
-  .rd-head{position:sticky;top:0;z-index:40;background:rgba(250,249,246,.92);
+  /* Opaque, not translucent. Paper text scrolling visibly under a
+     see-through bar reads as a rendering fault on a screen whose whole
+     job is legibility. */
+  .rd-head{position:sticky;top:0;z-index:40;background:var(--bg);
     backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .rd-head-in{max-width:1180px;margin:0 auto;padding:14px 24px;
     display:flex;align-items:center;gap:18px;flex-wrap:wrap}
@@ -1089,10 +1095,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   .rd-controls{display:flex;align-items:center;gap:14px;margin-left:auto}
-  .rd-bonus{font-family:var(--mo);font-size:var(--rd-meta);letter-spacing:.14em;
-    text-transform:uppercase;color:var(--soft);white-space:nowrap}
-  .rd-bonus-n{color:var(--ink);font-weight:700}
-
   .rd-levels{display:inline-flex;gap:2px;padding:3px;border-radius:99px;
     border:1px solid var(--line);background:var(--surf)}
   .rd-lvl{border:0;background:none;border-radius:99px;padding:6px 13px;
@@ -1107,7 +1109,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     transition:width .35s var(--ez)}
 
   /* ── Body ── */
-  .rd-body{flex:1;width:100%;max-width:1180px;margin:0 auto;
+  .rd-body{flex:1;width:100%;max-width:1180px;margin:0 auto;align-items:start;
     padding:clamp(34px,6vw,64px) 24px clamp(40px,6vw,72px);
     display:grid;grid-template-columns:minmax(0,1fr) minmax(0,26rem);
     gap:var(--rd-gap);align-items:start}
@@ -1123,6 +1125,45 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   /* The paper's own emphasis and highlights, left alone. */
   .rd-paper mark{background:transparent;color:inherit;padding:0}
 
+  /* -- Figures. The authors' own images, on the authors' side of the page.
+        Blue is the figure token and appears nowhere else here. -- */
+  .rd-figs{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+  .rd-fig{display:block;padding:0;border:1px solid var(--line);background:var(--surf);
+    border-radius:4px;overflow:hidden;cursor:zoom-in;max-width:200px;
+    transition:border-color .2s var(--ez)}
+  .rd-fig:hover{border-color:var(--blue-l)}
+  .rd-fig img{display:block;width:100%;height:auto}
+  .rd-fig-l{display:block;padding:7px 9px;font-family:var(--mo);font-size:10px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--blue);text-align:left;
+    border-top:1px solid var(--line-2)}
+
+  /* align-items:flex-start, not center: a tall figure centred in a scrolling
+     overlay puts its own top above the viewport, taking the close button with
+     it and trapping the reader. */
+  .rd-zoom{position:fixed;inset:0;z-index:90;background:rgba(10,14,20,.86);
+    display:flex;align-items:flex-start;justify-content:center;
+    padding:28px 28px 60px;overflow:auto;cursor:zoom-out}
+  .rd-zoom-in{position:relative;max-width:1000px;width:100%;background:var(--surf);
+    border-radius:6px;overflow:hidden;cursor:default}
+  .rd-zoom-in img{display:block;width:100%;height:auto;background:#fff}
+  .rd-zoom-cap{padding:18px 22px 22px;border-top:1px solid var(--line)}
+  .rd-zoom-cap b{display:block;font-family:var(--mo);font-size:10.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+  /* The authors' caption, set in our sans so it reads as reference material
+     rather than as the paper's running prose. */
+  .rd-zoom-cap p{margin:0;font-family:var(--ui);font-size:13.5px;line-height:1.62;
+    color:var(--ink-2)}
+  /* Fixed to the viewport rather than the panel, so it is reachable however
+     far the figure has been scrolled. */
+  .rd-zoom-x{position:fixed;top:16px;right:20px;z-index:91;font-family:var(--ui);
+    font-size:12px;font-weight:600;padding:7px 14px;border-radius:99px;
+    border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+  .rd-zoom-x:hover{border-color:var(--soft)}
+
+  .rd-act-go{display:inline-flex;align-items:center;text-decoration:none;
+    background:var(--ink);color:#fff;border-color:var(--ink)}
+  .rd-act-go:hover{opacity:.9}
+
   .rd-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
   .rd-act{font-family:var(--ui);font-size:var(--rd-ui);font-weight:600;
     padding:10px 18px;border-radius:99px;border:1px solid var(--line);
@@ -1134,11 +1175,56 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .rd-act-explain:hover:not(:disabled){color:var(--ink)}
 
   /* ── Explanation. The hairline, and the only colour. ── */
-  .rd-expl{min-width:0;position:relative;padding-left:var(--rd-gap);
-    border-left:1px solid var(--line)}
+  /* Sticky, so a long methods paragraph scrolls past a panel that stays in
+     view rather than leaving a column of empty page. Capped to the viewport
+     below the header and scrolling internally if our commentary ever runs
+     longer than that. The grid needs align-items:start for sticky to have
+     anything to move within: a stretched item is already full height. */
+  .rd-expl{min-width:0;position:sticky;top:var(--rd-sticky);align-self:start;
+    max-height:calc(100vh - var(--rd-sticky) - 20px);overflow-y:auto;
+    overscroll-behavior:contain;
+    padding-left:var(--rd-gap);border-left:1px solid var(--line)}
+  /* The panel's own scrollbar should not advertise itself. */
+  .rd-expl::-webkit-scrollbar{width:6px}
+  .rd-expl::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+  /* -- The commitment step. Neutral, not green: this is the reader's own
+        guess, and the green belongs to our commentary. Options are plain
+        bordered rows of equal weight, because any styling that distinguishes
+        one is a tell. -- */
+  .rd-pred{margin-bottom:26px}
+  .rd-pred-q{font-family:var(--ui);font-size:14.5px;font-weight:650;
+    line-height:1.45;color:var(--ink);margin:0 0 6px}
+  .rd-pred-h{font-family:var(--ui);font-size:12px;line-height:1.55;
+    color:var(--soft);margin:0 0 14px}
+  .rd-pred-o{display:block;width:100%;text-align:left;font-family:var(--ui);
+    font-size:13.5px;line-height:1.55;color:var(--ink-2);
+    padding:12px 14px;margin-bottom:8px;border:1px solid var(--line);
+    border-radius:5px;background:var(--surf);cursor:pointer;
+    transition:border-color .18s var(--ez),background .18s var(--ez)}
+  .rd-pred-o:hover{border-color:var(--soft);background:var(--bg)}
+  .rd-pred-o:last-child{margin-bottom:0}
+
+  /* The verdict. Deliberately quiet, and never congratulatory: being wrong
+     here is useful information, not a failure. */
+  .rd-pred-v{font-family:var(--mo);font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;margin:0 0 14px}
+  .rd-pred-v.ok{color:var(--green)}
+  .rd-pred-v.no{color:var(--soft)}
+
   .rd-expl-in{border-left:2px solid var(--green);padding-left:16px}
   .rd-expl-t{font-family:var(--ui);font-size:var(--rd-expl);
     line-height:var(--rd-expl-lh);color:#0F3C31;margin:0}
+  /* ── Caution. The one place amber appears on this screen. A hairline
+        divides it from the explanation so it reads as a second voice, not a
+        second paragraph. ── */
+  .rd-caution{margin-top:18px;padding-top:16px;
+    border-top:1px solid var(--line)}
+  .rd-caution-k{display:block;font-family:var(--mo);font-size:10px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
+    margin-bottom:7px}
+  .rd-caution-t{font-family:var(--ui);font-size:var(--rd-expl);
+    line-height:1.62;color:var(--ink-2);margin:0}
+
   .rd-expl-note{font-family:var(--ui);font-size:11.5px;line-height:1.5;
     color:var(--soft);margin:12px 0 0}
   .rd-expl-idle{font-family:var(--ui);font-size:13.5px;line-height:1.6;
@@ -1163,15 +1249,30 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     color:var(--soft);text-decoration:none;text-align:center}
   .rd-orig:hover{color:var(--ink);text-decoration:underline}
 
+  /* ── Attribution. A licence condition, so it sits on every paragraph. ── */
+  .rd-attrib{font-family:var(--ui);font-size:11px;line-height:1.6;
+    color:var(--soft);text-align:center;margin:0;
+    padding:0 24px 22px;max-width:760px;margin-inline:auto}
+  .rd-attrib i{font-style:italic}
+  .rd-attrib a{color:var(--soft);text-decoration:underline;
+    text-underline-offset:2px}
+  .rd-attrib a:hover{color:var(--ink)}
+
   /* ── Mobile: stack, paper first, hairline becomes a rule above us ── */
   @media(max-width:900px){
     .rd-body{grid-template-columns:1fr;gap:34px;padding-top:28px}
     .rd-paper{max-width:100%}
-    .rd-expl{padding-left:0;border-left:0;padding-top:28px;
+    /* Stacked under the paper on a phone. Sticky here would pin our
+       commentary over the authors' text on the smallest screen. */
+    .rd-expl{position:static;max-height:none;overflow:visible;
+      padding-left:0;border-left:0;padding-top:28px;
       border-top:1px solid var(--line)}
     .rd-head-in{padding:12px 16px;gap:12px}
     .rd-controls{width:100%;margin-left:0;justify-content:space-between}
     .rd-sec{width:100%}
+    .rd-figs{gap:10px}
+    .rd-fig{max-width:100%}
+    .rd-zoom{padding:12px}
     .rd-foot{padding:14px 16px}
     .rd-orig{order:3;width:100%;margin:4px 0 0}
   }
@@ -1179,4 +1280,170 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 
 @media(prefers-reduced-motion:reduce){
   .rd-bar i{transition:none}
+}
+
+/* ===========================================================================
+   CHECK - JUDGE - RECAP - RESULTS
+
+   One column, one question, one action. These screens come after twenty
+   minutes of dense reading, so they stay quieter than the reader expects
+   rather than louder. No cards and no shadows: hairlines and whitespace.
+   ======================================================================== */
+@layer components {
+  .ph{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+
+  .ph-head{border-bottom:1px solid var(--line-2);background:var(--bg);
+    display:flex;align-items:center;gap:18px;
+    padding:16px 24px;max-width:760px;margin:0 auto;width:100%}
+  .ph-kick{font-family:var(--mo);font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+
+  /* Progress dots show position in the round and nothing about correctness.
+     A dot that turns red on a wrong answer makes a no-penalty round feel
+     like a scoreboard, which is exactly what this screen is not. */
+  .ph-dots{display:flex;gap:6px;margin-left:auto}
+  .ph-dots i{width:7px;height:7px;border-radius:99px;background:var(--line);
+    transition:background .2s var(--ez)}
+  .ph-dots i.done{background:var(--soft)}
+  .ph-dots i.on{background:var(--ink)}
+
+  .ph-body,.rc,.rs{flex:1;width:100%;max-width:760px;margin:0 auto;
+    padding:44px 24px 64px}
+
+  .ph-n{font-family:var(--mo);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--soft);margin:0 0 12px}
+  .ph-q{font-family:var(--ui);font-size:21px;line-height:1.4;font-weight:650;
+    color:var(--ink);margin:0 0 28px;max-width:34em}
+
+  .ph-opts{display:flex;flex-direction:column;gap:9px}
+  .ph-opt{display:block;width:100%;text-align:left;font-family:var(--ui);
+    font-size:14.5px;line-height:1.55;color:var(--ink-2);
+    padding:14px 16px;border:1px solid var(--line);border-radius:6px;
+    background:var(--surf);cursor:pointer;
+    transition:border-color .18s var(--ez),background .18s var(--ez)}
+  .ph-opt:hover:not(:disabled){border-color:var(--soft)}
+  .ph-opt.on{border-color:var(--ink);background:var(--bg)}
+  .ph-opt:disabled{cursor:default}
+  /* Neutral on check: ink marks the answer, and a miss is greyed rather than
+     reddened. Red is reserved for a failed evaluation verdict. */
+  .ph-opt.right{border-color:var(--ink);background:var(--bg);color:var(--ink);
+    font-weight:600}
+  .ph-opt.wrong{border-color:var(--line);color:var(--soft);
+    text-decoration:line-through;text-decoration-color:var(--line)}
+  .ph-opt.muted{opacity:.5}
+
+  .ph-err{font-family:var(--ui);font-size:13px;color:var(--red);
+    margin:12px 0 0}
+
+  .ph-fb{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+  .ph-fb-v{font-family:var(--mo);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--soft);margin:0 0 8px}
+  .ph-fb-t{font-family:var(--ui);font-size:14px;line-height:1.65;
+    color:var(--ink-2);margin:0}
+
+  .ph-acts{margin-top:30px}
+  .ph-go{display:inline-flex;align-items:center;font-family:var(--ui);
+    font-size:14px;font-weight:600;padding:12px 22px;border-radius:99px;
+    border:1px solid var(--ink);background:var(--ink);color:#fff;
+    text-decoration:none;cursor:pointer;transition:opacity .18s var(--ez)}
+  .ph-go:hover{opacity:.88}
+
+  .ph-honest{font-family:var(--ui);font-size:11.5px;line-height:1.6;
+    color:var(--soft);margin:44px 0 0;padding-top:18px;
+    border-top:1px dashed var(--line);max-width:46em}
+  .ph-honest b{color:var(--ink);font-weight:600}
+  .ph-honest a{color:var(--soft);text-decoration:underline;
+    text-underline-offset:2px}
+
+  /* -- Judge. Violet marks the shift from what did it say to does it hold
+        up. It appears on this screen and nowhere else in the flow. -- */
+  .ph-judge .ph-kick{color:var(--violet)}
+  .ph-judge .ph-dots i.on{background:var(--violet)}
+  .ph-judge .ph-opt.on{border-color:var(--violet)}
+  .ph-judge .ph-opt.right{border-color:var(--violet);color:var(--violet)}
+
+  .ph-conf{border-left:2px solid var(--violet);padding-left:20px;
+    margin-bottom:8px}
+  .ph-conf-h{font-family:var(--ui);font-size:14.5px;line-height:1.55;
+    color:var(--ink);margin:0 0 20px;max-width:30em}
+  .ph-conf-n{display:block;font-family:var(--disp);
+    font-size:54px;line-height:1;font-weight:600;color:var(--violet);
+    margin-bottom:14px;font-variant-numeric:tabular-nums}
+  .ph-conf-s{width:100%;max-width:420px;accent-color:var(--violet);
+    display:block;margin-bottom:8px}
+  .ph-conf-ends{display:flex;justify-content:space-between;max-width:420px;
+    font-family:var(--mo);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--soft);margin-bottom:26px}
+  .ph-conf-w{font-family:var(--ui);font-size:12px;line-height:1.55;
+    color:var(--soft);margin:16px 0 0;max-width:32em}
+
+  .ph-staked{font-family:var(--mo);font-size:10.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--soft);margin:0 0 18px}
+  .ph-staked b{color:var(--violet);font-weight:700}
+
+  /* The juxtaposition. Equal weight, side by side, nothing joining them:
+     the reader draws the line between the two numbers themselves. */
+  .ph-pair{display:flex;gap:40px;margin-top:26px;padding-top:22px;
+    border-top:1px solid var(--line)}
+  .ph-pair-k{display:block;font-family:var(--mo);font-size:10px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--soft);
+    margin-bottom:6px}
+  .ph-pair-v{font-family:var(--disp);font-size:28px;font-weight:600;
+    color:var(--ink);line-height:1.1}
+  .ph-pair-v.ok{color:var(--green)}
+  .ph-pair-v.no{color:var(--soft)}
+
+  /* -- Recap. The paper retold, serif at the reading measure. -- */
+  .rc-t{font-family:var(--disp);font-size:30px;line-height:1.2;
+    font-weight:600;color:var(--ink);margin:0 0 30px;max-width:18em}
+  .rc-p{font-family:var(--rd);font-size:17px;line-height:1.75;
+    color:var(--ink-2);margin:0 0 22px;max-width:62ch}
+
+  /* -- Results. The one screen allowed to be bold, and only through scale
+        and whitespace. No gradient, no shadow, no decoration. -- */
+  .rs-loading{font-family:var(--ui);font-size:14px;color:var(--soft)}
+  .rs-big{font-family:var(--disp);font-size:clamp(30px,5.2vw,52px);
+    line-height:1.14;font-weight:600;letter-spacing:-.015em;color:var(--ink);
+    margin:30px 0 0;max-width:15em}
+  .rs-note{font-family:var(--ui);font-size:15px;line-height:1.6;
+    color:var(--soft);margin:24px 0 0;max-width:38em}
+
+  .rs-bars{margin-top:66px;display:flex;flex-direction:column;gap:26px}
+  .rs-bar-top{display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:9px}
+  .rs-bar-l{font-family:var(--ui);font-size:14px;font-weight:600;
+    color:var(--ink)}
+  .rs-bar-n{font-family:var(--mo);font-size:13px;color:var(--ink);
+    font-variant-numeric:tabular-nums}
+  .rs-bar-track{height:8px;background:var(--line-2);border-radius:99px;
+    overflow:hidden}
+  .rs-bar-track i{display:block;height:100%;background:var(--ink);
+    border-radius:99px;transition:width .5s var(--ez)}
+  .rs-bar-sub{display:flex;justify-content:space-between;margin-top:7px;
+    font-family:var(--mo);font-size:10px;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--soft)}
+
+  .rs-pattern{font-family:var(--ui);font-size:16px;line-height:1.6;
+    color:var(--ink);margin:46px 0 0;padding-top:26px;
+    border-top:1px solid var(--line);max-width:34em}
+
+  .rs-stats{display:flex;flex-wrap:wrap;gap:40px;margin:46px 0 0;
+    padding-top:26px;border-top:1px solid var(--line)}
+  .rs-stats dt{font-family:var(--mo);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--soft);margin-bottom:5px}
+  .rs-stats dd{font-family:var(--ui);font-size:17px;font-weight:600;
+    color:var(--ink);margin:0}
+  .rs-paper{font-family:var(--rd);font-style:italic;font-size:13.5px;
+    color:var(--soft);margin:30px 0 0}
+
+  @media(max-width:700px){
+    .ph-head,.ph-body,.rc,.rs{padding-left:18px;padding-right:18px}
+    .ph-q{font-size:19px}
+    .ph-pair{gap:28px}
+    .rs-stats{gap:26px}
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .rs-bar-track i{transition:none}
 }
