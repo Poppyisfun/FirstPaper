@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import { Rise } from "@/components/motion-primitives";
@@ -37,6 +38,7 @@ export default function Account() {
           </Rise>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

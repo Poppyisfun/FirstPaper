@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Bricolage_Grotesque, Literata, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/Footer";
 
 /**
  * Display — Fraunces, an old-style variable serif. SOFT rounds the terminals
@@ -48,9 +47,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${fraunces.variable} ${bricolage.variable} ${literata.variable} ${geistMono.variable} h-full antialiased`}
     >
+      {/* No footer here. The reading screens must carry nothing but the
+          paper, our commentary and navigation, so the marketing footer is
+          mounted by the surfaces that actually want it rather than globally. */}
       <body className="flex min-h-full flex-col bg-bg font-sans text-ink">
         <div className="flex-1">{children}</div>
-        <Footer />
       </body>
     </html>
   );
