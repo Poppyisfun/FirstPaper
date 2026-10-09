@@ -50,9 +50,36 @@ Each paper folder holds:
   minutes, xp, and the one-line practice goal
 - `source.json` — the authors' published text, parsed to paragraph level
 - `explanations.json` — FirstPaper's commentary, keyed by paragraph id
+- `predictions.json` — the three options shown before each explanation,
+  generated from the authors' paragraph alone and never from our commentary
+- `questions.json` — the check and judge rounds, with appraisal `tag` fields
 
 `content/ingest/` holds the Python that generates these. It is not part of the
 Next.js build and is excluded from TypeScript scanning.
+
+### Confidence is a 0-100 slider
+
+On the judge round the reader sets confidence on a 0-100 slider and commits it
+**before the options become visible.** They cannot see what they are choosing
+between while deciding how sure they are. That ordering is the whole point: a
+confidence stated after seeing the options is a reaction to the options.
+
+**Calibration gap = mean stated confidence minus actual accuracy on appraisal
+questions.** A negative gap means underconfident, which is a real and
+interesting result, not a failure.
+
+The older two-way wager model (`Wager = 1 | 2`, "judge +20 x confidence
+multiplier") is retired. Do not reintroduce it.
+
+### The reading screen asks for a prediction, not a payment
+
+Before our explanation appears, the reader picks one of three options for what
+the paragraph says, and the explanation then appears and stays. There is no
+bonus counter and no charge for help. Charging for an explanation taught
+readers to avoid explanations; a prediction measures whether the reading landed
+and costs nothing to get wrong.
+
+`prediction_made` is the difficulty signal, replacing `explanation_requested`.
 
 ### Scoring is derived, never stored
 
@@ -176,6 +203,102 @@ You MAY NOT change, without being explicitly asked:
 6. **The honesty notice**, the licence attribution, or the link to the original.
 
 If a content change seems necessary, say so and ask. Do not make it silently.
+
+## Writing questions and options
+
+Three rules learned the hard way on this project. Breaking any of them has
+produced a round that looked fine and measured nothing.
+
+### Option shape has been the recurring leak, not content
+
+The failure has never been that an option said too much. It is that the set
+gave itself away by **shape**: the correct answer was the most cautious, or the
+most specific, or the longest, every time. A reader learns that inside two
+papers and stops reading the paper.
+
+**Any set of options must be checked for answerability from shape alone** —
+send the options with no paragraph and no notes and see whether a model can
+still sort them. If it can, the set is rejected regardless of how good the
+content is. `content/ingest/predictions.py verify` does this for the reading
+round; `verify_questions.py` does it for check and judge.
+
+Prose instructions to the generator are not sufficient. A pass that asked for
+varied shape in words still put the correct option at the longest of three in
+sixteen of seventeen sets. The constraint has to be enforced programmatically
+and the result measured.
+
+### The blind test flags two different things, and only one is ours
+
+Sending options with no paragraph and no notes catches two kinds of hit, and
+they need opposite responses.
+
+**Shape and register tells are ours to fix.** When the model says it chose
+because one option was "the most detailed", "hedged", or "reads like a paper",
+that is a defect in how the set was written and a reader will learn it too.
+
+**Domain-knowledge detection is a confound of testing with a model, and is not
+actionable.** When the model says the other options "contain factual errors" or
+"state the opposite of known biology", it is using what it knows about the
+field. A distractor has to be factually wrong to be a distractor. A
+sixteen-year-old cannot spot that, and flattening the options until an expert
+cannot either would mean they were no longer about the paragraph.
+
+Gate on the first. Record the second and move on.
+
+### Prose constraints on generated content do not survive at volume
+
+Anything that must hold across every item gets enforced in code, with rejection
+and retry — not described in the prompt and hoped for.
+
+The evidence: a generation pass that was told in plain words to vary which
+option was correct still produced the correct answer as the longest of three in
+**sixteen of seventeen sets**. Pick-the-longest would have scored 94% without
+reading anything. Cycling an assigned length rank per paragraph and rejecting
+replies that missed it fixed it in one pass. The same now applies to register.
+
+### Register enforcement stops at keyword level, deliberately
+
+The exploitable heuristic is dead and that was the goal. "Pick the hedged
+option" paid on 16 of 17 sets before the constraint and pays on 6 of 17 after
+it, which is no better than guessing.
+
+What still trips the blind test is a model recognising synthetic text — it has
+read enough real papers to tell an authored distractor from a real finding.
+**No student has that corpus.** That is domain detection wearing shape's
+clothes, not an exploitable tell.
+
+Do not build a model-based register classifier, and do not reopen this without
+evidence from a real reader exploiting a real tell.
+
+### The notes must not STATE the answer
+
+The gate for a comprehension question is that our explanations do not state the
+answer, in substance, in any phrasing. It is **not** that a strong model cannot
+reconstruct it. A model reconstructing an answer from a good explanation is not
+evidence that a sixteen-year-old will.
+
+The behavioural run stays as a reported diagnostic, not a gate.
+
+### Any experiment we explain well enough to teach, we explain well enough to test from
+
+This is the real tension and it does not have a clean resolution. The recipe
+that beats a strict bar — ask about a named entity or an exact quantity we
+never mention — produces trivia, and trivia is worse than a slightly leaky
+question. Prefer the question that teaches.
+
+### Prefer well-constructed but less famous papers
+
+A landmark paper makes the no-notes control arm nearly useless. The tester model
+has read it, so it answers from memory and almost everything gets flagged, which
+hides the real leaks among the false ones.
+
+There is a second limitation worth knowing: on a famous paper the control cannot
+separate "our explanations gave it away" from "our explanations let the model
+identify the paper, and then it answered from memory". A question scoring 3/3
+with notes and 0/3 with nothing can be either.
+
+When selecting future papers, weight towards solid, well-structured work that is
+not canonical.
 
 ## Paper content rules
 
