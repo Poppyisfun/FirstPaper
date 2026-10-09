@@ -15,6 +15,15 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  * deliberately separate factories: nothing reads the secret key until the
  * server factory is actually called.
  *
+ * Every variable is referenced STATICALLY, as `process.env.NAME`. This is not
+ * a style choice. Next.js substitutes NEXT_PUBLIC_ variables into browser
+ * bundles by scanning for exactly that shape at build time, and a dynamic
+ * lookup like `process.env[name]` is invisible to that pass. An earlier
+ * version of this file read every variable through one `requireEnv(name)`
+ * helper, which was tidy and would have thrown "NEXT_PUBLIC_SUPABASE_URL is
+ * not set" in the browser the first time the browser client was used, because
+ * the value was never inlined.
+ *
  * There are no default values anywhere in this file. A variable that is
  * missing, blank, or still carrying its placeholder throws by name.
  */
@@ -23,13 +32,15 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 const PLACEHOLDER = /yourproject\.supabase\.co|xxxxx/;
 
 /**
- * Reads one variable, or throws naming it. Refusing placeholders matters as
- * much as refusing blanks: a placeholder otherwise sails through and surfaces
- * much later as a DNS or auth failure that looks like a code bug.
+ * Validates one already-read value, or throws naming it.
+ *
+ * The caller reads `process.env.NAME` itself and passes the result in, so the
+ * static reference stays at the call site where the build can see it.
+ * Refusing placeholders matters as much as refusing blanks: a placeholder
+ * otherwise sails through and surfaces much later as a DNS or auth failure
+ * that looks like a code bug.
  */
-function requireEnv(name: string): string {
-  const value = process.env[name];
-
+function required(name: string, value: string | undefined): string {
   if (!value || !value.trim()) {
     throw new Error(
       `${name} is not set. Add it to .env.local in the project root, then restart the server.`,
@@ -55,27 +66,30 @@ export function maskSecret(value: string | undefined): string {
 /**
  * What the server can see, for diagnostics. Masked, and it reports whether a
  * value is real rather than what it is.
+ *
+ * Server only: it touches the secret key, so it must never be imported into a
+ * client component.
  */
 export function describeEnv() {
-  const names = [
-    "NEXT_PUBLIC_SUPABASE_URL",
-    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-    "SUPABASE_SECRET_KEY",
+  const entries = [
+    ["NEXT_PUBLIC_SUPABASE_URL", process.env.NEXT_PUBLIC_SUPABASE_URL],
+    [
+      "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    ],
+    ["SUPABASE_SECRET_KEY", process.env.SUPABASE_SECRET_KEY],
   ] as const;
 
   return Object.fromEntries(
-    names.map((name) => {
-      const raw = process.env[name];
-      return [
-        name,
-        {
-          present: Boolean(raw && raw.trim()),
-          isPlaceholder: Boolean(raw && PLACEHOLDER.test(raw)),
-          length: raw?.length ?? 0,
-          masked: maskSecret(raw),
-        },
-      ];
-    }),
+    entries.map(([name, raw]) => [
+      name,
+      {
+        present: Boolean(raw && raw.trim()),
+        isPlaceholder: Boolean(raw && PLACEHOLDER.test(raw)),
+        length: raw?.length ?? 0,
+        masked: maskSecret(raw),
+      },
+    ]),
   );
 }
 
@@ -88,8 +102,14 @@ export function describeEnv() {
  */
 export function createSupabaseBrowserClient(): SupabaseClient {
   return createBrowserClient(
-    requireEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    requireEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"),
+    required(
+      "NEXT_PUBLIC_SUPABASE_URL",
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+    ),
+    required(
+      "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    ),
   );
 }
 
@@ -115,8 +135,11 @@ export function createSupabaseServerClient(): SupabaseClient {
   }
 
   return createClient(
-    requireEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    requireEnv("SUPABASE_SECRET_KEY"),
+    required(
+      "NEXT_PUBLIC_SUPABASE_URL",
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+    ),
+    required("SUPABASE_SECRET_KEY", process.env.SUPABASE_SECRET_KEY),
     {
       auth: {
         persistSession: false,
