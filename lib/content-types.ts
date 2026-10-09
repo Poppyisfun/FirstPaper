@@ -14,6 +14,7 @@
 
 /** Where a section sits in the IMRaD structure of a paper. */
 export type ImradTag =
+  | "abstract"
   | "introduction"
   | "methods"
   | "results"
@@ -41,6 +42,10 @@ export type Figure = {
   id: string | null;
   label: string | null;
   caption: string | null;
+  /** Path under public/, or null when no image could be retrieved. */
+  href?: string | null;
+  /** Paragraph ids whose text cites this figure by name. */
+  referenced_by?: string[];
 };
 
 /** source.json. Every field here is the authors' work and is never edited. */
@@ -71,23 +76,86 @@ export type PaperMeta = {
   xp: number;
   /** One line, in the style of "You'll practise: telling X from Y". */
   practiceGoal: string;
+  /** The whole paper in plain English, paragraphs separated by blank lines. */
+  plainSummary: string;
 };
 
-/** Our commentary for one paragraph, one entry per reading level. */
+/**
+ * Our commentary for one paragraph, one entry per reading level.
+ *
+ * `caution` is optional and belongs to the paragraph rather than the level: a
+ * claim that outruns its evidence does so whoever is reading. It is absent on
+ * most paragraphs by design. A warning on every paragraph is a warning on
+ * none, so the renderer shows this block only where the content carries one.
+ */
 export type Explanation = {
   explorer: string;
   reader: string;
   critic: string;
+  caution?: string;
 };
 
 /** explanations.json, keyed by paragraph id. */
 export type Explanations = Record<string, Explanation>;
+
+/** One option in the commitment shown before an explanation. */
+export type PredictionOption = {
+  id: string;
+  text: string;
+};
+
+/**
+ * What the reader commits to before our explanation appears.
+ *
+ * Generated from the authors' paragraph alone, never from our explanation:
+ * options written from our own commentary would reward recognising our voice
+ * rather than reading the paper.
+ */
+export type PredictionSet = {
+  options: PredictionOption[];
+  correctOptionId: string;
+};
+
+/** predictions.json, keyed by paragraph id. */
+export type Predictions = Record<string, PredictionSet>;
+
+export type QuestionOption = {
+  id: string;
+  text: string;
+};
+
+/**
+ * One question in the check or judge round.
+ *
+ * `tag` is present on appraisal questions only. It names the critical-reading
+ * criterion the question tests, and the results screen uses it to say which
+ * kind of judgement a reader is missing rather than only how many.
+ */
+export type Question = {
+  id: string;
+  prompt: string;
+  options: QuestionOption[];
+  correctOptionId: string;
+  /** One or two sentences shown after answering. */
+  why: string;
+  /** Paragraphs the answer rests on. */
+  paragraphIds: string[];
+  tag?: string;
+};
+
+/** questions.json: the two rounds. */
+export type PaperQuestions = {
+  comprehension: Question[];
+  appraisal: Question[];
+};
 
 /** One paper as the app sees it: its three files, loaded together. */
 export type LoadedPaper = {
   meta: PaperMeta;
   source: PaperSource;
   explanations: Explanations;
+  predictions: Predictions;
+  questions: PaperQuestions;
 };
 
 /** A paragraph plus the context needed to render or link to it. */

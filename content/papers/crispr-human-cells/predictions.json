@@ -1,0 +1,302 @@
+{
+  "slug": "crispr-human-cells",
+  "prompt": "What do you think this paragraph says?",
+  "predictions": {
+    "PMC3557905-s0-p0": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "Cas9 protein alone was enough to cut human genomic DNA, and adding guide RNA simply made the cuts happen faster; the authors conclude that the amount of Cas9 protein is what limits editing."
+        },
+        {
+          "id": "o2",
+          "text": "The authors report that Cas9, borrowed from a bacterial defence system, can team up with guide RNA inside human cells and cut both strands of DNA at the matching spot, with the supply of working guide RNA seeming to be the main bottleneck."
+        },
+        {
+          "id": "o3",
+          "text": "Cas9 worked only in extracts taken from broken-open cells, not in living human cells, and trimming the guide RNA shorter at one end was what made the targeting work better."
+        }
+      ],
+      "correct_option_id": "o2"
+    },
+    "PMC3557905-s1-p0": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "Cutting DNA at a chosen spot triggers repair that lets scientists rewrite genes. Zinc-finger nucleases and TALENs work, but each site needs a custom protein and they cut wrong places too."
+        },
+        {
+          "id": "o2",
+          "text": "Zinc-finger nucleases and TALENs can be aimed at any chosen DNA sequence without building a new protein each time, and the one real drawback is that they cut far too slowly inside living cells to be useful."
+        },
+        {
+          "id": "o3",
+          "text": "The authors suggest that these DNA-cutting tools are limited mainly because the cell's repair pathways behave unpredictably, so a cut site often seems to get patched up in the wrong way."
+        }
+      ],
+      "correct_option_id": "o1",
+      "rank_missed": "length shortest, wanted middle; register neutral, wanted confident"
+    },
+    "PMC3557905-s1-p1": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "The authors report that the single-guide RNA version of this system had already been shown to edit genes successfully inside human and other eukaryotic cells."
+        },
+        {
+          "id": "o2",
+          "text": "In bacteria, Cas9 cuts DNA at a site set by a guide RNA; whether this worked in eukaryotic cells was unknown."
+        },
+        {
+          "id": "o3",
+          "text": "Bacteria need several different Cas proteins working together to cut invading DNA, and the 20-letter guide sequence only works once the tracrRNA is removed from the complex."
+        }
+      ],
+      "correct_option_id": "o2"
+    },
+    "PMC3557905-s1-p2": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "Cas9 and the guide RNA work separately in human cells, and tests on cell extracts proved that the amount of Cas9 protein was the factor limiting how much DNA got cut."
+        },
+        {
+          "id": "o2",
+          "text": "Cas9 enters the nucleus of human cells and joins with the guide RNA there, and together they cut both strands of DNA at the matching site and set off end-joining repair; both parts are required, lengthening the RNA at its 3' end improves targeting, and loading the RNA into Cas9 is the step that limits cutting."
+        },
+        {
+          "id": "o3",
+          "text": "The authors suggest Cas9 may reach the nucleus, but report that cutting only happened after an extra human repair protein was supplied, and that trimming the guide RNA at its 3' end appeared to sharpen its aim."
+        }
+      ],
+      "correct_option_id": "o2",
+      "rank_missed": "register neutral, wanted confident"
+    },
+    "PMC3557905-s2-p0": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "The guide RNA kept Cas9 from falling apart: without it, the 160 kDa protein was broken into pieces and stayed outside the nucleus instead of entering it, the western blots showed."
+        },
+        {
+          "id": "o2",
+          "text": "The authors report that the Cas9 and guide RNA pair cut the human CLTA gene in these cells, and that the amount of cutting seems to rise when the U6 promoter is used to make extra guide RNA."
+        },
+        {
+          "id": "o3",
+          "text": "Cas9 and a guide RNA for the human CLTA gene were put into human cells. GFP tagging showed Cas9 intact in the nucleus, and the guide RNA was made, lasting longer when Cas9 was present."
+        }
+      ],
+      "correct_option_id": "o3"
+    },
+    "PMC3557905-s2-p1": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "The Surveyor assay showed no cutting at the CLTA1 target site; only the pair of zinc-finger nucleases aimed at a nearby part of the CLTA gene produced cleavage bands on the gel."
+        },
+        {
+          "id": "o2",
+          "text": "The authors used a mismatch assay and report that it seems to show cutting at the CLTA site targeted by the sgRNA."
+        },
+        {
+          "id": "o3",
+          "text": "The Cel-1 enzyme cuts DNA strands that match each other perfectly, so bands on the gel show that repair was error-free, and the zinc-finger nucleases acted as the negative control."
+        }
+      ],
+      "correct_option_id": "o2"
+    },
+    "PMC3557905-s2-p2": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "Extracts from cells given only the Cas9 vector did not cut the target plasmid, but cutting happened once lab-made guide RNA was added to the extract. Extracts from cells given both vectors cut the plasmid, and adding extra guide RNA raised the cutting further."
+        },
+        {
+          "id": "o2",
+          "text": "Adding extra Cas9 protein to the extracts switched on plasmid cutting, while adding more guide RNA made no difference whatsoever. The supply of Cas9 protein is the step that holds editing back in these human cells."
+        },
+        {
+          "id": "o3",
+          "text": "The authors report that extracts from cells given the guide RNA vector on its own still cut the plasmid, which seems to suggest that these human cells already make plenty of Cas9 by themselves."
+        }
+      ],
+      "correct_option_id": "o1",
+      "rank_missed": "register confident, wanted neutral"
+    },
+    "PMC3557905-s2-p3": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "They cut the Cas9-binding region of the guide RNA down by 4 or 10 base pairs, and these shorter guides drove much better cutting in cells than the original design."
+        },
+        {
+          "id": "o2",
+          "text": "The researchers made longer versions of the guide RNA's Cas9-binding part and tested them in cells, and the results appear to suggest these guides support more efficient cutting."
+        },
+        {
+          "id": "o3",
+          "text": "Extra bases were added to the part of the guide that matches the target DNA, and the Surveyor assay measured a 2.3-fold rise in cutting."
+        }
+      ],
+      "correct_option_id": "o2"
+    },
+    "PMC3557905-s3-p0": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "Zinc-finger nucleases cut the CLTA site worse than Cas9 did, and the authors say too little Cas9 protein is being made in the cells."
+        },
+        {
+          "id": "o2",
+          "text": "Cas9 steered by a guide RNA cuts human DNA at a chosen spot, editing it 6–8% of the time."
+        },
+        {
+          "id": "o3",
+          "text": "Adding caps and tails to the guide RNAs seems to have lifted editing at the CLTA site from 6% to 8%, suggesting guide RNA stability is the limit."
+        }
+      ],
+      "correct_option_id": "o2",
+      "rank_missed": "register neutral, wanted confident"
+    },
+    "PMC3557905-s3-p1": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "The researchers showed in these experiments that loading several guide RNAs into one cell let them cut many genes at once, which is how they built their multigenic disease models."
+        },
+        {
+          "id": "o2",
+          "text": "The authors suggest their work lays the groundwork for using Cas9 as an easy editing tool, and note that although they did not test it here, one cell could in principle be given several guide RNAs to hit one site harder or many sites at once."
+        },
+        {
+          "id": "o3",
+          "text": "They report that using more than one guide RNA at a time lowers the accuracy of cutting, so the system works best when a single site is targeted on its own."
+        }
+      ],
+      "correct_option_id": "o2"
+    },
+    "PMC3557905-s4-p0": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "The researchers compared a green-tagged Cas9 with a red-tagged Cas9 in human cells and found that the green version reached the nucleus far more reliably."
+        },
+        {
+          "id": "o2",
+          "text": "The researchers built the DNA tools for the work: a human-adapted Cas9 gene carrying a tag and a nuclear signal, joined to a green or red fluorescent protein, plus separate vectors that make the guide RNAs."
+        },
+        {
+          "id": "o3",
+          "text": "The authors seem to have mixed purified Cas9 protein with guide RNA in a tube and checked that this cut the target DNA before any of the work moved into living human cells."
+        }
+      ],
+      "correct_option_id": "o2",
+      "rank_missed": "length longest, wanted middle; register neutral, wanted confident"
+    },
+    "PMC3557905-s4-p1": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "X-tremeGENE beat Turbofect head to head, cutting the target gene in 80-90% of cells against only 30-50% for the rival reagent."
+        },
+        {
+          "id": "o2",
+          "text": "Human kidney cells were grown, given plasmid DNA using one of two reagents, then broken open to extract their DNA."
+        },
+        {
+          "id": "o3",
+          "text": "The authors suggest that counting glowing green cells after 48 hours showed what share of cells had the target gene successfully edited."
+        }
+      ],
+      "correct_option_id": "o2"
+    },
+    "PMC3557905-s4-p2": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "Human kidney cells received a plasmid carrying the guide RNA, and two days later the researchers extracted the cells' total RNA, separated it by size on a urea gel, transferred it onto a nylon membrane, and used a radioactive DNA probe to show that the short guide RNA was present in those cells."
+        },
+        {
+          "id": "o2",
+          "text": "Human kidney cells received a plasmid carrying a tagged version of the Cas9 gene, and two days later the researchers burst the cells open, ran a small amount of the liquid down a gel, transferred it onto a membrane, and used a tag-binding antibody to show the protein was there."
+        },
+        {
+          "id": "o3",
+          "text": "Human kidney cells received both plasmids, and two days later the researchers pulled the genomic DNA out, copied the target stretch by PCR, treated the copies with an enzyme that cuts where strands mismatch, and ran the pieces down a gel to estimate how much editing had happened."
+        }
+      ],
+      "correct_option_id": "o2",
+      "rank_missed": "register neutral, wanted confident"
+    },
+    "PMC3557905-s4-p3": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "The authors appear to show that the mismatch-cutting enzyme destroyed all edited DNA strands, so that the brightness of the single uncut 360-base-pair band on the gel told them directly how many cells had escaped editing, with the blue and white bacterial colonies confirming this count."
+        },
+        {
+          "id": "o2",
+          "text": "A 360-base-pair piece of the CLTA gene was copied, heated and slowly cooled so edited and unedited strands pair up, then cut by an enzyme that attacks mismatches; gel bands gave the percent cut, and cloned pieces were sequenced."
+        },
+        {
+          "id": "o3",
+          "text": "The exact insertions and deletions were read straight off the gel, and the bacteria were grown only to produce enough of the enzyme needed to cut the mismatched DNA."
+        }
+      ],
+      "correct_option_id": "o2"
+    },
+    "PMC3557905-s4-p4": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "The guide RNA was grown inside living bacterial cells, then released and separated from the cell debris on a 7 M urea gel before storage in treated water."
+        },
+        {
+          "id": "o2",
+          "text": "Running the guide RNA on a urea acrylamide gel measured how tightly it stuck to its DNA target, and the gel confirmed a strong, specific match."
+        },
+        {
+          "id": "o3",
+          "text": "The authors seem to have made the guide RNA in a tube using T7 polymerase and a DNA template, then cleaned it up on a gel."
+        }
+      ],
+      "correct_option_id": "o3"
+    },
+    "PMC3557905-s4-p5": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "RNA from HEK293T cells was separated by size on a gel, transferred to a membrane and fixed in place with UV light, then found using a radioactive DNA probe and read off by imaging."
+        },
+        {
+          "id": "o2",
+          "text": "The authors suggest that the mirVana kit seems to pull out more small RNA from HEK293T cells than the older gel-based methods they tried."
+        },
+        {
+          "id": "o3",
+          "text": "Proteins from HEK293T cells were run on a gel, blotted onto a membrane, and detected with labelled antibodies."
+        }
+      ],
+      "correct_option_id": "o1"
+    },
+    "PMC3557905-s4-p6": {
+      "options": [
+        {
+          "id": "o1",
+          "text": "This test measures how much Cas9 protein each batch of cells made, and the brightness of the two gel bands shows exactly how much protein the extract contained."
+        },
+        {
+          "id": "o2",
+          "text": "Cell extract, plasmid and guide RNA are warmed together and run on a gel, where bands of about 2230 and 3100 base pairs seem to show Cas9 cut the DNA."
+        },
+        {
+          "id": "o3",
+          "text": "XhoI is the enzyme being tested here. It makes the 2230 and 3100 base pair pieces, and adding the guide RNA blocks that cutting completely."
+        }
+      ],
+      "correct_option_id": "o2",
+      "rank_missed": "length longest, wanted middle"
+    }
+  }
+}

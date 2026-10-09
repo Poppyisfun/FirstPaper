@@ -10,5 +10,6 @@
   "level": "Reader",
   "minutes": 18,
   "xp": 320,
-  "practiceGoal": "You'll practise: telling a demonstration from a proof"
+  "practiceGoal": "You'll practise: telling a demonstration from a proof",
+  "plainSummary": "Bacteria defend themselves against viruses with a protein that cuts DNA, guided to its target by a short piece of RNA. Change the RNA, change where it cuts. This paper asked whether that system, borrowed from bacteria, would work inside human cells.\n\nThe authors put the protein and a guide into a human cell line and aimed it at a gene. It cut. They checked the cut by looking for the scars left behind when a cell repairs broken DNA, and they found them. They tried longer guides and the cutting improved. They compared their results against an older editing tool aimed nearby.\n\nWhat this paper shows is that the system works in a dish. What it does not show is how well it works elsewhere, whether it cuts in places it shouldn't, or whether it would be safe in a person. Those questions came later, and some are still open."
 }

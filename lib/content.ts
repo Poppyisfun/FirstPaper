@@ -9,7 +9,13 @@ import type {
   Paragraph,
   ParagraphHit,
   PaperMeta,
+  PaperQuestions,
   PaperSource,
+  PredictionOption,
+  PredictionSet,
+  Predictions,
+  Question,
+  QuestionOption,
   Section,
 } from "@/lib/content-types";
 
@@ -31,7 +37,13 @@ export type {
   Paragraph,
   ParagraphHit,
   PaperMeta,
+  PaperQuestions,
   PaperSource,
+  PredictionOption,
+  PredictionSet,
+  Predictions,
+  Question,
+  QuestionOption,
   Section,
 };
 

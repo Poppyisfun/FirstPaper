@@ -578,6 +578,56 @@ JUNK_PARAGRAPH = re.compile(
 )
 
 
+def abstract_paragraphs(root: ET.Element, pmcid: str, min_chars: int) -> list[dict]:
+    """The paper's own abstract, as paragraphs.
+
+    The abstract lives in <article-meta>, not <body>, which is why walking the
+    body alone misses it entirely.
+
+    An article often carries several <abstract> elements distinguished by
+    abstract-type: eLife digests arrive as "executive-summary", teaser text as
+    "toc", and so on. Only the untyped one is the abstract proper, and taking
+    the others would duplicate content that is not what the reader was
+    promised.
+
+    Structured abstracts put Background, Methods, Results and Conclusions in
+    <sec> children. Those are flattened into paragraphs with the subheading
+    kept at the front of the text, so a reader still sees the structure the
+    authors wrote.
+    """
+    abstract = None
+    for candidate in root.findall(".//article-meta//abstract"):
+        if not candidate.get("abstract-type"):
+            abstract = candidate
+            break
+    if abstract is None:
+        return []
+
+    texts: list[str] = []
+
+    # Paragraphs sitting directly under <abstract>.
+    for para in abstract.findall("p"):
+        text = flatten(para)
+        if len(text) >= min_chars and not JUNK_PARAGRAPH.match(text):
+            texts.append(text)
+
+    # Then each structured subsection, subheading first.
+    for sec in abstract.findall("sec"):
+        title_el = sec.find("title")
+        heading = flatten(title_el) if title_el is not None else None
+        for i, para in enumerate(sec.findall("p")):
+            text = flatten(para)
+            if len(text) < min_chars or JUNK_PARAGRAPH.match(text):
+                continue
+            if heading and i == 0:
+                text = f"{heading.rstrip(':.')}. {text}"
+            texts.append(text)
+
+    return [
+        {"id": f"{pmcid}-s0-p{i}", "text": text} for i, text in enumerate(texts)
+    ]
+
+
 def prose_paragraphs(sec: ET.Element) -> list[ET.Element]:
     """Every <p> in a section except those inside a figure or table.
 
@@ -593,7 +643,9 @@ def prose_paragraphs(sec: ET.Element) -> list[ET.Element]:
     return [p for p in sec.iter("p") if id(p) not in blocked]
 
 
-def parse_sections(root: ET.Element, pmcid: str, min_chars: int) -> list[dict]:
+def parse_sections(
+    root: ET.Element, pmcid: str, min_chars: int, offset: int = 0
+) -> list[dict]:
     """Top-level <sec> elements under <body>.
 
     Paragraphs come from the whole subtree so a subsection's prose stays with
@@ -606,7 +658,8 @@ def parse_sections(root: ET.Element, pmcid: str, min_chars: int) -> list[dict]:
         return []
 
     sections = []
-    for section_index, sec in enumerate(body.findall("sec")):
+    for position, sec in enumerate(body.findall("sec")):
+        section_index = position + offset
         title_el = sec.find("title")
         heading = flatten(title_el) if title_el is not None else None
 
@@ -646,7 +699,20 @@ def fetch_one(pmcid: str, min_chars: int) -> dict:
     root = ET.fromstring(xml_bytes)
 
     title_el = root.find(".//article-meta//article-title")
-    sections = parse_sections(root, pmcid, min_chars)
+
+    # The abstract takes s0 so it reads first, and the body shifts down one.
+    abstract = abstract_paragraphs(root, pmcid, min_chars)
+    sections = parse_sections(root, pmcid, min_chars, offset=1 if abstract else 0)
+    if abstract:
+        sections.insert(
+            0,
+            {
+                "index": 0,
+                "heading": "Abstract",
+                "imrad": "abstract",
+                "paragraphs": abstract,
+            },
+        )
 
     paper = {
         "pmcid": pmcid,
