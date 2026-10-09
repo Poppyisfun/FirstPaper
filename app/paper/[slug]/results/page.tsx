@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import Nav from "@/components/Nav";
-import { getAllPaperSlugs, getPaper } from "@/lib/content";
+import { countParagraphs, getAllPaperSlugs, getPaper } from "@/lib/content";
+import Results from "./Results";
 
 /** Prerender this phase for every paper that exists. */
 export function generateStaticParams() {
@@ -9,7 +9,14 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
-/** PLACEHOLDER. Phase 3 builds this. */
+/**
+ * Server component. It supplies only what is fixed about the paper; every
+ * number on the screen is derived in the browser from this session's events,
+ * because nothing scores a reader without an account on the server.
+ *
+ * There is no next-paper block: one paper exists, and a placeholder suggestion
+ * would be worse than none.
+ */
 export default async function ResultsPage({
   params,
 }: PageProps<"/paper/[slug]/results">) {
@@ -18,14 +25,10 @@ export default async function ResultsPage({
   if (!paper) notFound();
 
   return (
-    <>
-      <Nav active="library" />
-      <main className="wrap">
-        <div className="sect" style={{ paddingTop: 28 }}>
-          <div className="skick">Results</div>
-          <h1 className="stitle">{paper.meta.title}</h1>
-        </div>
-      </main>
-    </>
+    <Results
+      slug={slug}
+      title={paper.meta.title}
+      paragraphsTotal={countParagraphs(paper)}
+    />
   );
 }

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import Nav from "@/components/Nav";
 import { getAllPaperSlugs, getPaper } from "@/lib/content";
+import Judge from "./Judge";
 
 /** Prerender this phase for every paper that exists. */
 export function generateStaticParams() {
@@ -9,7 +9,10 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
-/** PLACEHOLDER. Phase 3 builds this. */
+/**
+ * Server component. It loads the questions and hands them to the client
+ * component, which owns progress and nothing else.
+ */
 export default async function JudgePage({
   params,
 }: PageProps<"/paper/[slug]/judge">) {
@@ -17,15 +20,5 @@ export default async function JudgePage({
   const paper = getPaper(slug);
   if (!paper) notFound();
 
-  return (
-    <>
-      <Nav active="library" />
-      <main className="wrap">
-        <div className="sect" style={{ paddingTop: 28 }}>
-          <div className="skick">Judge</div>
-          <h1 className="stitle">{paper.meta.title}</h1>
-        </div>
-      </main>
-    </>
-  );
+  return <Judge slug={slug} questions={paper.questions.appraisal} />;
 }
