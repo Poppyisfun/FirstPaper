@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import LibraryGrid from "@/components/LibraryGrid";
@@ -43,6 +44,7 @@ export default function Library() {
           look at it.
         </Rise>
       </main>
+      <Footer />
     </>
   );
 }

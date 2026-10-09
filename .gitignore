@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated ingest output, regenerable per search
+content/ingest/data/
+
+# python bytecode from the ingest tools
+__pycache__/
+*.py[cod]
+
+# verification output: regenerable tool results, not content
+content/papers/*/verification.json
+content/papers/*/predictions-verification.json

@@ -1,0 +1,15 @@
+{
+  "slug": "crispr-human-cells",
+  "title": "RNA-programmed genome editing in human cells",
+  "authors": "Jinek M, East A, Cheng A, Lin S, Ma E, Doudna J",
+  "year": 2013,
+  "journal": "eLife",
+  "licence": "CC BY 3.0",
+  "licence_url": "http://creativecommons.org/licenses/by/3.0/",
+  "original_url": "https://doi.org/10.7554/eLife.00471",
+  "level": "Reader",
+  "minutes": 18,
+  "xp": 320,
+  "practiceGoal": "You'll practise: telling a demonstration from a proof",
+  "plainSummary": "Bacteria defend themselves against viruses with a protein that cuts DNA, guided to its target by a short piece of RNA. Change the RNA, change where it cuts. This paper asked whether that system, borrowed from bacteria, would work inside human cells.\n\nThe authors put the protein and a guide into a human cell line and aimed it at a gene. It cut. They checked the cut by looking for the scars left behind when a cell repairs broken DNA, and they found them. They tried longer guides and the cutting improved. They compared their results against an older editing tool aimed nearby.\n\nWhat this paper shows is that the system works in a dish. What it does not show is how well it works elsewhere, whether it cuts in places it shouldn't, or whether it would be safe in a person. Those questions came later, and some are still open."
+}
