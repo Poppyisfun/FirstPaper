@@ -1,8 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import type { Explanation, ImradTag, Level } from "@/lib/content-types";
+import { track } from "@/lib/events";
+import { sessionSeed, shuffleWithSeed } from "@/lib/shuffle";
+import type {
+  Explanation,
+  Figure,
+  ImradTag,
+  Level,
+  PredictionSet,
+} from "@/lib/content-types";
 
 /** One paragraph with everything the screen needs to render it. */
 export type ReaderStep = {
@@ -11,6 +19,10 @@ export type ReaderStep = {
   sectionHeading: string | null;
   imrad: ImradTag;
   explanation: Explanation;
+  /** Figures this paragraph cites by name. Usually none. */
+  figures: Figure[];
+  /** The commitment shown before the explanation. Null if none was written. */
+  prediction: PredictionSet | null;
 };
 
 export type ReaderPaper = {
@@ -18,6 +30,13 @@ export type ReaderPaper = {
   title: string;
   pmcid: string;
   originalUrl: string;
+  /* Bibliography. The attribution line is a condition of the licence the text
+     is reproduced under, not a nicety, so it renders on every paragraph. */
+  authors: string;
+  year: number;
+  journal: string;
+  licence: string;
+  licenceUrl: string | null;
 };
 
 const LEVELS: { key: Level; label: string }[] = [
@@ -26,8 +45,11 @@ const LEVELS: { key: Level; label: string }[] = [
   { key: "critic", label: "Critic" },
 ];
 
-const START_BONUS = 100;
-const EXPLAIN_COST = 4;
+/** Publishers append a DOI to the caption text. That tail is not prose. */
+function captionProse(caption: string | null): string {
+  if (!caption) return "";
+  return caption.replace(/\s*DOI:\s*https?:\/\/\S+\s*$/i, "").trim();
+}
 
 /**
  * The reading screen.
@@ -35,6 +57,12 @@ const EXPLAIN_COST = 4;
  * One paragraph at a time, the paper's own words on the left in serif and our
  * explanation on the right in sans. That split is the information
  * architecture: the reader must never have to work out who is speaking.
+ *
+ * The explanation is earned by committing, not bought. Before it appears the
+ * reader says what they think the paragraph means; once they have chosen, it
+ * appears and stays. There is no cost and nothing to lose, because the point
+ * is to find out whether the reading landed, and a reader who is being charged
+ * for help learns to avoid help rather than to read.
  *
  * Green is the only colour here, and it belongs to the explanation. Everything
  * else stays neutral, because this screen is held for twenty minutes and
@@ -49,14 +77,29 @@ export default function Reader({
 }) {
   const [index, setIndex] = useState(0);
   const [level, setLevel] = useState<Level>("reader");
-  const [bonus, setBonus] = useState(START_BONUS);
-  /** Paragraph ids already paid for. Revealing is charged once, never again. */
-  const [revealed, setRevealed] = useState<Set<string>>(new Set());
+  /** Paragraph id to the option the reader committed to. */
+  const [picked, setPicked] = useState<Record<string, string>>({});
+  /** Which figure is open full size, if any. */
+  const [zoomed, setZoomed] = useState<Figure | null>(null);
+  /* Options are ordered from a per-session seed, which only exists in the
+     browser. Rendering them before mount would order them one way on the
+     server and another after hydration. */
+  const [seed, setSeed] = useState<string | null>(null);
+
+  useEffect(() => setSeed(sessionSeed()), []);
 
   const step = steps[index];
   const total = steps.length;
-  const isRevealed = revealed.has(step.id);
   const atLast = index === total - 1;
+  const chosenOption = picked[step.id] ?? null;
+  const hasPredicted = chosenOption !== null;
+
+  /* Shuffled per session, so two readers see different orders and one reader
+     sees the same order if they reload. Position carries no information. */
+  const options = useMemo(() => {
+    if (!step.prediction || !seed) return [];
+    return shuffleWithSeed(step.prediction.options, `${seed}:${step.id}`);
+  }, [step.prediction, step.id, seed]);
 
   /* Explorer and critic are not written yet. Falling back to reader keeps the
      screen useful, and the note keeps it honest about what is being shown. */
@@ -64,11 +107,37 @@ export default function Reader({
   const usingFallback = chosen.trim().length === 0;
   const body = usingFallback ? step.explanation.reader : chosen;
   const fallbackLabel = LEVELS.find((l) => l.key === level)?.label ?? level;
+  /* Paragraph-level, not level-level: the claim outruns its evidence whoever
+     is reading. Undefined on most paragraphs, and nothing renders then. */
+  const caution = step.explanation.caution?.trim() || null;
 
-  function reveal() {
-    if (isRevealed) return;
-    setRevealed((prev) => new Set(prev).add(step.id));
-    setBonus((v) => Math.max(0, v - EXPLAIN_COST));
+  /* Escape closes the figure. A modal that can only be dismissed by clicking
+     the right thing is a trap for keyboard users. */
+  useEffect(() => {
+    if (!zoomed) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoomed(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [zoomed]);
+
+  function predict(optionId: string) {
+    if (hasPredicted || !step.prediction) return;
+    setPicked((prev) => ({ ...prev, [step.id]: optionId }));
+    /* Whether the guess was right is the difficulty signal: a paragraph most
+       readers misread is a paragraph our explanation has to work harder on.
+       Fire and forget — nothing on this screen waits for it. */
+    void track({
+      name: "prediction_made",
+      slug: paper.slug,
+      props: {
+        paragraph_id: step.id,
+        chosen_option_id: optionId,
+        correct: optionId === step.prediction.correctOptionId,
+        level,
+      },
+    });
   }
 
   function go(delta: number) {
@@ -94,9 +163,6 @@ export default function Reader({
           </div>
 
           <div className="rd-controls">
-            <span className="rd-bonus">
-              <span className="rd-bonus-n">{bonus}</span> bonus
-            </span>
             <div
               className="rd-levels"
               role="radiogroup"
@@ -135,25 +201,86 @@ export default function Reader({
         <article className="rd-paper" aria-label="Paragraph from the paper">
           <p dangerouslySetInnerHTML={{ __html: step.text }} />
 
+          {step.figures.length > 0 && (
+            <div className="rd-figs">
+              {step.figures.map((figure) => (
+                <button
+                  key={figure.id}
+                  type="button"
+                  className="rd-fig"
+                  onClick={() => setZoomed(figure)}
+                  aria-label={`Open ${figure.label ?? "figure"} full size`}
+                >
+                  {/* Not next/image: these are the authors' figures served
+                      straight from public/, and optimisation would re-encode
+                      a scientific image. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={figure.href ?? ""} alt={figure.label ?? "Figure"} />
+                  <span className="rd-fig-l">{figure.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="rd-acts">
-            <button type="button" className="rd-act" onClick={() => go(1)} disabled={atLast}>
-              I understood this
-            </button>
-            <button
-              type="button"
-              className="rd-act rd-act-explain"
-              onClick={reveal}
-              disabled={isRevealed}
-              aria-expanded={isRevealed}
-            >
-              {isRevealed ? "Explanation shown" : `Explain it  −${EXPLAIN_COST}`}
-            </button>
+            {atLast ? (
+              <Link
+                className="rd-act rd-act-go"
+                href={`/paper/${paper.slug}/check`}
+              >
+                Done reading — check what landed →
+              </Link>
+            ) : (
+              <button type="button" className="rd-act" onClick={() => go(1)}>
+                Next paragraph →
+              </button>
+            )}
           </div>
         </article>
 
         {/* FirstPaper speaking. Sans, always, and the only colour on the page. */}
         <aside className="rd-expl" aria-label="Explanation">
-          {isRevealed ? (
+          {!hasPredicted && step.prediction && (
+            <div className="rd-pred">
+              <h2 className="rd-pred-q">What do you think this paragraph says?</h2>
+              <p className="rd-pred-h">
+                Commit before you read ours. Getting it wrong costs nothing and
+                tells us more than getting it right.
+              </p>
+              {options.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className="rd-pred-o"
+                  onClick={() => predict(option.id)}
+                >
+                  {option.text}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {!step.prediction && !hasPredicted && (
+            <p className="rd-expl-idle">
+              Try saying this paragraph in your own words first.
+            </p>
+          )}
+
+          {hasPredicted && step.prediction && (
+            <p
+              className={
+                chosenOption === step.prediction.correctOptionId
+                  ? "rd-pred-v ok"
+                  : "rd-pred-v no"
+              }
+            >
+              {chosenOption === step.prediction.correctOptionId
+                ? "That matches what the paragraph says."
+                : "Not what the paragraph says — read ours against what you picked."}
+            </p>
+          )}
+
+          {hasPredicted && (
             <div className="rd-expl-in">
               <p className="rd-expl-t">{body}</p>
               {usingFallback && (
@@ -161,12 +288,15 @@ export default function Reader({
                   {fallbackLabel} level isn&rsquo;t written yet. Showing Reader.
                 </p>
               )}
+              {/* Only where the paragraph actually carries one. Rare on
+                  purpose: a caution on every paragraph is a caution on none. */}
+              {caution && (
+                <div className="rd-caution">
+                  <span className="rd-caution-k">Worth questioning</span>
+                  <p className="rd-caution-t">{caution}</p>
+                </div>
+              )}
             </div>
-          ) : (
-            <p className="rd-expl-idle">
-              Try saying this paragraph in your own words first. The explanation
-              is here when you want it.
-            </p>
           )}
 
           <p className="rd-honest">
@@ -205,6 +335,50 @@ export default function Reader({
           Next →
         </button>
       </footer>
+
+      {zoomed && (
+        <div
+          className="rd-zoom"
+          role="dialog"
+          aria-modal="true"
+          aria-label={zoomed.label ?? "Figure"}
+          onClick={() => setZoomed(null)}
+        >
+          <div className="rd-zoom-in" onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={zoomed.href ?? ""} alt={zoomed.label ?? "Figure"} />
+            <div className="rd-zoom-cap">
+              <b>{zoomed.label}</b>
+              <p>{captionProse(zoomed.caption)}</p>
+            </div>
+            <button
+              type="button"
+              className="rd-zoom-x"
+              onClick={() => setZoomed(null)}
+              aria-label="Close figure"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Required by the licence the paper text is reproduced under. It names
+          the authors, where the work was published, and what the licence
+          permits, and it is present on every paragraph rather than once at the
+          end, because a reader may never reach the end. */}
+      <p className="rd-attrib">
+        {paper.title}. {paper.authors} ({paper.year}){" "}
+        <i>{paper.journal}</i>. Reproduced under{" "}
+        {paper.licenceUrl ? (
+          <a href={paper.licenceUrl} target="_blank" rel="noopener noreferrer">
+            {paper.licence}
+          </a>
+        ) : (
+          paper.licence
+        )}
+        . The paper&rsquo;s own text is unchanged.
+      </p>
     </div>
   );
 }

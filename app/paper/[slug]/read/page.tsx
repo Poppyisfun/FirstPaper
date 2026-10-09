@@ -35,6 +35,9 @@ export default async function ReadPage({
   const paper = getPaper(slug);
   if (!paper) notFound();
 
+  /* A figure belongs to the paragraphs whose text cites it by name, which is
+     computed at ingest rather than here. A figure with no image is dropped:
+     there is nothing to show, and a broken thumbnail is worse than none. */
   const steps: ReaderStep[] = paper.source.sections.flatMap((section) =>
     section.paragraphs.map((paragraph) => ({
       id: paragraph.id,
@@ -46,6 +49,11 @@ export default async function ReadPage({
         reader: "",
         critic: "",
       },
+      prediction: paper.predictions[paragraph.id] ?? null,
+      figures: paper.source.figures.filter(
+        (figure) =>
+          figure.href && (figure.referenced_by ?? []).includes(paragraph.id),
+      ),
     })),
   );
 
@@ -56,6 +64,11 @@ export default async function ReadPage({
         title: paper.meta.title,
         pmcid: paper.source.pmcid,
         originalUrl: paper.meta.originalUrl,
+        authors: paper.meta.authors,
+        year: paper.meta.year,
+        journal: paper.meta.journal,
+        licence: paper.meta.licence,
+        licenceUrl: paper.meta.licenceUrl,
       }}
       steps={steps}
     />
