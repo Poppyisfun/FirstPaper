@@ -88,6 +88,19 @@ export default function Reader({
 
   useEffect(() => setSeed(sessionSeed()), []);
 
+  /* Opening the paper is what creates the session row. Fired once per mount
+     and carrying the level, which the session needs and no later event is
+     guaranteed to supply. */
+  useEffect(() => {
+    void track({
+      name: "paper_started",
+      slug: paper.slug,
+      props: { level, paragraphs: steps.length },
+    });
+    // Once per paper, not once per level change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paper.slug]);
+
   const step = steps[index];
   const total = steps.length;
   const atLast = index === total - 1;

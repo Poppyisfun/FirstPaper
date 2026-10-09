@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { readLog } from "@/lib/events";
+import { flushNow, readLog, track } from "@/lib/events";
 import {
   calibrationNote,
   calibrationSentence,
@@ -39,7 +39,13 @@ export default function Results({
   const [data, setData] = useState<ResultsData | null>(null);
 
   useEffect(() => {
-    setData(deriveResults(readLog(slug), paragraphsTotal));
+    const log = readLog(slug);
+    setData(deriveResults(log, paragraphsTotal));
+    /* Reaching this screen is the end of the paper. Recorded so the session
+       can be closed server-side; the number on screen does not wait for it. */
+    if (log.length > 0) {
+      void track({ name: "paper_completed", slug }).then(() => flushNow());
+    }
   }, [slug, paragraphsTotal]);
 
   if (!data) {
