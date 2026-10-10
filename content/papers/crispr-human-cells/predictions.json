@@ -3,21 +3,22 @@
   "prompt": "What do you think this paragraph says?",
   "predictions": {
     "PMC3557905-s0-p0": {
+      "prompt": "What would you need to see to believe this?",
       "options": [
         {
           "id": "o1",
-          "text": "Cas9 protein alone was enough to cut human genomic DNA, and adding guide RNA simply made the cuts happen faster; the authors conclude that the amount of Cas9 protein is what limits editing."
+          "text": "Proof that the cut happened where they aimed it, in living cells, and some sign of how often it worked rather than just that it can."
         },
         {
           "id": "o2",
-          "text": "The authors report that Cas9, borrowed from a bacterial defence system, can team up with guide RNA inside human cells and cut both strands of DNA at the matching spot, with the supply of working guide RNA seeming to be the main bottleneck."
+          "text": "Evidence that the cutting is safe in a living person, with no harm done to the patient and no lasting side effects once the treatment has finished."
         },
         {
           "id": "o3",
-          "text": "Cas9 worked only in extracts taken from broken-open cells, not in living human cells, and trimming the guide RNA shorter at one end was what made the targeting work better."
+          "text": "A survey of the whole genome showing every other place the protein cut by mistake, counted and listed, so the damage elsewhere is fully known."
         }
       ],
-      "correct_option_id": "o2"
+      "correct_option_id": "o1"
     },
     "PMC3557905-s1-p0": {
       "options": [
@@ -58,15 +59,15 @@
       "options": [
         {
           "id": "o1",
-          "text": "Cas9 and the guide RNA work separately in human cells, and tests on cell extracts proved that the amount of Cas9 protein was the factor limiting how much DNA got cut."
+          "text": "Cas9 cuts DNA on its own, and the short RNA that comes with it only makes the cutting faster rather than choosing the place."
         },
         {
           "id": "o2",
-          "text": "Cas9 enters the nucleus of human cells and joins with the guide RNA there, and together they cut both strands of DNA at the matching site and set off end-joining repair; both parts are required, lengthening the RNA at its 3' end improves targeting, and loading the RNA into Cas9 is the step that limits cutting."
+          "text": "Cas9 and a short guide RNA together cut human DNA at a chosen spot, and lengthening the guide's tail made the cutting work better."
         },
         {
           "id": "o3",
-          "text": "The authors suggest Cas9 may reach the nucleus, but report that cutting only happened after an extra human repair protein was supplied, and that trimming the guide RNA at its 3' end appeared to sharpen its aim."
+          "text": "Cas9 works only outside living cells, in a tube, and the authors could not get it to cut anything inside a human cell at all."
         }
       ],
       "correct_option_id": "o2",
@@ -163,15 +164,15 @@
       "options": [
         {
           "id": "o1",
-          "text": "The researchers showed in these experiments that loading several guide RNAs into one cell let them cut many genes at once, which is how they built their multigenic disease models."
+          "text": "They report that giving one cell several guides at once already worked, and show the results of hitting two separate genes at the same time."
         },
         {
           "id": "o2",
-          "text": "The authors suggest their work lays the groundwork for using Cas9 as an easy editing tool, and note that although they did not test it here, one cell could in principle be given several guide RNAs to hit one site harder or many sites at once."
+          "text": "They suggest one cell could be given several guides at once, to hit one gene harder or several genes together, without having tested it."
         },
         {
           "id": "o3",
-          "text": "They report that using more than one guide RNA at a time lowers the accuracy of cutting, so the system works best when a single site is targeted on its own."
+          "text": "They conclude that several guides in one cell interfere with each other, and advise against trying to target more than one gene."
         }
       ],
       "correct_option_id": "o2"
@@ -233,15 +234,15 @@
       "options": [
         {
           "id": "o1",
-          "text": "The authors appear to show that the mismatch-cutting enzyme destroyed all edited DNA strands, so that the brightness of the single uncut 360-base-pair band on the gel told them directly how many cells had escaped editing, with the blue and white bacterial colonies confirming this count."
+          "text": "The target stretch was copied, the copies were melted apart and left to re-pair, and an enzyme cut wherever two strands disagreed."
         },
         {
           "id": "o2",
-          "text": "A 360-base-pair piece of the CLTA gene was copied, heated and slowly cooled so edited and unedited strands pair up, then cut by an enzyme that attacks mismatches; gel bands gave the percent cut, and cloned pieces were sequenced."
+          "text": "The target stretch was copied and read letter by letter directly, with no enzyme involved and no gel used at any stage."
         },
         {
           "id": "o3",
-          "text": "The exact insertions and deletions were read straight off the gel, and the bacteria were grown only to produce enough of the enzyme needed to cut the mismatched DNA."
+          "text": "The target stretch was copied and weighed against an unedited sample, and the difference in weight gave the amount of editing."
         }
       ],
       "correct_option_id": "o2"
@@ -267,15 +268,15 @@
       "options": [
         {
           "id": "o1",
-          "text": "RNA from HEK293T cells was separated by size on a gel, transferred to a membrane and fixed in place with UV light, then found using a radioactive DNA probe and read off by imaging."
+          "text": "RNA was pulled out of the cells, separated by size on a gel, moved onto a membrane and found with a radioactive probe."
         },
         {
           "id": "o2",
-          "text": "The authors suggest that the mirVana kit seems to pull out more small RNA from HEK293T cells than the older gel-based methods they tried."
+          "text": "Protein was pulled out of the cells, separated by size on a gel, moved onto a membrane and found with a tag-binding antibody."
         },
         {
           "id": "o3",
-          "text": "Proteins from HEK293T cells were run on a gel, blotted onto a membrane, and detected with labelled antibodies."
+          "text": "DNA was pulled out of the cells, cut with an enzyme at a known spot, and the resulting pieces were measured on a gel."
         }
       ],
       "correct_option_id": "o1"

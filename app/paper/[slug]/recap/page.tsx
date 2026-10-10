@@ -27,6 +27,15 @@ export default async function RecapPage({
   const paper = getPaper(slug);
   if (!paper) notFound();
 
+  /* The abstract, shown a second time. Being able to read it now, after
+     seventeen paragraphs of working through the paper, is the most direct
+     evidence the reader has that any of this landed. It costs nothing to
+     put here and nothing else on the screen demonstrates the point as
+     plainly. */
+  const abstract = paper.source.sections
+    .find((section) => section.imrad === "abstract")
+    ?.paragraphs[0];
+
   const paragraphs = paper.meta.plainSummary
     .split(/\n{2,}/)
     .map((p) => p.trim())
@@ -39,6 +48,19 @@ export default async function RecapPage({
       </header>
 
       <main className="rc">
+        {abstract && (
+          <section className="rc-then" aria-label="The abstract, again">
+            <span className="rc-then-k">This is where you started</span>
+            <p
+              className="rc-then-t"
+              dangerouslySetInnerHTML={{ __html: abstract.text }}
+            />
+            <p className="rc-then-n">
+              You were told not to expect to follow this. Read it again now.
+            </p>
+          </section>
+        )}
+
         <h1 className="rc-t">The whole paper, in plain English</h1>
 
         {paragraphs.map((text, i) => (

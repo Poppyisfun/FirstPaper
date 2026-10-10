@@ -1,4 +1,5 @@
 import Nav from "@/components/Nav";
+import { getAllPapers } from "@/lib/content";
 import HeroSpotlight from "@/components/HeroSpotlight";
 import HeroCopy from "@/components/HeroCopy";
 import DemoStrip from "@/components/DemoStrip";
@@ -33,7 +34,7 @@ const journey = [
   {
     tone: "g",
     t: "Read the real paper",
-    d: "Not a summary. The actual published text, with the real figures. Beside every paragraph is a plain language explanation written at your level. You choose Explorer, Reader, or Critic, and you can switch any time.",
+    d: "Not a summary. The actual published text, with the real figures. Beside every paragraph is a plain language explanation. One reading level is written today; Explorer and Critic are coming.",
   },
   {
     tone: "g",
@@ -43,7 +44,7 @@ const journey = [
   {
     tone: "a",
     t: "Judge the science",
-    d: "Five harder questions on whether the paper holds up. Was the sample big enough? Did they prove a cause or just find a pattern? Who paid for it? Before each answer, you say how confident you are.",
+    d: "Five harder questions on whether the paper holds up. Does the claim cover more ground than the experiment did? What is that percentage a fraction of? Did the authors say shown, or did they say suggests? Before you see the options, you say how confident you are.",
   },
   {
     tone: "g",
@@ -53,7 +54,7 @@ const journey = [
   {
     tone: "v",
     t: "See your results",
-    d: "Your score, your rank, and the skills you unlocked.",
+    d: "How often you were right, set against how sure you said you were. That gap is the thing worth knowing.",
   },
 ];
 
@@ -61,6 +62,11 @@ const journey = [
 const ranks = ["Explorer", "Reader", "Critic", "Peer Reviewer"];
 
 export default function Home() {
+  /* Derived, not asserted. The landing page and the library card used to
+     disagree because each carried its own number; meta.json is the one
+     place a paper says how long it takes. */
+  const minutes = Math.min(...getAllPapers().map((p) => p.meta.minutes));
+
   return (
     <>
       <a className="skip" href="#how">
@@ -152,8 +158,8 @@ export default function Home() {
             <div className="skick">The journey</div>
             <h2 className="stitle">What happens when you open a paper</h2>
             <p className="ssub">
-              One paper takes about 25 minutes. Here is exactly what you will
-              do.
+              One paper takes about {minutes} minutes. Here is exactly what
+              you will do.
             </p>
           </Rise>
 
@@ -192,12 +198,13 @@ export default function Home() {
               </RiseItem>
 
               <RiseItem className="xp-b a">
-                <h3>Bonus</h3>
+                <h3>Guess first</h3>
                 <p>
-                  Every paper starts you with an insight bonus. Understand a
-                  paragraph yourself and you keep it. Ask for an explanation
-                  and you spend a little. Asking for help is always allowed.
-                  The bonus is only there to reward trying first.
+                  Before each explanation you pick what you think the
+                  paragraph says. Getting it wrong costs nothing and is not
+                  scored against you. It is how we find out which paragraphs
+                  lose people, which is the only way the explanations get
+                  better.
                 </p>
               </RiseItem>
 
@@ -211,13 +218,6 @@ export default function Home() {
                 </p>
               </RiseItem>
 
-              <RiseItem className="xp-b">
-                <h3>Badges</h3>
-                <p>
-                  You also unlock skill badges along the way. Each one marks a
-                  specific thing you can now spot in any paper.
-                </p>
-              </RiseItem>
             </Stagger>
 
             <Rise className="ladder" delay={0.1}>
@@ -247,15 +247,15 @@ export default function Home() {
         <section className="sect tight">
           <Rise className="acct">
             <div className="skick">Your account</div>
-            <h2 className="stitle">Keep everything in one place</h2>
+            <h2 className="stitle">Accounts are coming</h2>
             <p>
-              Create an account and your XP stays with you. Your dashboard
-              shows the papers you have finished, the ones you are partway
-              through, and your current rank. As you read, it suggests new
-              papers based on what you are interested in.
+              You do not need one. A whole paper works start to finish without
+              signing up for anything, and your results are yours either way.
+              Later, an account will carry your XP between papers and keep a
+              record of what you have read.
             </p>
-            <BtnLink href="/account" variant="v lg" icon="→">
-              Create your account
+            <BtnLink href="/library" variant="v lg" icon="→">
+              Read a paper instead
             </BtnLink>
           </Rise>
         </section>
@@ -296,8 +296,8 @@ export default function Home() {
           <Rise>
             <h2 className="stitle">Start with one paper.</h2>
             <p className="ssub">
-              It takes 25 minutes. You will finish knowing how to read the next
-              one.
+              It takes {minutes} minutes. You will finish knowing how to read
+              the next one.
             </p>
             <div className="final-cta">
               <BtnLink href="/library" variant="pri lg" icon="→">

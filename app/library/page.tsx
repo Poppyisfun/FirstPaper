@@ -26,8 +26,7 @@ export default function Library() {
           </Rise>
           <Rise as="p" className="ssub" delay={0.12} style={{ maxWidth: 560 }}>
             Every paper here is free and open-access, and picked because
-            it&rsquo;s worth your time. Start anywhere. Most people begin with
-            an Explorer paper.
+            it&rsquo;s worth your time.
           </Rise>
         </div>
 

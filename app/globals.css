@@ -1447,3 +1447,93 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 @media(prefers-reduced-motion:reduce){
   .rs-bar-track i{transition:none}
 }
+
+/* ===========================================================================
+   Orientation step, the prediction gate, the recap's second look at the
+   abstract, and the per-session breakdown on results.
+   ======================================================================== */
+@layer components {
+  /* -- The abstract, presented as orientation rather than paragraph one. -- */
+  .rd-orient{margin-bottom:26px;padding-bottom:20px;
+    border-bottom:1px solid var(--line)}
+  .rd-orient-k{display:block;font-family:var(--mo);font-size:10px;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--soft);
+    margin-bottom:9px}
+  .rd-orient-t{font-family:var(--ui);font-size:13.5px;line-height:1.62;
+    color:var(--soft);margin:0;max-width:52ch}
+
+  /* -- Why the next button is dead. Stated beside the dead button. -- */
+  .rd-gate{font-family:var(--ui);font-size:12.5px;line-height:1.55;
+    color:var(--soft);margin:12px 0 0;max-width:46ch}
+
+  /* -- Recap: the abstract, second time around. Serif, because these are
+        still the authors' words, and boxed off so it reads as a callback
+        rather than as the start of the summary. -- */
+  .rc-then{margin:0 0 42px;padding:22px 24px;border:1px solid var(--line);
+    border-radius:8px;background:var(--surf)}
+  .rc-then-k{display:block;font-family:var(--mo);font-size:10px;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--soft);
+    margin-bottom:12px}
+  .rc-then-t{font-family:var(--rd);font-size:15.5px;line-height:1.72;
+    color:var(--ink-2);margin:0;max-width:62ch}
+  .rc-then-n{font-family:var(--ui);font-size:12.5px;line-height:1.55;
+    color:var(--soft);margin:14px 0 0}
+
+  /* -- Results: the working, under the headline. Quiet throughout: the
+        calibration sentence is the only thing on this screen allowed to
+        be loud. -- */
+  .rs-detail{margin-top:54px;padding-top:30px;
+    border-top:1px solid var(--line)}
+  .rs-detail-h{font-family:var(--ui);font-size:15px;font-weight:650;
+    color:var(--ink);margin:0 0 26px}
+
+  .rs-grp{margin-bottom:30px}
+  .rs-grp-h{display:flex;justify-content:space-between;align-items:baseline;
+    gap:14px;font-family:var(--mo);font-size:10.5px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--soft);font-weight:400;
+    margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-2)}
+  .rs-grp-h span{color:var(--ink);font-variant-numeric:tabular-nums}
+  .rs-grp-n{font-family:var(--ui);font-size:12.5px;line-height:1.55;
+    color:var(--soft);margin:0 0 12px;max-width:52ch}
+
+  .rs-qs{list-style:none;margin:0;padding:0}
+  .rs-qs li{display:grid;grid-template-columns:62px 1fr auto;gap:12px;
+    align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-2)}
+  .rs-qs li:last-child{border-bottom:0}
+  .rs-q-v{font-family:var(--mo);font-size:9.5px;letter-spacing:.12em;
+    text-transform:uppercase}
+  .rs-qs li.ok .rs-q-v{color:var(--green)}
+  .rs-qs li.no .rs-q-v{color:var(--soft)}
+  .rs-q-t{font-family:var(--ui);font-size:13.5px;line-height:1.5;
+    color:var(--ink-2)}
+  .rs-q-c{font-family:var(--mo);font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--violet);white-space:nowrap}
+
+  .rs-tags{list-style:none;margin:0;padding:0}
+  .rs-tags li{display:grid;grid-template-columns:130px 62px 1fr;gap:12px;
+    align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-2)}
+  .rs-tags li:last-child{border-bottom:0}
+  .rs-tags b{font-family:var(--ui);font-size:13.5px;font-weight:650;
+    color:var(--ink)}
+  .rs-tags span{font-family:var(--mo);font-size:12px;color:var(--ink);
+    font-variant-numeric:tabular-nums}
+  .rs-tags li.zero span{color:var(--red)}
+  .rs-tags i{font-style:normal;font-family:var(--ui);font-size:12.5px;
+    line-height:1.5;color:var(--soft)}
+
+  .rs-miss{list-style:none;margin:0;padding:0}
+  .rs-miss li{display:flex;justify-content:space-between;gap:14px;
+    padding:8px 0;border-bottom:1px solid var(--line-2)}
+  .rs-miss li:last-child{border-bottom:0}
+  .rs-miss b{font-family:var(--ui);font-size:13.5px;font-weight:600;
+    color:var(--ink-2)}
+  .rs-miss span{font-family:var(--mo);font-size:12px;color:var(--soft);
+    font-variant-numeric:tabular-nums}
+
+  @media(max-width:700px){
+    .rs-qs li{grid-template-columns:56px 1fr;row-gap:4px}
+    .rs-q-c{grid-column:2}
+    .rs-tags li{grid-template-columns:1fr auto;row-gap:2px}
+    .rs-tags i{grid-column:1 / -1}
+  }
+}

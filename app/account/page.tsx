@@ -26,9 +26,11 @@ export default function Account() {
               Accounts are coming
             </h1>
             <p className="ssub">
-              Right now your progress lives in this session. Soon you will be
-              able to create an account, keep your XP, see every paper you have
-              read, and get suggestions based on what you are interested in.
+              There is nothing to sign up for yet, and nothing you are
+              missing: a whole paper works start to finish without an account,
+              and you get your full results at the end. What an account will
+              add later is memory across papers — your XP carried forward, a
+              record of what you have read, and suggestions based on it.
             </p>
             <div className="acct-cta">
               <BtnLink href="/library" variant="pri lg" icon="→">

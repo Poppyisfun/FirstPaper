@@ -116,6 +116,9 @@ function toPredictions(raw: typeof crisprPredictions): Predictions {
       {
         options: value.options.map((o) => ({ id: o.id, text: o.text })),
         correctOptionId: value.correct_option_id,
+        ...("prompt" in value && value.prompt
+          ? { prompt: value.prompt as string }
+          : {}),
       },
     ]),
   );

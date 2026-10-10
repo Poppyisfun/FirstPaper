@@ -24,10 +24,23 @@ export type Rank = "Explorer" | "Reader" | "Critic" | "Peer Reviewer";
 /** XP never goes negative anywhere it is displayed. */
 export const floor0 = (n: number) => (n < 0 ? 0 : n);
 
+/**
+ * Rank thresholds.
+ *
+ * PROVISIONAL, and per paper. Perfect play on a seventeen-paragraph paper
+ * with five questions in each round is 336 XP, so the old 380 for Peer
+ * Reviewer was arithmetically unreachable: a reader could answer everything
+ * correctly and still be shown a tier above them they could never earn.
+ * These are set against that ceiling — top rank on a perfect run, not on a
+ * typical one.
+ *
+ * They must be revisited when accounts land and rank becomes cumulative
+ * across papers, because a per-paper ceiling is the wrong basis then.
+ */
 export function rankFor(xp: number): Rank {
-  if (xp >= 380) return "Peer Reviewer";
-  if (xp >= 260) return "Critic";
-  if (xp >= 140) return "Reader";
+  if (xp >= 310) return "Peer Reviewer";
+  if (xp >= 220) return "Critic";
+  if (xp >= 110) return "Reader";
   return "Explorer";
 }
 
@@ -53,6 +66,22 @@ export type Calibration =
       verdict: "overconfident" | "underconfident" | "well calibrated";
     };
 
+/** One answered question, for the per-question breakdown. */
+export type AnsweredQuestion = {
+  questionId: string;
+  chosenOptionId: string;
+  correct: boolean;
+  /** Appraisal only: what they staked before seeing the options. */
+  confidence: number | null;
+  tag: string | null;
+};
+
+/** A paragraph whose prediction was wrong, with where it sits in the paper. */
+export type MissedParagraph = {
+  paragraphId: string;
+  section: string;
+};
+
 export type Results = {
   /** Paragraphs where the reader predicted before the explanation appeared. */
   paragraphsPredicted: number;
@@ -73,6 +102,15 @@ export type Results = {
   /** Appraisal tags the reader got wrong, worst first. */
   missedTags: { tag: string; missed: number; total: number }[];
 
+  /** Every check answer, in the order they were given. */
+  checkAnswers: AnsweredQuestion[];
+  /** Every judge answer, with the confidence staked on it. */
+  judgeAnswers: AnsweredQuestion[];
+  /** Appraisal performance per criterion, including the ones they got right. */
+  tagBreakdown: { tag: string; correct: number; total: number }[];
+  /** Paragraphs the reader predicted wrong, grouped by section. */
+  missedPredictions: MissedParagraph[];
+
   xp: number;
   rank: Rank;
 };
@@ -89,9 +127,37 @@ function prop(event: PaperEvent, key: string): unknown {
  */
 const CALIBRATION_BAND = 10;
 
+/**
+ * Every appraisal criterion the reader met, right or wrong.
+ *
+ * Distinct from deriveMissedTags, which lists only failures for the pattern
+ * sentence. The breakdown shows the whole picture, because "denominator:
+ * 0 of 1" only means something next to "scope: 1 of 1".
+ */
+export function deriveTagBreakdown(
+  judged: JudgeAnswer[],
+): { tag: string; correct: number; total: number }[] {
+  const counts = new Map<string, { correct: number; total: number }>();
+  for (const j of judged) {
+    const entry = counts.get(j.tag) ?? { correct: 0, total: 0 };
+    entry.total += 1;
+    if (j.correct) entry.correct += 1;
+    counts.set(j.tag, entry);
+  }
+  return [...counts.entries()]
+    .map(([tag, v]) => ({ tag, ...v }))
+    // Worst first: this is a "where did I struggle" view, not a scoreboard.
+    .sort(
+      (a, b) =>
+        a.correct / a.total - b.correct / b.total || a.tag.localeCompare(b.tag),
+    );
+}
+
 export function deriveResults(
   events: PaperEvent[],
   paragraphsTotal: number,
+  /** Paragraph id to section heading, for grouping missed predictions. */
+  sectionOf: Record<string, string> = {},
 ): Results {
   const predictions = events.filter((e) => e.name === "prediction_made");
   /* A reader can revisit a paragraph; only the first prediction counts, since
@@ -137,7 +203,26 @@ export function deriveResults(
       judgeCorrect * XP_JUDGE_CORRECT,
   );
 
+  const asAnswered = (e: PaperEvent): AnsweredQuestion => ({
+    questionId: String(prop(e, "question_id") ?? ""),
+    chosenOptionId: String(prop(e, "chosen_option_id") ?? ""),
+    correct: prop(e, "correct") === true,
+    confidence:
+      typeof prop(e, "confidence") === "number"
+        ? (prop(e, "confidence") as number)
+        : null,
+    tag: typeof prop(e, "tag") === "string" ? (prop(e, "tag") as string) : null,
+  });
+
+  const missedPredictions: MissedParagraph[] = [...firstByParagraph.entries()]
+    .filter(([, e]) => prop(e, "correct") !== true)
+    .map(([id]) => ({ paragraphId: id, section: sectionOf[id] ?? "" }));
+
   return {
+    checkAnswers: checks.map(asAnswered),
+    judgeAnswers: judgeEvents.map(asAnswered),
+    tagBreakdown: deriveTagBreakdown(judged),
+    missedPredictions,
     paragraphsPredicted,
     paragraphsPredictedCorrectly,
     paragraphsTotal,

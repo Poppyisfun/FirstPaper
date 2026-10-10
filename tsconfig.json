@@ -40,6 +40,7 @@
     "node_modules",
     "content/ingest",
     ".next",
-    "out"
+    "out",
+    "refrence"
   ]
 }

@@ -81,6 +81,16 @@ and costs nothing to get wrong.
 
 `prediction_made` is the difficulty signal, replacing `explanation_requested`.
 
+### Rank thresholds are provisional and per paper
+
+Explorer 0 / Reader 110 / Critic 220 / Peer Reviewer 310, set against a
+perfect-play ceiling of 336 on the first paper. The previous 380 for Peer
+Reviewer could not be reached by anyone.
+
+**Ranks should be cumulative across papers once accounts exist**, and these
+numbers must be revisited then: a threshold calibrated to one paper's ceiling
+is the wrong basis for a total across several.
+
 ### Scoring is derived, never stored
 
 XP, scores, ranks and calibration are **computed from `events` at read time.**
@@ -269,6 +279,18 @@ clothes, not an exploitable tell.
 
 Do not build a model-based register classifier, and do not reopen this without
 evidence from a real reader exploiting a real tell.
+
+### Watch the hedging of distractors on paper two
+
+Across the seventeen prediction sets on the first paper, the correct option
+was the strictly **least** hedged **zero** times. Longest and most-hedged both
+came out near chance (7/17 and 6/17 against a 1-in-3 baseline), so there is no
+tell a reader could exploit, and this one is not exploitable either: the hedge
+counts are 0-3 and usually tied, so "it is not the bluntest" is not a strategy.
+
+It does mean our distractors carry blunt overclaims more often than the truth
+does. Harmless at one paper. Check it again on the second, because a reader
+who meets it twice may start to feel it even if they could not name it.
 
 ### The notes must not STATE the answer
 

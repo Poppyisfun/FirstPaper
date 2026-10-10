@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { flushNow, readLog, track } from "@/lib/events";
 import {
+  TAG_PHRASE,
   calibrationNote,
   calibrationSentence,
   deriveResults,
@@ -29,10 +30,14 @@ export default function Results({
   slug,
   title,
   paragraphsTotal,
+  sectionOf,
+  questionPrompts,
 }: {
   slug: string;
   title: string;
   paragraphsTotal: number;
+  sectionOf: Record<string, string>;
+  questionPrompts: Record<string, string>;
 }) {
   /* Derived from the session's events at read time, never stored. Reading
      happens after mount because the log lives in the browser. */
@@ -40,12 +45,14 @@ export default function Results({
 
   useEffect(() => {
     const log = readLog(slug);
-    setData(deriveResults(log, paragraphsTotal));
+    setData(deriveResults(log, paragraphsTotal, sectionOf));
     /* Reaching this screen is the end of the paper. Recorded so the session
        can be closed server-side; the number on screen does not wait for it. */
     if (log.length > 0) {
       void track({ name: "paper_completed", slug }).then(() => flushNow());
     }
+    // sectionOf is a fixed server-rendered map; it never changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, paragraphsTotal]);
 
   if (!data) {
@@ -131,6 +138,103 @@ export default function Results({
             </dd>
           </div>
         </dl>
+
+        {/* ── The per-session breakdown ──────────────────────────────
+            Everything above is the headline. This is the working: which
+            question, which answer, and for the judging round what they
+            staked on it. No account needed; it is all in this session. */}
+        <section className="rs-detail" aria-label="Question by question">
+          <h2 className="rs-detail-h">Question by question</h2>
+
+          {data.checkAnswers.length > 0 && (
+            <div className="rs-grp">
+              <h3 className="rs-grp-h">
+                Comprehension <span>{data.checkCorrect} of {data.checkAnswered}</span>
+              </h3>
+              <ol className="rs-qs">
+                {data.checkAnswers.map((a) => (
+                  <li key={a.questionId} className={a.correct ? "ok" : "no"}>
+                    <span className="rs-q-v">{a.correct ? "right" : "wrong"}</span>
+                    <span className="rs-q-t">
+                      {questionPrompts[a.questionId] ?? a.questionId}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {data.judgeAnswers.length > 0 && (
+            <div className="rs-grp">
+              <h3 className="rs-grp-h">
+                Appraisal <span>{data.judgeCorrect} of {data.judgeAnswered}</span>
+              </h3>
+              <ol className="rs-qs">
+                {data.judgeAnswers.map((a) => (
+                  <li key={a.questionId} className={a.correct ? "ok" : "no"}>
+                    <span className="rs-q-v">{a.correct ? "right" : "wrong"}</span>
+                    <span className="rs-q-t">
+                      {questionPrompts[a.questionId] ?? a.questionId}
+                    </span>
+                    {a.confidence !== null && (
+                      <span className="rs-q-c">
+                        said {a.confidence}% sure
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {data.tagBreakdown.length > 0 && (
+            <div className="rs-grp">
+              <h3 className="rs-grp-h">By what it tested</h3>
+              <ul className="rs-tags">
+                {data.tagBreakdown.map((t) => (
+                  <li key={t.tag} className={t.correct === 0 ? "zero" : ""}>
+                    <b>{t.tag}</b>
+                    <span>{t.correct} of {t.total}</span>
+                    <i>{TAG_PHRASE[t.tag] ?? ""}</i>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {data.missedPredictions.length > 0 && (
+            <div className="rs-grp">
+              <h3 className="rs-grp-h">
+                Paragraphs you read differently to us{" "}
+                <span>
+                  {data.missedPredictions.length} of {data.paragraphsPredicted}
+                </span>
+              </h3>
+              <p className="rs-grp-n">
+                Your first guess did not match ours here. That is not a score
+                against you — it is where our explanation had the most work to
+                do.
+              </p>
+              <ul className="rs-miss">
+                {Object.entries(
+                  data.missedPredictions.reduce<Record<string, number>>(
+                    (acc, m) => {
+                      const key = m.section || "Elsewhere";
+                      acc[key] = (acc[key] ?? 0) + 1;
+                      return acc;
+                    },
+                    {},
+                  ),
+                ).map(([section, count]) => (
+                  <li key={section}>
+                    <b>{section}</b>
+                    <span>{count}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
 
         <p className="rs-paper">{title}</p>
 

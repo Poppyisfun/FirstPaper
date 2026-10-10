@@ -114,6 +114,14 @@ export type PredictionOption = {
 export type PredictionSet = {
   options: PredictionOption[];
   correctOptionId: string;
+  /**
+   * Overrides the default "what do you think this paragraph says?".
+   *
+   * The abstract gets a different question, because it is the only paragraph
+   * that is already a summary of everything else and asking a reader to
+   * predict a summary is a strange thing to do.
+   */
+  prompt?: string;
 };
 
 /** predictions.json, keyed by paragraph id. */

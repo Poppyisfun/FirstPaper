@@ -6,13 +6,26 @@ import PaperCard from "@/components/PaperCard";
 import { Rise, springSoft } from "@/components/motion-primitives";
 import { FILTERS, LIBRARY, matchesFilter, type Filter } from "@/content/library";
 
+/**
+ * Below this many papers the filter row is hidden.
+ *
+ * Filters over a one-item shelf read as broken: most values return nothing,
+ * and a reader cannot tell an empty category from a bug. They come back on
+ * their own once there is something to filter.
+ */
+const MIN_PAPERS_FOR_FILTERS = 4;
+
 export default function LibraryGrid() {
   const [filter, setFilter] = useState<Filter>("All papers");
-  const shown = LIBRARY.filter((entry) => matchesFilter(entry, filter));
+  const showFilters = LIBRARY.length >= MIN_PAPERS_FOR_FILTERS;
+  const shown = showFilters
+    ? LIBRARY.filter((entry) => matchesFilter(entry, filter))
+    : LIBRARY;
   const reduce = useReducedMotion();
 
   return (
     <>
+      {showFilters && (
       <Rise className="filters" delay={0.08}>
         {FILTERS.map((f) => (
           <button
@@ -33,6 +46,7 @@ export default function LibraryGrid() {
           </button>
         ))}
       </Rise>
+      )}
 
       <motion.div className="cards" layout={!reduce}>
         <AnimatePresence mode="popLayout">
@@ -57,7 +71,7 @@ export default function LibraryGrid() {
         className="mt-6 font-mono text-[9.5px] uppercase tracking-[0.13em] text-ink-soft"
       >
         {shown.length} {shown.length === 1 ? "paper" : "papers"}
-        {filter !== "All papers" && ` · ${filter}`}
+        {showFilters && filter !== "All papers" && ` · ${filter}`}
       </p>
     </>
   );

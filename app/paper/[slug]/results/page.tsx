@@ -24,11 +24,27 @@ export default async function ResultsPage({
   const paper = getPaper(slug);
   if (!paper) notFound();
 
+  /* Which section each paragraph sits in, so a missed prediction can be
+     reported as "Materials and methods" rather than as an opaque id. The
+     client has no access to source.json. */
+  const sectionOf: Record<string, string> = {};
+  for (const section of paper.source.sections) {
+    for (const paragraph of section.paragraphs) {
+      sectionOf[paragraph.id] = section.heading ?? section.imrad;
+    }
+  }
+
   return (
     <Results
       slug={slug}
       title={paper.meta.title}
       paragraphsTotal={countParagraphs(paper)}
+      sectionOf={sectionOf}
+      questionPrompts={Object.fromEntries(
+        [...paper.questions.comprehension, ...paper.questions.appraisal].map(
+          (q) => [q.id, q.prompt],
+        ),
+      )}
     />
   );
 }

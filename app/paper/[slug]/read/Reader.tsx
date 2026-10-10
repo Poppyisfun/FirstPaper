@@ -104,8 +104,20 @@ export default function Reader({
   const step = steps[index];
   const total = steps.length;
   const atLast = index === total - 1;
+
+  /* The abstract is an orientation step, not paragraph one. It summarises
+     everything that follows, so counting it as the first paragraph both
+     mis-numbers the paper and opens on its densest text. The body paragraphs
+     number from one; this step sits outside that count. */
+  const isOrientation = step.imrad === "abstract";
+  const bodyTotal = steps.filter((s) => s.imrad !== "abstract").length;
+  const bodyNumber = steps
+    .slice(0, index + 1)
+    .filter((s) => s.imrad !== "abstract").length;
   const chosenOption = picked[step.id] ?? null;
   const hasPredicted = chosenOption !== null;
+  /* A paragraph with no prediction set written cannot be gated on one. */
+  const blocked = step.prediction !== null && !hasPredicted;
 
   /* Shuffled per session, so two readers see different orders and one reader
      sees the same order if they reload. Position carries no information. */
@@ -168,7 +180,9 @@ export default function Reader({
               ← Library
             </Link>
             <span className="rd-count">
-              Paragraph {index + 1} of {total}
+              {isOrientation
+                ? "Before you start"
+                : `Paragraph ${bodyNumber} of ${bodyTotal}`}
             </span>
             {step.sectionHeading && (
               <span className="rd-sec">{step.sectionHeading}</span>
@@ -212,6 +226,17 @@ export default function Reader({
       <main className="rd-body">
         {/* The scientists speaking. Serif, always. */}
         <article className="rd-paper" aria-label="Paragraph from the paper">
+          {isOrientation && (
+            <div className="rd-orient">
+              <span className="rd-orient-k">The authors&rsquo; own summary</span>
+              <p className="rd-orient-t">
+                This is the abstract: the whole paper compressed into one
+                paragraph, written for other scientists. It is dense on
+                purpose and you are not expected to follow it yet. Read it
+                once, then come back to it at the end.
+              </p>
+            </div>
+          )}
           <p dangerouslySetInnerHTML={{ __html: step.text }} />
 
           {step.figures.length > 0 && (
@@ -240,22 +265,43 @@ export default function Reader({
               <Link
                 className="rd-act rd-act-go"
                 href={`/paper/${paper.slug}/check`}
+                aria-disabled={blocked}
+                onClick={(e) => blocked && e.preventDefault()}
+                tabIndex={blocked ? -1 : undefined}
               >
                 Done reading — check what landed →
               </Link>
             ) : (
-              <button type="button" className="rd-act" onClick={() => go(1)}>
-                Next paragraph →
+              <button
+                type="button"
+                className="rd-act"
+                onClick={() => go(1)}
+                disabled={blocked}
+              >
+                {isOrientation ? "Start reading →" : "Next paragraph →"}
               </button>
             )}
           </div>
+
+          {/* Why the button is dead, said where the button is. */}
+          {blocked && (
+            <p className="rd-gate">
+              {isOrientation
+                ? "Answer the question on the right before you begin."
+                : "Make a guess on the right first. It is never scored against you, and it is how we find out which paragraphs lose people."}
+            </p>
+          )}
+
         </article>
 
         {/* FirstPaper speaking. Sans, always, and the only colour on the page. */}
         <aside className="rd-expl" aria-label="Explanation">
           {!hasPredicted && step.prediction && (
             <div className="rd-pred">
-              <h2 className="rd-pred-q">What do you think this paragraph says?</h2>
+              <h2 className="rd-pred-q">
+                {step.prediction.prompt ??
+                  "What do you think this paragraph says?"}
+              </h2>
               <p className="rd-pred-h">
                 Commit before you read ours. Getting it wrong costs nothing and
                 tells us more than getting it right.
