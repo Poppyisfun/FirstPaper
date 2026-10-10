@@ -50,3 +50,6 @@ __pycache__/
 # verification output: regenerable tool results, not content
 content/papers/*/verification.json
 content/papers/*/predictions-verification.json
+
+# third-party skill repos cloned in-tree; installed to ~/.claude/skills
+/taste/
