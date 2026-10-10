@@ -34,10 +34,18 @@ export const ANON_COOKIE_OPTIONS = {
   maxAge: ANON_MAX_AGE,
 } as const;
 
-/** The three reading levels, for validating what arrives from the client. */
-const LEVELS = new Set(["explorer", "reader", "critic"]);
+/**
+ * The three difficulty labels a paper can carry.
+ *
+ * These were once a per-reader setting choosing between three written
+ * explanations. That is gone: one explanation per paragraph, and these words
+ * now describe how hard the paper is, which is what the library card always
+ * meant by them. The sessions table calls the column `level`.
+ */
+const DIFFICULTIES = new Set(["explorer", "reader", "critic"]);
 
-/** Narrows an arbitrary value to a level, defaulting rather than throwing. */
+/** Narrows an arbitrary value to a difficulty, defaulting rather than throwing. */
 export function asLevel(value: unknown): string {
-  return typeof value === "string" && LEVELS.has(value) ? value : "reader";
+  const v = typeof value === "string" ? value.toLowerCase() : "";
+  return DIFFICULTIES.has(v) ? v : "reader";
 }

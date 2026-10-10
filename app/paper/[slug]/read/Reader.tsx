@@ -8,7 +8,6 @@ import type {
   Explanation,
   Figure,
   ImradTag,
-  Level,
   PredictionSet,
 } from "@/lib/content-types";
 
@@ -28,6 +27,8 @@ export type ReaderStep = {
 export type ReaderPaper = {
   slug: string;
   title: string;
+  /** The paper's own difficulty label, not a reader setting. */
+  difficulty: string;
   pmcid: string;
   originalUrl: string;
   /* Bibliography. The attribution line is a condition of the licence the text
@@ -38,12 +39,6 @@ export type ReaderPaper = {
   licence: string;
   licenceUrl: string | null;
 };
-
-const LEVELS: { key: Level; label: string }[] = [
-  { key: "explorer", label: "Explorer" },
-  { key: "reader", label: "Reader" },
-  { key: "critic", label: "Critic" },
-];
 
 /** Publishers append a DOI to the caption text. That tail is not prose. */
 function captionProse(caption: string | null): string {
@@ -76,7 +71,6 @@ export default function Reader({
   steps: ReaderStep[];
 }) {
   const [index, setIndex] = useState(0);
-  const [level, setLevel] = useState<Level>("reader");
   /** Paragraph id to the option the reader committed to. */
   const [picked, setPicked] = useState<Record<string, string>>({});
   /** Which figure is open full size, if any. */
@@ -95,7 +89,7 @@ export default function Reader({
     void track({
       name: "paper_started",
       slug: paper.slug,
-      props: { level, paragraphs: steps.length },
+      props: { difficulty: paper.difficulty, paragraphs: steps.length },
     });
     // Once per paper, not once per level change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,12 +120,11 @@ export default function Reader({
     return shuffleWithSeed(step.prediction.options, `${seed}:${step.id}`);
   }, [step.prediction, step.id, seed]);
 
-  /* Explorer and critic are not written yet. Falling back to reader keeps the
-     screen useful, and the note keeps it honest about what is being shown. */
-  const chosen = step.explanation[level];
-  const usingFallback = chosen.trim().length === 0;
-  const body = usingFallback ? step.explanation.reader : chosen;
-  const fallbackLabel = LEVELS.find((l) => l.key === level)?.label ?? level;
+  /* One explanation per paragraph. Three reading levels would have meant
+     three times the authoring cost on every paper forever, which is the worst
+     long-term commitment available to us; Explorer/Reader/Critic now label a
+     paper's difficulty instead, which the library card already did. */
+  const body = step.explanation.reader;
   /* Paragraph-level, not level-level: the claim outruns its evidence whoever
      is reading. Undefined on most paragraphs, and nothing renders then. */
   const caution = step.explanation.caution?.trim() || null;
@@ -160,7 +153,6 @@ export default function Reader({
         paragraph_id: step.id,
         chosen_option_id: optionId,
         correct: optionId === step.prediction.correctOptionId,
-        level,
       },
     });
   }
@@ -189,26 +181,6 @@ export default function Reader({
             )}
           </div>
 
-          <div className="rd-controls">
-            <div
-              className="rd-levels"
-              role="radiogroup"
-              aria-label="Explanation level"
-            >
-              {LEVELS.map((l) => (
-                <button
-                  key={l.key}
-                  type="button"
-                  role="radio"
-                  aria-checked={level === l.key}
-                  className={level === l.key ? "rd-lvl on" : "rd-lvl"}
-                  onClick={() => setLevel(l.key)}
-                >
-                  {l.label}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div
@@ -342,11 +314,6 @@ export default function Reader({
           {hasPredicted && (
             <div className="rd-expl-in">
               <p className="rd-expl-t">{body}</p>
-              {usingFallback && (
-                <p className="rd-expl-note">
-                  {fallbackLabel} level isn&rsquo;t written yet. Showing Reader.
-                </p>
-              )}
               {/* Only where the paragraph actually carries one. Rare on
                   purpose: a caution on every paragraph is a caution on none. */}
               {caution && (

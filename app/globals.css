@@ -533,15 +533,12 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     font-weight:400;letter-spacing:-.016em;margin:6px 0 0;line-height:1.12}
   .rp-t:focus{outline:none}
 
-
-
   /* The highlighter sweep — the one richly animated beat in the reader. */
   .rp-para.resolved mark,.rp-para.resolved mark.t{
     background:var(--hl);box-shadow:0 0 0 2px var(--hl)}
   .rp-para mark,.rp-para mark.t{background:transparent;border-radius:3px;padding:0 1.5px;
     color:inherit;box-shadow:0 0 0 0 transparent;
     transition:background .55s var(--ez),box-shadow .55s var(--ez)}
-
 
   /* Think prompt — violet, because it belongs to the game layer. */
   .think{background:var(--violet-s);border:1px solid var(--violet-l);border-left:3px solid var(--violet);
@@ -555,7 +552,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     transition:transform .15s var(--ez)}
   .tb:hover{transform:translateY(-1px)}
   .tb.solo{background:var(--violet);color:#fff;border-color:var(--violet)}
-
 
   .fig-x{background:rgba(255,255,255,.86);border-left:3px solid var(--blue);border-radius:0 12px 12px 0;
     padding:14px 16px;margin-top:12px;font-size:13.5px;line-height:1.68;color:#1B384F}
@@ -1003,22 +999,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .xp-b p{margin:0;font-size:14.5px;line-height:1.7;color:var(--ink-2)}
 
   /* Rank ladder, lowest rung at the bottom. */
-  .ladder{position:sticky;top:96px}
-  .ladder ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;
-    align-items:stretch;gap:0}
-  .ladder li{display:flex;flex-direction:column;align-items:center}
-  .rung{width:100%;background:var(--surf);border:1px solid var(--line);border-radius:14px;
-    padding:16px 18px;text-align:center;box-shadow:var(--sh1);
-    transition:transform .4s var(--ez),box-shadow .4s var(--ez)}
-  .rung:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-  .rung-n{display:block;font-family:var(--disp);font-variation-settings:var(--fv-sm);
-    font-size:20px;font-weight:500;letter-spacing:-.008em;color:var(--ink)}
-  .rung.on{background:var(--violet-s);border-color:var(--violet-l);box-shadow:var(--sh2)}
-  .rung.on .rung-n{color:var(--violet)}
-  .rung-tag{display:block;font-family:var(--mo);font-size:8.5px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--violet);margin-top:6px}
   /* Chevron between rungs. Never a hyphen. */
-  .rung-c{display:block;color:var(--violet-l);font-size:15px;line-height:1;padding:7px 0}
 
   /* ── Account ── */
   .acct{background:var(--violet-s);border:1px solid var(--violet-l);border-radius:var(--r-out);
@@ -1037,7 +1018,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 
   @media(max-width:900px){
     .xpg{grid-template-columns:1fr;gap:24px}
-    .ladder{position:static}
     .jrn::before{left:17px}
     .jrn-m{width:36px;height:36px;font-size:12.5px}
     .jrn-step{gap:16px}
@@ -1095,13 +1075,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   .rd-controls{display:flex;align-items:center;gap:14px;margin-left:auto}
-  .rd-levels{display:inline-flex;gap:2px;padding:3px;border-radius:99px;
-    border:1px solid var(--line);background:var(--surf)}
-  .rd-lvl{border:0;background:none;border-radius:99px;padding:6px 13px;
-    font-family:var(--ui);font-size:12px;font-weight:600;color:var(--soft);
-    transition:color .2s var(--ez),background .2s var(--ez)}
-  .rd-lvl:hover{color:var(--ink)}
-  .rd-lvl.on{background:var(--ink);color:#fff}
 
   /* Thin, and neutral: the only colour on this screen is the explanation. */
   .rd-bar{height:2px;background:var(--line-2)}
@@ -1225,8 +1198,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .rd-caution-t{font-family:var(--ui);font-size:var(--rd-expl);
     line-height:1.62;color:var(--ink-2);margin:0}
 
-  .rd-expl-note{font-family:var(--ui);font-size:11.5px;line-height:1.5;
-    color:var(--soft);margin:12px 0 0}
   .rd-expl-idle{font-family:var(--ui);font-size:13.5px;line-height:1.6;
     color:var(--soft);margin:0;max-width:34ch}
 

@@ -19,30 +19,15 @@ export const XP_PARAGRAPH_PREDICTED = 8;
 export const XP_CHECK_CORRECT = 20;
 export const XP_JUDGE_CORRECT = 20;
 
-export type Rank = "Explorer" | "Reader" | "Critic" | "Peer Reviewer";
+/* Ranks are deliberately absent.
+ *
+ * Explorer / Reader / Critic / Peer Reviewer collided word for word with the
+ * reading levels, and a rank competes with calibration for the reader's
+ * attention on the one screen where calibration is the whole point. XP
+ * remains as a progress marker in the library; it is not a tier system. */
 
 /** XP never goes negative anywhere it is displayed. */
 export const floor0 = (n: number) => (n < 0 ? 0 : n);
-
-/**
- * Rank thresholds.
- *
- * PROVISIONAL, and per paper. Perfect play on a seventeen-paragraph paper
- * with five questions in each round is 336 XP, so the old 380 for Peer
- * Reviewer was arithmetically unreachable: a reader could answer everything
- * correctly and still be shown a tier above them they could never earn.
- * These are set against that ceiling — top rank on a perfect run, not on a
- * typical one.
- *
- * They must be revisited when accounts land and rank becomes cumulative
- * across papers, because a per-paper ceiling is the wrong basis then.
- */
-export function rankFor(xp: number): Rank {
-  if (xp >= 310) return "Peer Reviewer";
-  if (xp >= 220) return "Critic";
-  if (xp >= 110) return "Reader";
-  return "Explorer";
-}
 
 /** One appraisal answer, paired with what the reader claimed beforehand. */
 export type JudgeAnswer = {
@@ -112,7 +97,6 @@ export type Results = {
   missedPredictions: MissedParagraph[];
 
   xp: number;
-  rank: Rank;
 };
 
 function prop(event: PaperEvent, key: string): unknown {
@@ -235,7 +219,6 @@ export function deriveResults(
     calibration,
     missedTags,
     xp,
-    rank: rankFor(xp),
   };
 }
 

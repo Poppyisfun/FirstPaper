@@ -125,7 +125,7 @@ async function persist(
 
   for (const [slug, group] of bySlug) {
     const level = asLevel(
-      group.find((e) => e.props?.level !== undefined)?.props?.level,
+      group.find((e) => e.props?.difficulty !== undefined)?.props?.difficulty,
     );
     const sessionId = await sessionIdFor(db, anonId, slug, level);
     if (!sessionId) continue;

@@ -64,6 +64,7 @@ export default async function ReadPage({
         title: paper.meta.title,
         pmcid: paper.source.pmcid,
         originalUrl: paper.meta.originalUrl,
+        difficulty: paper.meta.level,
         authors: paper.meta.authors,
         year: paper.meta.year,
         journal: paper.meta.journal,

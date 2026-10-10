@@ -4,7 +4,6 @@ import type {
   Explanations,
   Figure,
   ImradTag,
-  Level,
   LoadedPaper,
   Paragraph,
   ParagraphHit,
@@ -32,7 +31,6 @@ export type {
   Explanations,
   Figure,
   ImradTag,
-  Level,
   LoadedPaper,
   Paragraph,
   ParagraphHit,
@@ -105,20 +103,6 @@ export function getParagraphs(slug: string): Paragraph[] {
   const paper = getPaper(slug);
   if (!paper) return [];
   return paper.source.sections.flatMap((section) => section.paragraphs);
-}
-
-/** Our commentary for one paragraph at one reading level, or null. */
-export function getExplanation(
-  slug: string,
-  paragraphId: string,
-  level: Level,
-): string | null {
-  const paper = getPaper(slug);
-  const entry = paper?.explanations[paragraphId];
-  if (!entry) return null;
-
-  const text = entry[level];
-  return text.length > 0 ? text : null;
 }
 
 /** Total paragraphs in a paper. Used for progress and the checkpoint. */

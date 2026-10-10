@@ -122,15 +122,10 @@ export default function Results({
 
         {pattern && <p className="rs-pattern">{pattern}</p>}
 
+        {/* XP lives in the library as a progress marker. It is not on this
+            screen: results gets one headline and it is the confidence
+            sentence. Rank is gone entirely. */}
         <dl className="rs-stats">
-          <div>
-            <dt>XP</dt>
-            <dd>{data.xp}</dd>
-          </div>
-          <div>
-            <dt>Rank</dt>
-            <dd>{data.rank}</dd>
-          </div>
           <div>
             <dt>Read without a wrong prediction</dt>
             <dd>

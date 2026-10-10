@@ -22,9 +22,6 @@ export type ImradTag =
   | "limitations"
   | "other";
 
-/** The three reading levels. Changes the commentary, never the paper text. */
-export type Level = "explorer" | "reader" | "critic";
-
 /** One paragraph of the authors' text. `id` is "<pmcid>-s<sec>-p<para>". */
 export type Paragraph = {
   id: string;

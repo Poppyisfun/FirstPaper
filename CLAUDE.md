@@ -1,5 +1,22 @@
 @AGENTS.md
 
+## Why this exists, and what would kill it
+
+**The moat is not the explanation.** ChatGPT explains papers better than we ever
+will, free, with follow-up questions. That fight is lost permanently and it is
+not the fight. Explanation is a commodity.
+
+**The moat is measurement.** Nobody else measures whether a reader's judgement
+is any good and produces a record of it a third person would believe.
+Calibration is a scorecard. Build toward the scorecard; treat the explanation
+as the cost of getting there.
+
+**The thing most likely to kill this is not ChatGPT and not money.** It is that
+in six months there are still three papers, because each one takes a weekend by
+hand. The content factory — the frozen schema, the ingest pipeline, the
+versioned prompts, the CI gate — matters more than it looks, because it is the
+only thing that makes it safe for someone other than the author to add a paper.
+
 ## FirstPaper — project context
 
 FirstPaper is a web app that teaches teenagers to read AND critically judge
@@ -56,6 +73,29 @@ Each paper folder holds:
 
 `content/ingest/` holds the Python that generates these. It is not part of the
 Next.js build and is excluded from TypeScript scanning.
+
+### Four things are deliberately absent
+
+Each was removed on purpose. Do not reintroduce any of them without a reason
+that answers the one given here.
+
+**Three explanation levels.** Explorer / Reader / Critic as a per-reader
+toggle meant three times the authoring cost on every paper, forever — the
+worst long-term commitment available to a project whose main risk is having
+three papers in six months. One explanation per paragraph. Those three words
+survive only as a paper's **difficulty** label, which is what the library card
+always meant by them.
+
+**Ranks.** Explorer / Reader / Critic / Peer Reviewer collided word for word
+with the level names, and a rank competes with calibration for attention on
+the one screen where calibration is the entire point.
+
+**Badges.** Declared in `lib/types.ts`, awarded nowhere, built never. The file
+is deleted.
+
+**XP on the results screen.** XP remains as a progress marker on the library
+card. Results gets one headline and it is the confidence sentence; nothing
+else on that screen may compete with it.
 
 ### Confidence is a 0-100 slider
 

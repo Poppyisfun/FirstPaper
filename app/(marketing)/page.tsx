@@ -58,9 +58,6 @@ const journey = [
   },
 ];
 
-/** Bottom to top, so the ladder is rendered in reverse. */
-const ranks = ["Explorer", "Reader", "Critic", "Peer Reviewer"];
-
 export default function Home() {
   /* Derived, not asserted. The landing page and the library card used to
      disagree because each carried its own number; meta.json is the one
@@ -208,38 +205,8 @@ export default function Home() {
                 </p>
               </RiseItem>
 
-              <RiseItem className="xp-b">
-                <h3>Why collect it</h3>
-                <p>
-                  XP builds your rank. Everyone starts as an Explorer. Keep
-                  reading well and you become a Reader, then a Critic, then a
-                  Peer Reviewer. Your rank is proof of something you can do,
-                  not a prize for showing up.
-                </p>
-              </RiseItem>
 
             </Stagger>
-
-            <Rise className="ladder" delay={0.1}>
-              <ol>
-                {[...ranks].reverse().map((r, i) => {
-                  const isStart = r === "Explorer";
-                  return (
-                    <li key={r}>
-                      <div className={isStart ? "rung on" : "rung"}>
-                        <span className="rung-n">{r}</span>
-                        {isStart && <span className="rung-tag">You start here</span>}
-                      </div>
-                      {i < ranks.length - 1 && (
-                        <span className="rung-c" aria-hidden="true">
-                          ⌃
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </Rise>
           </div>
         </section>
 
