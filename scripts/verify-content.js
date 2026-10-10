@@ -2,11 +2,13 @@
 /**
  * FirstPaper content check — two tiers, plus an alignment check.
  *
- *   LOCKED    Everything in source.json, and the bibliographic fields of
- *             meta.json. This is the authors' published work, reproduced under
+ *   LOCKED    The authors' own words in paper.json: every source_text,
+ *             every figure caption, and the bibliographic fields. This is
+ *             their published work, reproduced under
  *             its open licence. A change here FAILS.
  *
- *   EDITABLE  explanations.json and our own meta fields. This is FirstPaper's
+ *   EDITABLE  Explanations, cautions, predictions, questions and the
+ *             recap. This is FirstPaper's
  *             writing, and a change here is REPORTED, not blocked.
  *
  *   ALIGNMENT Explanations are keyed by paragraph id. If those drift apart,
@@ -46,7 +48,7 @@ function paperDirs() {
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
     .filter((name) =>
-      fs.existsSync(path.join(PAPERS, name, "source.json")),
+      fs.existsSync(path.join(PAPERS, name, "paper.json")),
     )
     .sort();
 }
@@ -64,54 +66,46 @@ let explanationTotal = 0;
 const slugs = paperDirs();
 
 for (const slug of slugs) {
-  const source = read(slug, "source.json");
-  const meta = read(slug, "meta.json");
-  const explanations = fs.existsSync(
-    path.join(PAPERS, slug, "explanations.json"),
-  )
-    ? read(slug, "explanations.json")
-    : {};
+  const paper = read(slug, "paper.json");
 
   for (const key of LOCKED_META) {
-    locked[`${slug}.meta.${key}`] = h(meta[key]);
+    locked[`${slug}.meta.${key}`] = h(paper[key]);
   }
-  locked[`${slug}.source.title`] = h(source.title);
+  locked[`${slug}.title`] = h(paper.title);
 
   const sourceIds = [];
-  source.sections.forEach((section, si) => {
-    locked[`${slug}.s${si}.heading`] = h(section.heading);
-    locked[`${slug}.s${si}.imrad`] = h(section.imrad);
-    section.paragraphs.forEach((p) => {
-      locked[`${slug}.${p.id}.text`] = h(p.text);
-      sourceIds.push(p.id);
-      paragraphTotal++;
-    });
+  paper.paragraphs.forEach((p) => {
+    // The authors' words and where they sit. Our commentary is not here.
+    locked[`${slug}.${p.id}.source_text`] = h(p.source_text);
+    locked[`${slug}.${p.id}.section`] = h(p.section);
+    locked[`${slug}.${p.id}.imrad`] = h(p.imrad);
+    sourceIds.push(p.id);
+    paragraphTotal++;
   });
 
-  (source.figures || []).forEach((fig, i) => {
-    locked[`${slug}.fig${i}.caption`] = h(fig.caption);
+  (paper.figures || []).forEach((fig) => {
+    locked[`${slug}.${fig.id}.caption`] = h(fig.caption);
+    locked[`${slug}.${fig.id}.label`] = h(fig.label);
     figureTotal++;
   });
 
-  for (const [id, entry] of Object.entries(explanations)) {
-    for (const level of ["explorer", "reader", "critic"]) {
-      free[`${slug}.${id}.${level}`] = h(entry[level] || "");
-    }
-    if (entry.reader) explanationTotal++;
+  for (const p of paper.paragraphs) {
+    free[`${slug}.${p.id}.explanation`] = h(p.explanation);
+    free[`${slug}.${p.id}.caution`] = h(p.caution || "");
+    if (p.explanation) explanationTotal++;
   }
-  free[`${slug}.meta.practiceGoal`] = h(meta.practiceGoal);
-  free[`${slug}.meta.level`] = h(meta.level);
+  free[`${slug}.practice_goal`] = h(paper.practice_goal);
+  free[`${slug}.difficulty`] = h(paper.difficulty);
+  free[`${slug}.recap`] = h(paper.recap);
 
-  // Alignment: every paragraph should have an entry, and vice versa.
-  const explIds = Object.keys(explanations);
-  if (explIds.length) {
-    for (const id of sourceIds) {
-      if (!(id in explanations)) misaligned.push(`${slug}: no entry for ${id}`);
-    }
-    for (const id of explIds) {
-      if (!sourceIds.includes(id)) {
-        misaligned.push(`${slug}: entry ${id} has no paragraph`);
-      }
+  /* Alignment used to be a real hazard: explanations lived in a second file
+     keyed by paragraph id, so a regenerated source silently attached our
+     commentary to the wrong paragraph. One file per paper makes that
+     impossible — an explanation sits inside the paragraph it explains. What
+     is still worth checking is that every paragraph has one. */
+  for (const p of paper.paragraphs) {
+    if (!p.explanation || !p.explanation.trim()) {
+      misaligned.push(`${slug}: ${p.id} has no explanation`);
     }
   }
 }

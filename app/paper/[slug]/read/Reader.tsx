@@ -4,24 +4,22 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { track } from "@/lib/events";
 import { sessionSeed, shuffleWithSeed } from "@/lib/shuffle";
-import type {
-  Explanation,
-  Figure,
-  ImradTag,
-  PredictionSet,
-} from "@/lib/content-types";
+import type { Figure, Imrad, Prediction } from "@/lib/schema";
 
 /** One paragraph with everything the screen needs to render it. */
 export type ReaderStep = {
   id: string;
   text: string;
   sectionHeading: string | null;
-  imrad: ImradTag;
-  explanation: Explanation;
+  imrad: Imrad;
+  /** Our commentary. One per paragraph; there are no reading levels. */
+  explanation: string;
+  /** Where a claim outruns its evidence. Rare by design. */
+  caution: string | null;
   /** Figures this paragraph cites by name. Usually none. */
   figures: Figure[];
-  /** The commitment shown before the explanation. Null if none was written. */
-  prediction: PredictionSet | null;
+  /** The commitment shown before the explanation. */
+  prediction: Prediction;
 };
 
 export type ReaderPaper = {
@@ -111,7 +109,7 @@ export default function Reader({
   const chosenOption = picked[step.id] ?? null;
   const hasPredicted = chosenOption !== null;
   /* A paragraph with no prediction set written cannot be gated on one. */
-  const blocked = step.prediction !== null && !hasPredicted;
+  const blocked = !hasPredicted;
 
   /* Shuffled per session, so two readers see different orders and one reader
      sees the same order if they reload. Position carries no information. */
@@ -124,10 +122,9 @@ export default function Reader({
      three times the authoring cost on every paper forever, which is the worst
      long-term commitment available to us; Explorer/Reader/Critic now label a
      paper's difficulty instead, which the library card already did. */
-  const body = step.explanation.reader;
-  /* Paragraph-level, not level-level: the claim outruns its evidence whoever
-     is reading. Undefined on most paragraphs, and nothing renders then. */
-  const caution = step.explanation.caution?.trim() || null;
+  const body = step.explanation;
+  /* Null on most paragraphs, and nothing renders then. */
+  const caution = step.caution?.trim() || null;
 
   /* Escape closes the figure. A modal that can only be dismissed by clicking
      the right thing is a trap for keyboard users. */
@@ -152,7 +149,7 @@ export default function Reader({
       props: {
         paragraph_id: step.id,
         chosen_option_id: optionId,
-        correct: optionId === step.prediction.correctOptionId,
+        correct: optionId === step.prediction.correct,
       },
     });
   }
@@ -225,7 +222,7 @@ export default function Reader({
                       straight from public/, and optimisation would re-encode
                       a scientific image. */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={figure.href ?? ""} alt={figure.label ?? "Figure"} />
+                  <img src={figure.src ?? ""} alt={figure.label ?? "Figure"} />
                   <span className="rd-fig-l">{figure.label}</span>
                 </button>
               ))}
@@ -268,7 +265,7 @@ export default function Reader({
 
         {/* FirstPaper speaking. Sans, always, and the only colour on the page. */}
         <aside className="rd-expl" aria-label="Explanation">
-          {!hasPredicted && step.prediction && (
+          {!hasPredicted && (
             <div className="rd-pred">
               <h2 className="rd-pred-q">
                 {step.prediction.prompt ??
@@ -300,12 +297,12 @@ export default function Reader({
           {hasPredicted && step.prediction && (
             <p
               className={
-                chosenOption === step.prediction.correctOptionId
+                chosenOption === step.prediction.correct
                   ? "rd-pred-v ok"
                   : "rd-pred-v no"
               }
             >
-              {chosenOption === step.prediction.correctOptionId
+              {chosenOption === step.prediction.correct
                 ? "That matches what the paragraph says."
                 : "Not what the paragraph says — read ours against what you picked."}
             </p>
@@ -372,7 +369,7 @@ export default function Reader({
         >
           <div className="rd-zoom-in" onClick={(e) => e.stopPropagation()}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={zoomed.href ?? ""} alt={zoomed.label ?? "Figure"} />
+            <img src={zoomed.src ?? ""} alt={zoomed.label ?? "Figure"} />
             <div className="rd-zoom-cap">
               <b>{zoomed.label}</b>
               <p>{captionProse(zoomed.caption)}</p>

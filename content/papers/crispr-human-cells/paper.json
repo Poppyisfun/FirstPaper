@@ -1,0 +1,758 @@
+{
+  "slug": "crispr-human-cells",
+  "doi": null,
+  "pmcid": "PMC3557905",
+  "licence": "CC-BY",
+  "licence_url": "http://creativecommons.org/licenses/by/3.0/",
+  "citation_count": null,
+  "title": "RNA-programmed genome editing in human cells",
+  "authors": "Jinek M, East A, Cheng A, Lin S, Ma E, Doudna J",
+  "year": 2013,
+  "journal": "eLife",
+  "original_url": "https://doi.org/10.7554/eLife.00471",
+  "difficulty": "reader",
+  "headline_tag": "You'll practise: telling a demonstration from a proof",
+  "estimated_minutes": 18,
+  "practice_goal": "You'll practise: telling a demonstration from a proof",
+  "paragraphs": [
+    {
+      "id": "PMC3557905-s0-p0",
+      "section": "Abstract",
+      "imrad": "abstract",
+      "source_text": "Type II CRISPR immune systems in bacteria use a dual RNA-guided DNA endonuclease, Cas9, to cleave foreign DNA at specific sites. We show here that Cas9 assembles with hybrid guide RNAs in human cells and can induce the formation of double-strand DNA breaks (DSBs) at a site complementary to the guide RNA sequence in genomic DNA. This cleavage activity requires both Cas9 and the complementary binding of the guide RNA. Experiments using extracts from transfected cells show that RNA expression and/or assembly into Cas9 is the limiting factor for Cas9-mediated DNA cleavage. In addition, we find that extension of the RNA sequence at the 3′ end enhances DNA targeting activity in vivo. These results show that RNA-programmed genome editing is a facile strategy for introducing site-specific genetic changes in human cells.",
+      "explanation": "This is the whole paper compressed into one paragraph, written last and read first. Cas9 is a bacterial protein that cuts DNA wherever a short guide RNA points it. The claims here are that the two assemble inside human cells, that cutting needs both of them, that something about the guide RNA is the bottleneck, and that lengthening the guide helped. Everything after this paragraph is the evidence for those four claims. Read them as claims for now, and decide at the end which ones the experiments actually carried.",
+      "caution": "“In human cells” is doing a lot of work here. Hold onto that phrase — you’ll be asked what it actually covers.",
+      "prediction": {
+        "prompt": "What would you need to see to believe this?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "Proof that the cut happened where they aimed it, in living cells, and some sign of how often it worked rather than just that it can."
+          },
+          {
+            "id": "o2",
+            "text": "Evidence that the cutting is safe in a living person, with no harm done to the patient and no lasting side effects once the treatment has finished."
+          },
+          {
+            "id": "o3",
+            "text": "A survey of the whole genome showing every other place the protein cut by mistake, counted and listed, so the damage elsewhere is fully known."
+          }
+        ],
+        "correct": "o1"
+      }
+    },
+    {
+      "id": "PMC3557905-s1-p0",
+      "section": "Introduction",
+      "imrad": "introduction",
+      "source_text": "Methods for introducing site-specific double-strand DNA (dsDNA) breaks (DSBs) in genomic DNA have transformed our ability to engineer eukaryotic organisms by initiating DNA repair pathways that lead to targeted genetic re-programming. Zinc-finger nucleases (ZFNs) and transcription activator-like effector nucleases (TALENs) have proved effective for such genomic manipulation but their use has been limited by the need to engineer a specific protein for each dsDNA target site and by off-target activity. Thus, alternative strategies for triggering site-specific DNA cleavage in eukaryotic cells are of great interest.",
+      "explanation": "Cutting both strands of DNA at a chosen spot, a double-strand break, is how you edit a genome: the cell repairs the cut and you steer the repair. Two earlier tools did it, zinc-finger nucleases and TALENs, a nuclease being a protein that cuts DNA. Both needed a new protein built for every target, and both sometimes cut the wrong place.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "Cutting DNA at a chosen spot triggers repair that lets scientists rewrite genes. Zinc-finger nucleases and TALENs work, but each site needs a custom protein and they cut wrong places too."
+          },
+          {
+            "id": "o2",
+            "text": "Zinc-finger nucleases and TALENs can be aimed at any chosen DNA sequence without building a new protein each time, and the one real drawback is that they cut far too slowly inside living cells to be useful."
+          },
+          {
+            "id": "o3",
+            "text": "The authors suggest that these DNA-cutting tools are limited mainly because the cell's repair pathways behave unpredictably, so a cut site often seems to get patched up in the wrong way."
+          }
+        ],
+        "correct": "o1"
+      }
+    },
+    {
+      "id": "PMC3557905-s1-p1",
+      "section": "Introduction",
+      "imrad": "introduction",
+      "source_text": "Research into genome defense mechanisms in bacteria showed that CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats)/Cas (CRISPR-associated) loci encode RNA-guided adaptive immune systems that can destroy foreign DNA. The Type II CRISPR/Cas systems require a single protein, Cas9, to catalyze DNA cleavage. Cas9 generates blunt DSBs at sites defined by a 20-nucleotide guide sequence contained within an associated CRISPR RNA (crRNA) transcript. Cas9 requires both the guide crRNA and a trans-activating crRNA (tracrRNA) that is partially complementary to the crRNA for site-specific DNA recognition and cleavage. Recent experiments showed that the crRNA:tracrRNA complex can be redesigned as a single transcript (single-guide RNA or sgRNA) encompassing the features required for both Cas9 binding and DNA target siterecognition. Using sgRNA, Cas9 can be programmed to cleave double-stranded DNA at any site defined by the guide RNA sequence and including a GG protospacer-adjacent (PAM) motif. These findings suggested the exciting possibility that Cas9:sgRNA complexes might constitute a simple and versatile RNA-directed system for generating DSBs that could facilitate site-specific genome editing. However, it was not known whether such a bacterial system would function in eukaryotic cells.",
+      "explanation": "Bacteria defend themselves against viruses with a system called CRISPR, which stores scraps of invader DNA and destroys that DNA if it returns. One version needs a single protein, Cas9, to do the cutting. A short piece of RNA, a single-stranded relative of DNA, tells Cas9 where: a 20-letter guide sequence matching the target. Researchers had already simplified that guide into one piece, the sgRNA. That is what makes it useful. One protein plus one short RNA cuts DNA wherever you choose, provided the target sits beside a short landing signal called a PAM. Change the RNA, change the target. Whether any of it worked in human cells was still unknown.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "The authors report that the single-guide RNA version of this system had already been shown to edit genes successfully inside human and other eukaryotic cells."
+          },
+          {
+            "id": "o2",
+            "text": "In bacteria, Cas9 cuts DNA at a site set by a guide RNA; whether this worked in eukaryotic cells was unknown."
+          },
+          {
+            "id": "o3",
+            "text": "Bacteria need several different Cas proteins working together to cut invading DNA, and the 20-letter guide sequence only works once the tracrRNA is removed from the complex."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s1-p2",
+      "section": "Introduction",
+      "imrad": "introduction",
+      "source_text": "We show here that Cas9 can be expressed and localized to the nucleus of human cells, and that it assembles with sgRNA in vivo.These complexes can generate double stranded breaks and stimulate non-homologous end joining (NHEJ) repair in genomic DNA at a site complementary to the sgRNA sequence, an activity that requires both Cas9 and the sgRNA. Extension of the RNA sequence at its 3′ end enhances DNA targeting activity in vivo. Further, experiments using extracts from transfected cells show that sgRNA assembly into Cas9 is the limiting factor for Cas9-mediated DNA cleavage. These results demonstrate the feasibility of RNA-programmed genome editing in human cells.",
+      "explanation": "This is the authors saying what they will show. Cas9 can be made inside a human cell, reach the nucleus where the DNA sits, and pair with its guide RNA. Together they cut, and the cell patches the break by glueing the ends back together, often losing or adding a few letters. Nothing happens unless both parts are present. Treat it as a promise: the experiments that follow decide whether it holds.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "Cas9 cuts DNA on its own, and the short RNA that comes with it only makes the cutting faster rather than choosing the place."
+          },
+          {
+            "id": "o2",
+            "text": "Cas9 and a short guide RNA together cut human DNA at a chosen spot, and lengthening the guide's tail made the cutting work better."
+          },
+          {
+            "id": "o3",
+            "text": "Cas9 works only outside living cells, in a tube, and the authors could not get it to cut anything inside a human cell at all."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s2-p0",
+      "section": "Results",
+      "imrad": "results",
+      "source_text": "To test whether Cas9 could be programmed to cleave genomic DNA in vivo, we co-expressed Cas9 together with an sgRNA designed to target the human clathrin light chain (CLTA) gene. The CLTA genomic locus has previously been targeted and edited using ZFNs. We first tested the expression of a human-codon-optimized version of the Streptococcus pyogenes Cas9 protein and sgRNA in human HEK293T cells. The 160 kDa Cas9 protein was expressed as a fusion protein bearing an HA epitope, a nuclear localization signal (NLS), and green fluorescent protein (GFP) attached to the C-terminus of Cas9 (Figure 1A). Analysis of cells transfected with a vector encoding the GFP-fused Cas9 revealed abundant Cas9 expression and nuclear localization (Figure 1B). Western blotting confirmed that the Cas9 protein is expressed largely intact in extracts from these cells (Figure 1A). To program Cas9, we expressed sgRNA bearing a 5′-terminal 20-nucleotide sequence complementary to the target DNA sequence, and a 42-nucleotide 3′-terminal stem loop structure required for Cas9 binding (Figure 1C). This 3′-terminal sequence corresponds to the minimal stem-loop structure that has previously been used to program Cas9 in vitro. The expression of this sgRNA was driven by the human U6 (RNA polymerase III) promoter. Northern blotting analysis of RNA extracted from cells transfected with the U6 promoter-driven sgRNA plasmid expression vector showed that the sgRNA is indeed expressed, and that their stability is enhanced by the presence of Cas9 (Figure 1D).",
+      "explanation": "First they had to show the parts work at all. They picked a human gene to aim at, one an older cutting tool had already been built for, which gives them something to compare against. They put Cas9 into human cells grown in a dish, tagged with a glowing green marker so they could see where it went, and with a short address label attached that tells the cell to carry it into the nucleus. Figure 1B shows it arriving there, and Figure 1A shows the protein is whole rather than chopped up. They then supplied the guide RNA: a stretch of letters matching the target, plus a folded tail that Cas9 grips. Figure 1D shows the guide is made, and that more of it survives when Cas9 is present, which hints the two hold on to each other.",
+      "caution": "Notice how many genes and how many cell types are in play. The abstract’s phrasing suggested something broader.",
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "The guide RNA kept Cas9 from falling apart: without it, the 160 kDa protein was broken into pieces and stayed outside the nucleus instead of entering it, the western blots showed."
+          },
+          {
+            "id": "o2",
+            "text": "The authors report that the Cas9 and guide RNA pair cut the human CLTA gene in these cells, and that the amount of cutting seems to rise when the U6 promoter is used to make extra guide RNA."
+          },
+          {
+            "id": "o3",
+            "text": "Cas9 and a guide RNA for the human CLTA gene were put into human cells. GFP tagging showed Cas9 intact in the nucleus, and the guide RNA was made, lasting longer when Cas9 was present."
+          }
+        ],
+        "correct": "o3"
+      }
+    },
+    {
+      "id": "PMC3557905-s2-p1",
+      "section": "Results",
+      "imrad": "results",
+      "source_text": "Next, we investigated whether site-specific DSBs are generated in HEK293T cells transfected with Cas9-HA-NLS-mCherry and the CLTA1 sgRNA. To do this, we probed for minor insertions and deletions in the locus resulting from imperfect repair by DSB-induced NHEJ using the Surveyor nuclease assay. The region of genomic DNA targeted by Cas9:sgRNA is amplified by PCR and the resulting products are denatured and reannealed. The rehybridized PCR products are incubated with the mismatch recognition endonuclease Cel-1 and resolved on an acrylamide gel to identify Cel-1 cleavage bands. As DNA repair by NHEJ is typically induced by a DSB, a positive signal in the Surveyor assay indicates that genomic DNA cleavage has occurred. Using this assay, we detected cleavage of the CLTA locus at a position targeted by the CLTA1 sgRNA (Figure 1E). A pair of ZFNs that target a neighboring site in the CLTA locus provided a positive control in these experiments.",
+      "explanation": "Now the real question: does anything actually get cut? You cannot watch a cut happen, so they looked for its scar. A cell repairing a double-strand break by glueing the ends together often loses or gains a few letters. They copied the target region out of many cells, mixed the copies so strands from different cells could pair, and added an enzyme that cuts only where two strands disagree. A signal means some copies differ from others, which the authors read as a cut clumsily repaired. Follow that chain rather than the conclusion. Figure 1E shows the signal. A tool already known to cut this region ran alongside it.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "The Surveyor assay showed no cutting at the CLTA1 target site; only the pair of zinc-finger nucleases aimed at a nearby part of the CLTA gene produced cleavage bands on the gel."
+          },
+          {
+            "id": "o2",
+            "text": "The authors used a mismatch assay and report that it seems to show cutting at the CLTA site targeted by the sgRNA."
+          },
+          {
+            "id": "o3",
+            "text": "The Cel-1 enzyme cuts DNA strands that match each other perfectly, so bands on the gel show that repair was error-free, and the zinc-finger nucleases acted as the negative control."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s2-p2",
+      "section": "Results",
+      "imrad": "results",
+      "source_text": "To determine if either Cas9 or sgRNA expression is a limiting factor in the observed genome editing reactions, lysates prepared from the transfected cells were incubated with plasmid DNA harboring a fragment of the CLTA gene targeted by the CLTA1 sgRNA. Plasmid DNA cleavage was not observed upon incubation with lysate prepared from cells transfected with the Cas9-HA-NLS-GFP expression vector alone, consistent with the Surveyor assay results. However, robust plasmid cleavage was detected when the lysate was supplemented with in vitro transcribed CLTA1 sgRNA (Figure 2A). Furthermore, lysate prepared from cells transfected with both Cas9 and sgRNA expression vectors supported plasmid cleavage, while lysates from cells transfected with the sgRNA-encoding vector alone did not (Figure 2A). These results suggest that a limiting factor for Cas9 function in human cells could be assembly with the sgRNA. We tested this possibility directly by analyzing plasmid cleavage in lysates from cells transfected as before in the presence and absence of added exogenous sgRNA. Notably, when exogenous sgRNA was added to lysate from cells transfected with both the Cas9 and sgRNA expression vectors, a substantial increase in DNA cleavage activity was observed (Figure 2B). This result indicates that the limiting factor for Cas9 function in HEK293T cells is the expression of the sgRNA or its loading into Cas9.",
+      "explanation": "Editing worked, but weakly, so they asked which ingredient was running short. They broke the cells open and gave the resulting soup a piece of target DNA to cut, which lets them test the machinery outside a living cell where the amounts can be controlled. Soup from cells given only Cas9 did nothing to the target. Add guide RNA made separately in a tube, and the same soup cut it well (Figure 2A). Soup from cells given both Cas9 and the guide did cut. And when extra guide RNA was added on top of that, activity rose again (Figure 2B). Four conditions, four outcomes. The differences between them are the finding.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "Extracts from cells given only the Cas9 vector did not cut the target plasmid, but cutting happened once lab-made guide RNA was added to the extract. Extracts from cells given both vectors cut the plasmid, and adding extra guide RNA raised the cutting further."
+          },
+          {
+            "id": "o2",
+            "text": "Adding extra Cas9 protein to the extracts switched on plasmid cutting, while adding more guide RNA made no difference whatsoever. The supply of Cas9 protein is the step that holds editing back in these human cells."
+          },
+          {
+            "id": "o3",
+            "text": "The authors report that extracts from cells given the guide RNA vector on its own still cut the plasmid, which seems to suggest that these human cells already make plenty of Cas9 by themselves."
+          }
+        ],
+        "correct": "o1"
+      }
+    },
+    {
+      "id": "PMC3557905-s2-p3",
+      "section": "Results",
+      "imrad": "results",
+      "source_text": "As a means of enhancing the Cas9:sgRNA assembly in vivo, we next tested the effect of extending the presumed Cas9-binding region of the guide RNA. Two new versions of the CLTA1 sgRNA were designed to include an additional 4 or 10 base pairs in the helix that mimics the base-pairing interactions between the crRNA and tracrRNA (Figure 3A). Additionally, the 3′-end of the guide RNA was extended by five nucleotides based on the native sequence of the S. pyogenes tracrRNA. Vectors encoding these 3′ extended sgRNAs under the control of either the U6 or H1 Pol III promoters were transfected into cells along with the Cas9-HA-NLS-GFP expression vector and site-specific genome cleavage was tested using the Surveyor assay (Figure 3B). These results suggest that the 3′-extended sgRNAs support more efficient Cas9 function in vivo, although more quantitative comparisons will be necessary to confirm this conclusion.",
+      "explanation": "They next tried making the guide hold on to Cas9 better. Two longer versions were built, adding extra paired letters to the stretch Cas9 grips, plus a few more at the very end, copying the shape the bacterium uses naturally (Figure 3A). Both were put back into cells with Cas9 and tested the same way as before. The longer guides appear to cut more (Figure 3B). Take that as a lead rather than a settled result. The last sentence of this paragraph is where the authors say how much weight it will bear, and it is worth reading more slowly than the rest.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "They cut the Cas9-binding region of the guide RNA down by 4 or 10 base pairs, and these shorter guides drove much better cutting in cells than the original design."
+          },
+          {
+            "id": "o2",
+            "text": "The researchers made longer versions of the guide RNA's Cas9-binding part and tested them in cells, and the results appear to suggest these guides support more efficient cutting."
+          },
+          {
+            "id": "o3",
+            "text": "Extra bases were added to the part of the guide that matches the target DNA, and the Surveyor assay measured a 2.3-fold rise in cutting."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s3-p0",
+      "section": "Discussion",
+      "imrad": "discussion",
+      "source_text": "Besides serving as an invaluable research tool, targeted genome engineering in cells and organisms could potentially provide the path to revolutionary applications in human therapies, agricultural biotechnology and microbial engineering. Methods of modifying the genome exploit endogenous DNA repair pathways that are initiated by the introduction of site-specific dsDNA cleavages. The results presented here provide a straightforward system of RNA-guided site-specific dsDNA cleavage using the Cas9 protein from a Type II bacterial CRISPR system to promote genome editing in human cells. Our data show that a codon-optimized version of Cas9, when programmed by an appropriate sgRNA, successfully assembles into Cas9 targeting complexes to trigger site-specific DNA cleavage and repair by NHEJ. The efficiency of NHEJ-induced mutagenesis at the CLTA locus investigated here is consistently in the range of 6–8%. This frequency is lower than that found for a ZFN pair that recognizes a nearby target sequence, but is within the range of frequencies observed more generally with ZFNs and TALENs. Our data suggest that sgRNA expression and/or its assembly into Cas9, rather than Cas9 expression, localization or folding, presently limits Cas9 function in human cells. Higher efficiencies of Cas9-mediated genome targeting could be achieved by optimization of the sgRNA construct design, its expression levels or its subcellular localization. We note that the sgRNAs used in this study are not thought to be 5′-capped or 3′-polyadenylated, which may have reduced their stability in vivo. This and other 5′ and 3′ end modifications might provide alternative approaches to enhancing Cas9:sgRNA assembly and activity in cells. Nonetheless, the levels of targeting observed in this study have been obtained with a minimal system that relies on simple base pairing to a guide RNA, in contrast to the ZFN and TALEN proteins, which require a new protein to be engineered for each new cleavage site. RNA-guided genome editing would thus offer distinct advantages due to the simplicity of the sgRNA design.",
+      "explanation": "Here they step back and weigh what they have. They open by naming where this could go: human therapies, agriculture, engineering microbes. All of it works the same way, by making a cut at a chosen place and letting the cell's own repair machinery do the rest, which is why a reliable way to aim the cut matters so much. Their contribution, they say, is that the aiming is done by a guide RNA rather than by a purpose-built protein. They report an efficiency figure for editing at their target, and set it against the older tool. They state where they think the limit on performance lies, and list ideas for lifting it: better guide design, more of it, protective additions to the guide's ends. Those are proposals, not results. The claim worth watching is the last one. They argue their system is the better one because changing target means rewriting a short RNA instead of engineering a new protein. That is a fair point about convenience, and they place it directly beside the efficiency comparison. Easier to aim is not the same as better at cutting.",
+      "caution": "The paper says “suggest”, not “show”. That word is a deliberate choice by the authors — watch for it.",
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "Zinc-finger nucleases cut the CLTA site worse than Cas9 did, and the authors say too little Cas9 protein is being made in the cells."
+          },
+          {
+            "id": "o2",
+            "text": "Cas9 steered by a guide RNA cuts human DNA at a chosen spot, editing it 6–8% of the time."
+          },
+          {
+            "id": "o3",
+            "text": "Adding caps and tails to the guide RNAs seems to have lifted editing at the CLTA site from 6% to 8%, suggesting guide RNA stability is the limit."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s3-p1",
+      "section": "Discussion",
+      "imrad": "discussion",
+      "source_text": "Our results thus provide the framework for implementing Cas9 as a facile molecular tool for diverse genome editing applications. Although not tested explicitly in this study, a powerful feature of this system is the potential to program Cas9 with multiple sgRNAs in the same cell, either to increase the efficiency of targeting at a single locus, or as a means of targeting several loci simultaneously. Such strategies would find broad application in genome-wide experiments and large-scale research efforts such as the development of multigenic disease models. As an inexpensive and rapid mechanism for triggering site-specific genome modification, the programmable Cas9:sgRNA system could potentially transform next-generation genome-scale studies.",
+      "explanation": "They close by looking ahead. One cell could be given several guide RNAs at once, they suggest, either to hit a single gene harder or to go after several genes together. That would matter for work across whole genomes, or for building models of diseases that involve more than one gene. Read this paragraph for what it is: a proposal about what the tool might allow, arriving at the end of a paper about what it did.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "They report that giving one cell several guides at once already worked, and show the results of hitting two separate genes at the same time."
+          },
+          {
+            "id": "o2",
+            "text": "They suggest one cell could be given several guides at once, to hit one gene harder or several genes together, without having tested it."
+          },
+          {
+            "id": "o3",
+            "text": "They conclude that several guides in one cell interfere with each other, and advise against trying to target more than one gene."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s4-p0",
+      "section": "Materials and methods",
+      "imrad": "methods",
+      "source_text": "The sequence encoding Streptococcus pyogenes Cas9 (residues 1–1368) fused to an HA epitope (amino acid sequence DAYPYDVPDYASL), a nuclear localization signal (amino acid sequence PKKKRKVEDPKKKRKVD) was codon optimized for human expression and synthesized by GeneArt (Regensburg, Germany; DNA and protein sequences shown in supplementary file 1). Ligation-independent cloning (LIC) was used to insert this sequence into a pcDNA3.1-derived GFP and mCherry LIC vectors (vectors 6D and 6B, respectively, obtained from the UC Berkeley MacroLab), resulting in a Cas9-HA-NLS-GFP and Cas9-HA-NLS-mCherry fusions expressed under the control of the CMV promoter. Guide sgRNAs were expressed using expression vector pSilencer 2.1-U6 puro (Life Technologies, Carlsbad, CA) and pSuper (Oligoengine, Seattle, WA). RNA expression constructs were generated by annealing complementary oligonucleotides to form the RNA-coding DNA sequence and ligating the annealed DNA fragment between the BamHI and HindIII sites in pSilencer 2.1-U6 puro and BglII and HindIII sites in pSuper.",
+      "explanation": "Building the tools. The bacterial Cas9 gene was rewritten letter by letter so human cells would read it efficiently, since the same protein can be spelled many ways and bacteria and humans favour different spellings. Three things were bolted on: a tag for detecting the protein, an address label sending it to the nucleus, and a glowing marker for seeing it. Each was ordered as synthetic DNA and slotted into rings of DNA that human cells will read from.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "The researchers compared a green-tagged Cas9 with a red-tagged Cas9 in human cells and found that the green version reached the nucleus far more reliably."
+          },
+          {
+            "id": "o2",
+            "text": "The researchers built the DNA tools for the work: a human-adapted Cas9 gene carrying a tag and a nuclear signal, joined to a green or red fluorescent protein, plus separate vectors that make the guide RNAs."
+          },
+          {
+            "id": "o3",
+            "text": "The authors seem to have mixed purified Cas9 protein with guide RNA in a tube and checked that this cut the target DNA before any of the work moved into living human cells."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s4-p1",
+      "section": "Materials and methods",
+      "imrad": "methods",
+      "source_text": "HEK293T cells were maintained in Dulbecco's modified eagle medium (DMEM) supplemented with 10% fetal bovine serum (FBS) in a 37°C humidified incubator with 5% CO2. Cells were transiently transfected with plasmid DNA using either X-tremeGENE DNA Transfection Reagent (Roche Applied Science, Indianapolis, IN) or Turbofect Transfection Reagent (Thermo Scientific, Waltham, MA) with recommended protocols. Briefly, HEK293T cells were transfected at 60–80% confluency in 6-well plates using 0.5 μg of the Cas9 expression plasmid and 2.0 μg of the RNA expression plasmid. The transfection efficiencies were estimated to be 30–50% for Turbofect (Figures 1E and 2A,B) and 80–90% for X-tremegene (Figure 3B), based on the fraction of GFP-positive cells observed by fluorescence microscopy. 48 hr post transfection, cells were washed with phosphate buffered saline (PBS) and lysed by applying 250 μl lysis buffer (20 mM Hepes pH 7.5, 100 mM potassium chloride [KCl], 5 mM magnesium chloride [MgCl2], 1 mM dithiothreitol [DTT], 5% glycerol, 0.1% Triton X-100, supplemented with Roche Protease Inhibitor cocktail) and then rocked for 10 min at 4°C. The resulting cell lysate was divided into aliquots for further analysis. Genomic DNA was isolated from 200 μl cell lysate using the DNeasy Blood and Tissue Kit (Qiagen, Hilden, Germany) according to the manufacturer's protocol.",
+      "explanation": "Growing and treating the cells. They used a human cell line grown in a dish, the kind that grows reliably and takes up foreign DNA easily, which is why a line like this is the usual choice for a first test. The cells were fed a nutrient broth and kept at body temperature. The DNA rings carrying Cas9 and the guide were then delivered using a reagent that ferries DNA across the cell membrane. They deliberately supplied more of the guide RNA plasmid than of the Cas9 plasmid. They also checked what fraction of cells took the DNA up at all, using the glowing marker to count them. Two days later the cells were burst open and the contents divided up for the tests that follow.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "X-tremeGENE beat Turbofect head to head, cutting the target gene in 80-90% of cells against only 30-50% for the rival reagent."
+          },
+          {
+            "id": "o2",
+            "text": "Human kidney cells were grown, given plasmid DNA using one of two reagents, then broken open to extract their DNA."
+          },
+          {
+            "id": "o3",
+            "text": "The authors suggest that counting glowing green cells after 48 hours showed what share of cells had the target gene successfully edited."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s4-p2",
+      "section": "Materials and methods",
+      "imrad": "methods",
+      "source_text": "HEK293T, transfected with the Cas9-HA-NLS-GFP expression plasmid, were harvested and lysed 48 hr post transfection as above. 5 μl of lysate were electrophoresed on a 10% SDS polyacrylamide gel, blotter onto a PVDF membrane and probed with HRP-conjugated anti-HA antibody (1:1000 dilution in 1× PBS; Sigma, St. Louis, MO).",
+      "explanation": "Checking Cas9 is really there and whole. Proteins from burst cells were sorted by size on a gel, then stained with something that sticks to the tag they added. The right-sized band means success.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "Human kidney cells received a plasmid carrying the guide RNA, and two days later the researchers extracted the cells' total RNA, separated it by size on a urea gel, transferred it onto a nylon membrane, and used a radioactive DNA probe to show that the short guide RNA was present in those cells."
+          },
+          {
+            "id": "o2",
+            "text": "Human kidney cells received a plasmid carrying a tagged version of the Cas9 gene, and two days later the researchers burst the cells open, ran a small amount of the liquid down a gel, transferred it onto a membrane, and used a tag-binding antibody to show the protein was there."
+          },
+          {
+            "id": "o3",
+            "text": "Human kidney cells received both plasmids, and two days later the researchers pulled the genomic DNA out, copied the target stretch by PCR, treated the copies with an enzyme that cuts where strands mismatch, and ran the pieces down a gel to estimate how much editing had happened."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s4-p3",
+      "section": "Materials and methods",
+      "imrad": "methods",
+      "source_text": "The Surveyor assay was performed as previously described. Briefly, the human clathrin light chain A (CLTA) locus was PCR amplified from 200 ng of genomic DNA using a high fidelity polymerase, Herculase II Fusion DNA Polymerase (Agilent Technologies, Santa Clara, CA) and forward primer 5′-GCAGCAGAAGAAGCCTTTGT-3′ and reverse primer 5′-TTCCTCCTCTCCCTCCTCTC-3′. 300 ng of the 360 bp amplicon was then denatured by heating to 95°C and slowly reannealed using a heat block to randomly rehybridize wild type and mutant DNA strands. Samples were then incubated with Cel-1 nuclease (Surveyor Kit; Transgenomic, Omaha, NE) for 1 hr at 42°C. Cel-1 recognizes and cleaves DNA helices containing mismatches (wild type:mutant hybridization). Cel-1 nuclease digestion products were separated on a 10% acrylamide gel and visualized by staining with SYBR Safe (Life Technologies). Quantification of cleavage bands was performed using ImageLab software (Bio-Rad, Hercules, CA). The percent cleavage was determined by dividing the average intensity of cleavage products (160–200 bps) by the sum of the intensities of the uncleaved PCR product (360 bp) and the cleavage product. Mutations (indels) resulting from Cas9-induced DNA repair reactions were identified by Sanger sequencing of cloned amplicons. Briefly, the 360-bp PCR amplicon was treated with Taq DNA polymerase (NEB) and dATP to attach an ‘A’ base to the 3′ end of the DNA fragment. The DNA was then ligated into pGEM-T Easy vector (Promega, Madison, WI) according to the manufacturer's protocol. Transformants were grown on Luria Broth agar plates containing 100 μg/ml of ampicillin, 70 μg/ml 5-bromo-4-chloro-indolyl-β-D-galactopyranoside and 100 μM isopropyl β-D-1-thiogalactopyranoside. Random white colonies were selected for Sanger sequencing (Quintara Biosciences, Albany, CA). Representative DNA sequences are shown in Figure 1—figure supplement 1.",
+      "explanation": "How the edits were counted. They copied the target region out of the cells' DNA, heated the copies until the two strands came apart, then let them cool so strands re-paired at random. An edited strand paired with an unedited one leaves a bulge where the letters disagree, and the enzyme they add cuts only at bulges. Running the result through a gel separates the cut pieces from the uncut ones, and comparing how much lands in each gives an estimate of how much editing happened. Separately, they read individual copies letter by letter, by first growing each one on its own in bacteria so that every copy read came from a single original molecule. That is how they could say which letters had been lost or gained at the cut site.",
+      "caution": "Ask yourself what this assay can and can’t tell you. It measures something, but possibly not the thing you assume.",
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "The target stretch was copied, the copies were melted apart and left to re-pair, and an enzyme cut wherever two strands disagreed."
+          },
+          {
+            "id": "o2",
+            "text": "The target stretch was copied and read letter by letter directly, with no enzyme involved and no gel used at any stage."
+          },
+          {
+            "id": "o3",
+            "text": "The target stretch was copied and weighed against an unedited sample, and the difference in weight gave the amount of editing."
+          }
+        ],
+        "correct": "o2"
+      }
+    },
+    {
+      "id": "PMC3557905-s4-p4",
+      "section": "Materials and methods",
+      "imrad": "methods",
+      "source_text": "Guide RNA was in vitro transcribed using recombinant T7 RNA polymerase and a DNA template generated by annealing complementary synthetic oligonucleotides as previously described. RNAs were purified by electrophoresis on 7 M urea denaturing acrylamide gel, ethanol precipitated, and dissolved in DEPC-treated water.",
+      "explanation": "Making guide RNA in a tube, not in cells. Two DNA strands formed a template, an enzyme copied it into RNA, and a gel cleaned it up. This is the spare guide.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "The guide RNA was grown inside living bacterial cells, then released and separated from the cell debris on a 7 M urea gel before storage in treated water."
+          },
+          {
+            "id": "o2",
+            "text": "Running the guide RNA on a urea acrylamide gel measured how tightly it stuck to its DNA target, and the gel confirmed a strong, specific match."
+          },
+          {
+            "id": "o3",
+            "text": "The authors seem to have made the guide RNA in a tube using T7 polymerase and a DNA template, then cleaned it up on a gel."
+          }
+        ],
+        "correct": "o3"
+      }
+    },
+    {
+      "id": "PMC3557905-s4-p5",
+      "section": "Materials and methods",
+      "imrad": "methods",
+      "source_text": "RNA was purified from HEK293T cells using the mirVana small-RNA isolation kit (Ambion). For each sample, 800 ng of RNA were separated on a 10% urea-PAGE gel after denaturation for 10 min at 70°C in RNA loading buffer (0.5× TBE [pH 7.5], 0.5 mg/ml bromophenol blue, 0.5 mg xylene cyanol and 47% formamide). After electrophoresis at 10 W in 0.5× TBE buffer until the bromophenol blue dye reached the bottom of the gel, samples were electroblotted onto a Nytran membrane at 20 V for 1.5 hr in 0.5× TBE. The transferred RNAs were cross-linked onto the Nytran membrane in UV-Crosslinker (Strategene) and were pre-hybridized at 45°C for 3 hr in a buffer containing 40% formamide, 5× SSC, 3× Dernhardt's solution (0.1% each of ficoll, polyvinylpyrollidone, and BSA) and 200 µg/ml Salmon sperm DNA. The pre-hybridized membranes were incubated overnight in the prehybridization buffer supplemented with 5′-32P-labeled antisense DNA oligo probe at 1 million cpm/ml. After several washes in SSC buffer (final wash in 0.2× SCC), the membranes were imaged phosphorimaging.",
+      "explanation": "Checking the guide RNA is present, and how much. Small RNAs were pulled out of the cells, sorted by size on a gel, and moved onto a membrane where they were fixed in place. A short radioactive DNA probe, built to stick only to the guide sequence, was washed over it. Wherever the probe stuck, the film darkens. This is the test behind the earlier claim that the guide survives better when Cas9 is around.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "RNA was pulled out of the cells, separated by size on a gel, moved onto a membrane and found with a radioactive probe."
+          },
+          {
+            "id": "o2",
+            "text": "Protein was pulled out of the cells, separated by size on a gel, moved onto a membrane and found with a tag-binding antibody."
+          },
+          {
+            "id": "o3",
+            "text": "DNA was pulled out of the cells, cut with an enzyme at a known spot, and the resulting pieces were measured on a gel."
+          }
+        ],
+        "correct": "o1"
+      }
+    },
+    {
+      "id": "PMC3557905-s4-p6",
+      "section": "Materials and methods",
+      "imrad": "methods",
+      "source_text": "Cell lysates were prepared as described above and incubated with CLTA-RFP donor plasmid. Cleavage reactions were carried out in a total volume of 20 μl and contained 10 μl lysate, 2 μl of 5× cleavage buffer (100 mM HEPES pH 7.5, 500 mM KCl, 25 mM MgCl2, 5 mM DTT, 25% glycerol) and 300 ng plasmid. Where indicated, reactions were supplemented with 10 pmol of in vitro transcribed CLTA1 sgRNA. Reactions were incubated at 37°C for 1 hr and subsequently digested with 10 U of XhoI (NEB) for an additional 30 min at 37°C. The reactions were stopped by the addition of Proteinase K (Thermo Scientific) and incubated at 37°C for 15 min. Cleavage products were analyzed by electrophoresis on a 1% agarose gel and stained with SYBR Safe. The presence of ∼2230 and ∼3100 bp fragments is indicative of Cas9-mediated cleavage.",
+      "explanation": "The cut-in-a-tube test. Contents of burst cells were mixed with a ring of DNA carrying the target, held at body temperature for an hour, then cut with a second enzyme at a known spot. That second cut is the trick: it turns a successful Cas9 cut into two fragments of predictable size, so those two sizes on a gel are what the authors take as evidence that Cas9 cut where it was supposed to, rather than somewhere random.",
+      "caution": null,
+      "prediction": {
+        "prompt": "What do you think this paragraph says?",
+        "options": [
+          {
+            "id": "o1",
+            "text": "This test measures how much Cas9 protein each batch of cells made, and the brightness of the two gel bands shows exactly how much protein the extract contained."
+          },
+          {
+            "id": "o2",
+            "text": "Cell extract, plasmid and guide RNA are warmed together and run on a gel, where bands of about 2230 and 3100 base pairs seem to show Cas9 cut the DNA."
+          },
+          {
+            "id": "o3",
+            "text": "XhoI is the enzyme being tested here. It makes the 2230 and 3100 base pair pieces, and adding the guide RNA blocks that cutting completely."
+          }
+        ],
+        "correct": "o2"
+      }
+    }
+  ],
+  "check": [
+    {
+      "id": "c1",
+      "prompt": "In the test-tube cleavage experiment, lysate from cells given the Cas9 vector alone failed to cut the target plasmid. One other lysate in that experiment also failed. Which one, and what does its failure establish?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lysate from cells given the guide RNA vector alone — establishing that the cutting seen in the other conditions came from Cas9 made in the cells, not from something else in the lysate"
+        },
+        {
+          "id": "b",
+          "text": "Lysate from cells given the guide RNA vector alone — establishing that the guide RNA is degraded when Cas9 is not there to protect it"
+        },
+        {
+          "id": "c",
+          "text": "Lysate from cells given both vectors but no extra guide RNA — establishing that assembly of the two is the bottleneck"
+        },
+        {
+          "id": "d",
+          "text": "Lysate from cells given Cas9 with a scrambled guide — establishing that targeting depends on the guide sequence matching"
+        }
+      ],
+      "correct": "a",
+      "feedback": "The paper reports that lysate from cells transfected with the sgRNA-encoding vector alone did not support cleavage. Paired with the Cas9-only lysate also failing, that rules out the lysate itself supplying the cutting activity. Option b confuses this with the separate Northern blot finding that sgRNA is more stable when Cas9 is present; option d describes a control the paper never ran."
+    },
+    {
+      "id": "c2",
+      "prompt": "When the researchers tested the lengthened guide RNAs, what drove their expression in the cells?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Two different promoters, U6 and H1, were each used"
+        },
+        {
+          "id": "b",
+          "text": "The same U6 promoter that had driven the original guide RNA"
+        },
+        {
+          "id": "c",
+          "text": "The CMV promoter, the same one driving Cas9"
+        },
+        {
+          "id": "d",
+          "text": "T7 RNA polymerase, as used to make guide RNA in a tube"
+        }
+      ],
+      "correct": "a",
+      "feedback": "The original sgRNA was driven by the human U6 promoter. The 3'-extended versions were put under either the U6 or the H1 Pol III promoter — two promoters, not one. A reader who only skimmed would carry U6 forward from the earlier experiment and pick b."
+    },
+    {
+      "id": "c3",
+      "prompt": "Two lengthened versions of the guide RNA were built. How did they differ from each other and from the original?",
+      "options": [
+        {
+          "id": "a",
+          "text": "One added 4 extra base pairs to the helix and the other added 10; both also gained 5 nucleotides at the 3' end"
+        },
+        {
+          "id": "b",
+          "text": "One added 4 extra base pairs to the helix and the other added 10; neither changed the 3' end"
+        },
+        {
+          "id": "c",
+          "text": "Both added the same 10 base pairs to the helix, but differed in their 3' extension — 5 nucleotides against 10"
+        },
+        {
+          "id": "d",
+          "text": "One added 5 extra base pairs to the helix and the other added 20; both also gained 4 nucleotides at the 3' end"
+        }
+      ],
+      "correct": "a",
+      "feedback": "The two designs added 4 or 10 base pairs to the helix that mimics the crRNA:tracrRNA pairing, and both were additionally extended at the 3' end by five nucleotides taken from the native S. pyogenes tracrRNA. Two changes were made at once, which is itself worth noticing."
+    },
+    {
+      "id": "c4",
+      "prompt": "The Surveyor assay reports a percentage. What is that percentage a fraction of?",
+      "options": [
+        {
+          "id": "a",
+          "text": "The cut fragments, as a share of the cut fragments plus the uncut PCR product"
+        },
+        {
+          "id": "b",
+          "text": "The cut fragments, as a share of the uncut PCR product alone"
+        },
+        {
+          "id": "c",
+          "text": "Cells carrying an edit, as a share of all the cells in the dish"
+        },
+        {
+          "id": "d",
+          "text": "Sequencing reads carrying an edit, as a share of all reads from the locus"
+        }
+      ],
+      "correct": "a",
+      "feedback": "Percent cleavage was the average intensity of the 160-200 bp cleavage products divided by the sum of that and the uncleaved 360 bp product. It is a measure of band intensity on a gel, not of cells. Option c is what most readers assume 'editing efficiency' means, and getting that wrong changes what the headline number is a number about."
+    },
+    {
+      "id": "c5",
+      "prompt": "The experiment that first detected cutting in living cells included a positive control. What was it, and where did it cut?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A pair of zinc-finger nucleases, aimed at a site neighbouring the one Cas9 targeted — not the same site"
+        },
+        {
+          "id": "b",
+          "text": "A pair of zinc-finger nucleases, aimed at exactly the site Cas9 targeted"
+        },
+        {
+          "id": "c",
+          "text": "A TALEN pair, aimed at exactly the site Cas9 targeted"
+        },
+        {
+          "id": "d",
+          "text": "Cas9 carrying a guide RNA already shown to work at a different gene"
+        }
+      ],
+      "correct": "a",
+      "feedback": "A ZFN pair targeting a neighbouring site in the same locus was the positive control. 'Neighbouring' is the load-bearing word: the comparison the Discussion later draws between Cas9 and ZFN efficiency is between two tools aimed at two different sequences, not a head-to-head at one."
+    }
+  ],
+  "judge": [
+    {
+      "id": "a1",
+      "prompt": "The paper reports that the lengthened guide RNAs produced more cutting. How do the authors themselves characterise that conclusion?",
+      "options": [
+        {
+          "id": "a",
+          "text": "As a suggestion, adding that more quantitative comparisons will be needed to confirm it"
+        },
+        {
+          "id": "b",
+          "text": "As a suggestion, adding that the experiment needs repeating in a second cell type to confirm it"
+        },
+        {
+          "id": "c",
+          "text": "As an established result of the study"
+        },
+        {
+          "id": "d",
+          "text": "As an established result, explained by tighter Cas9 binding that they measured directly"
+        }
+      ],
+      "correct": "a",
+      "feedback": "The sentence reads: 'These results suggest that the 3'-extended sgRNAs support more efficient Cas9 function in vivo, although more quantitative comparisons will be necessary to confirm this conclusion.' Suggest, not show — and the authors name the specific thing missing, which is quantification, not replication. The abstract states the same finding flatly. Both sentences are the authors'; the difference between them is the lesson.",
+      "tag": "hedging"
+    },
+    {
+      "id": "a2",
+      "prompt": "Setting aside what the paper hopes for and what others later built on it, which of these did this study itself establish?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cas9 and a guide RNA made inside the cell cut a chosen site, and the repair left insertions and deletions there."
+        },
+        {
+          "id": "b",
+          "text": "Nothing yet firm. The cutting was detected by one assay only, and until an independent method confirms it the honest position is that the result remains preliminary rather than established."
+        },
+        {
+          "id": "c",
+          "text": "That Cas9 cuts its intended site and no others, no stray cuts having been found elsewhere in the genome."
+        },
+        {
+          "id": "d",
+          "text": "That editing is reliable enough in cultured human cells to justify testing it in primary tissue."
+        }
+      ],
+      "correct": "a",
+      "feedback": "The cutting is established, and by two methods rather than one: the Surveyor assay detected indels and Sanger sequencing of cloned amplicons read the mutated alleles directly. That makes b an over-correction, which is its own kind of misreading. c and d are the genuine overclaims: the genome was never surveyed for off-target cuts, and no primary cells or tissue appear anywhere in the paper. Being too sceptical about a demonstrated result is as wrong as being too credulous about an undemonstrated one.",
+      "tag": "scope"
+    },
+    {
+      "id": "a3",
+      "prompt": "The paper is titled 'RNA-programmed genome editing in human cells'. Which statement matches the work the title stands on?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Editing at the CLTA gene in HEK293T cells: one locus, one line."
+        },
+        {
+          "id": "b",
+          "text": "Editing at CLTA in HEK293T cells, and again at a second locus in the same line."
+        },
+        {
+          "id": "c",
+          "text": "Cutting shown only in extracts from broken-open cells; the claim about living human cells rests on inference from those extracts."
+        },
+        {
+          "id": "d",
+          "text": "Editing at CLTA across several human cell lines."
+        }
+      ],
+      "correct": "a",
+      "feedback": "Every experiment is one locus, the clathrin light chain gene, in HEK293T cells. Both halves matter: the gene without the line, or the line without the gene, leaves the claim looking wider than it is. c understates it in the opposite direction, and that is a real error too. The Surveyor assay was run on genomic DNA taken from living transfected cells; the lysate experiments were a separate line of evidence about what was limiting, not the basis for the editing claim.",
+      "tag": "generalisation"
+    },
+    {
+      "id": "a4",
+      "prompt": "In the Discussion the authors compare their editing efficiency with zinc-finger nucleases. What do they report?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lower than the ZFN pair used here, but within the range ZFNs and TALENs achieve generally"
+        },
+        {
+          "id": "b",
+          "text": "Higher than the ZFN pair used here, and above the general range for ZFNs and TALENs"
+        },
+        {
+          "id": "c",
+          "text": "About the same as the ZFN pair used here"
+        },
+        {
+          "id": "d",
+          "text": "Lower than the ZFN pair used here, and below the general range for ZFNs and TALENs"
+        }
+      ],
+      "correct": "a",
+      "feedback": "Mutagenesis at CLTA ran consistently at 6-8%, which the authors state is lower than the ZFN pair aimed at a nearby sequence, though within the range seen for ZFNs and TALENs generally. They report an unfavourable head-to-head and then argue for their system on a different ground — that retargeting means rewriting a short RNA rather than engineering a new protein. Easier to aim is not the same as better at cutting, and the two claims sit side by side.",
+      "tag": "comparison"
+    },
+    {
+      "id": "a5",
+      "prompt": "The Surveyor percentage is computed from DNA pooled across the whole dish, including cells that never took up the plasmids. What follows for the headline editing figure?",
+      "options": [
+        {
+          "id": "a",
+          "text": "With 30-50% of cells transfected, the rate among cells that got the machinery is roughly two to three times the figure reported."
+        },
+        {
+          "id": "b",
+          "text": "Nothing can be concluded. Without knowing which individual cells were transfected, the percentage cannot be corrected in any principled way and should be read only as a lower bound of unknown looseness."
+        },
+        {
+          "id": "c",
+          "text": "Nothing follows: untransfected cells contribute to the cut and uncut bands in the same proportion."
+        },
+        {
+          "id": "d",
+          "text": "The figure already accounts for it, which is why the authors counted GFP-positive cells."
+        }
+      ],
+      "correct": "a",
+      "feedback": "Transfection ran at 30-50% with Turbofect, the reagent used for the experiments behind the reported figure, so most of the DNA in the denominator came from cells that never had Cas9 in them. The correction is approximate but it is a correction, which is why b gives up too early. c has the arithmetic backwards: untransfected DNA can only land in the uncut band. The GFP count in d is how the 30-50% was arrived at, not a correction applied to the result.",
+      "tag": "denominator"
+    }
+  ],
+  "recap": "Bacteria defend themselves against viruses with a protein that cuts DNA, guided to its target by a short piece of RNA. Change the RNA, change where it cuts. This paper asked whether that system, borrowed from bacteria, would work inside human cells.\n\nThe authors put the protein and a guide into a human cell line and aimed it at a gene. It cut. They checked the cut by looking for the scars left behind when a cell repairs broken DNA, and they found them. They tried longer guides and the cutting improved. They compared their results against an older editing tool aimed nearby.\n\nWhat this paper shows is that the system works in a dish. What it does not show is how well it works elsewhere, whether it cuts in places it shouldn't, or whether it would be safe in a person. Those questions came later, and some are still open.",
+  "ai_summary": null,
+  "figures": [
+    {
+      "id": "fig1",
+      "label": "Figure 1.",
+      "src": "/papers/crispr-human-cells/figures/fig1.jpg",
+      "caption": "Co-expression of Cas9 and guide RNA in human cells generates double-strand DNA breaks at the target locus.(A) Top: schematic diagram of the Cas9-HA-NLS-GFP expression construct. Bottom: lysate from HEK293T cells transfected with the Cas9 expression plasmid was analyzed by Western blotting using an anti-HA antibody. (B) Fluorescence microscopy of HEK293T cells expressing Cas9-HA-NLS-GFP. (C) Blue line indicates the sequence used for the guide segment of CLTA1 sgRNA. Top: schematic diagram of the sgRNA target site in exon 7 of the human CLTA gene. The target sequence that hybridizes to the guide segment of CLTA1 sgRNA is indicated by the blue line. The GG nucleotide protospacer adjacent motif (PAM) is highlighted in yellow. Black lines denote the DNA binding regions of the control ZFN protein. The translation stop codon of the CLTA open reading frame is highlighted in red for reference. Middle: schematic diagram of the sgRNA expression construct. The RNA is expressed under the control of the U6 Pol III promoter and a poly(T) tract that serves as a Pol III transcriptional terminator signal. Bottom: sgRNA-guided cleavage of target DNA by Cas9. The sgRNA consists of a 20-nt 5′-terminal guide segment (blue) followed by a 42-nt stem-loop structure required for Cas9 binding (red). Cas9-mediated cleavage of the two target DNA strands occurs upon unwinding of the target DNA and formation of a duplex between the guide segment of the sgRNA and the target DNA. This is dependent on the presence of a GG dinucleotide PAM downstream of the target sequence in the target DNA. Note that the target sequence is inverted relative to the upper diagram. (D) Northern blot analysis of sgRNA expression in HEK239T cells. (E) Surveyor nuclease assay of genomic DNA isolated from HEK293T cells expressing Cas9 and/or CLTA sgRNA. A ZFN construct previously used to target the CLTA locus was used as a positive control for detecting DSB-induced DNA repair by non-homologous end joining.DOI: http://dx.doi.org/10.7554/eLife.00471.003",
+      "attribution": "Jinek M, East A, Cheng A, Lin S, Ma E, Doudna J (2013) eLife. Reproduced under CC BY 3.0.",
+      "referenced_by": [
+        "PMC3557905-s2-p0",
+        "PMC3557905-s2-p1",
+        "PMC3557905-s4-p1"
+      ]
+    },
+    {
+      "id": "fig1s1",
+      "label": "Figure 1—figure supplement 1.",
+      "src": "/papers/crispr-human-cells/figures/fig1s1.jpg",
+      "caption": "Mutated alleles of the CLTA gene in HEK293T cells as a result of Cas9-induced NHEJ.Four types of indels were identified by Sanger sequencing in 68 clonal amplicons. The protospacer sequence is highlighted in grey with the putative cleavage site indicated by the arrow. Dashes represent deleted bases.DOI: http://dx.doi.org/10.7554/eLife.00471.004",
+      "attribution": "Jinek M, East A, Cheng A, Lin S, Ma E, Doudna J (2013) eLife. Reproduced under CC BY 3.0.",
+      "referenced_by": [
+        "PMC3557905-s4-p3"
+      ]
+    },
+    {
+      "id": "fig2",
+      "label": "Figure 2.",
+      "src": "/papers/crispr-human-cells/figures/fig2.jpg",
+      "caption": "Cell lysates contain active Cas9:sgRNA and support site-specific DNA cleavage.(A) Lysates from cells transfected with the plasmid(s) indicated at left were incubated with plasmid DNA containing a PAM and the target sequence complementary to the CLTA1 sgRNA; where indicated, the reaction was supplemented with 10 pmol of in vitro transcribed CLTA1 sgRNA; secondary cleavage with XhoI generated fragments of ∼2230 and ∼3100 bp fragments indicative of Cas9-mediated cleavage. A control reaction using lysate from cells transfected with a ZFN expression construct shows fragments of slightly different size reflecting the offset of the ZFN target site relative to the CLTA1 target site. (B) Lysates from cells transfected with Cas9-HA-NLS-GFP expression plasmid and, where indicated, the CLTA1 sgRNA expression plasmid, were incubated with target plasmid DNA as in (A) in the absence or presence of in vitro-transcribed CLTA1 sgRNA.DOI: http://dx.doi.org/10.7554/eLife.00471.005",
+      "attribution": "Jinek M, East A, Cheng A, Lin S, Ma E, Doudna J (2013) eLife. Reproduced under CC BY 3.0.",
+      "referenced_by": [
+        "PMC3557905-s2-p2",
+        "PMC3557905-s4-p1"
+      ]
+    },
+    {
+      "id": "fig3",
+      "label": "Figure 3.",
+      "src": "/papers/crispr-human-cells/figures/fig3.jpg",
+      "caption": "3′ extension of sgRNA constructs enhances site-specific NHEJ-mediated mutagenesis.(A) The construct for CLTA1 sgRNA expression (top) was designed to generate transcripts containing the original Cas9-binding sequence v1.0, or sequences extended by 4 base pairs (v2.1) or 10 base pairs (v2.2). (B) Surveyor nuclease assay of genomic DNA isolated from HEK293T cells expressing Cas9 and/or CLTA sgRNA v1.0, v2.1 or v2.2. A ZFN construct previously used to target the CLTA locus was used as a positive control for detecting DSB-induced DNA repair by non-homologous end joining.DOI: http://dx.doi.org/10.7554/eLife.00471.006",
+      "attribution": "Jinek M, East A, Cheng A, Lin S, Ma E, Doudna J (2013) eLife. Reproduced under CC BY 3.0.",
+      "referenced_by": [
+        "PMC3557905-s2-p3",
+        "PMC3557905-s4-p1"
+      ]
+    }
+  ]
+}

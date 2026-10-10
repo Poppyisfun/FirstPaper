@@ -209,6 +209,18 @@ def main() -> int:
     parser.add_argument(
         "--runs", type=int, default=DEFAULT_RUNS, help=f"default {DEFAULT_RUNS}"
     )
+    parser.add_argument(
+        "--max-leaks",
+        type=int,
+        default=None,
+        help="exit 1 if more questions than this are answerable from the explanations alone. Omit to report without gating.",
+    )
+    parser.add_argument(
+        "--replay",
+        type=Path,
+        default=None,
+        help="re-apply the gate to a stored verification.json instead of calling the model. For testing the gate itself.",
+    )
     args = parser.parse_args()
 
     if not os.environ.get("ANTHROPIC_API_KEY"):
@@ -220,16 +232,31 @@ def main() -> int:
     if not os.environ.get("ANTHROPIC_API_KEY"):
         sys.exit("ANTHROPIC_API_KEY is not set, and .env.local does not carry it.")
 
-    path = args.questions or (PAPERS / args.slug / "questions.json")
+    if args.replay:
+        rows = json.loads(args.replay.read_text(encoding="utf-8"))
+        print(f"  replaying {len(rows)} results from {args.replay.name}")
+        print("  no model calls\n")
+        for r in rows:
+            mark = "LEAK" if r["answerable_from_notes"] else "ok"
+            print(f"    {r['id']:<4} notes {r['from_notes']}/{r['runs']}  {mark}")
+        return gate(rows, args.max_leaks)
+
+    path = args.questions or (PAPERS / args.slug / "paper.json")
     doc = json.loads(path.read_text(encoding="utf-8"))
     # Both rounds. The check round is what the design constraint is about,
     # but an appraisal question the notes answer is just as dead, and the
     # control arm is the only way to tell that apart from one the model
     # simply knows already.
     questions = []
-    for section in ("comprehension", "appraisal"):
-        for question in doc.get(section, []):
-            questions.append({**question, "section": section})
+    for section, key in (("comprehension", "check"), ("appraisal", "judge")):
+        for question in doc.get(key, []):
+            questions.append({
+                **question,
+                "section": section,
+                # The schema renamed these; the prompts below still want
+                # the old names.
+                "correct_option_id": question["correct"],
+            })
 
     notes = load_notes(args.slug)
     assert_no_paper_text(notes, args.slug)
@@ -348,6 +375,32 @@ def main() -> int:
     out = path.with_name("verification.json")
     out.write_text(json.dumps(rows, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\n  wrote {out}")
+    return gate(rows, args.max_leaks)
+
+
+def gate(rows: list[dict], max_leaks: int | None) -> int:
+    """The CI verdict.
+
+    Counts only questions the explanations answer. A question the model
+    also gets right from nothing is recorded and ignored: that is the
+    model knowing the field, and a sixteen-year-old does not.
+    """
+    leaks = [r for r in rows if r["answerable_from_notes"]]
+    if max_leaks is None:
+        print(f"\n  {len(leaks)} of {len(rows)} answerable from the notes "
+              f"(no threshold set, not gating)")
+        return 0
+
+    print(f"\n  GATE: {len(leaks)} of {len(rows)} answerable from the "
+          f"explanations alone, threshold {max_leaks}")
+    if len(leaks) > max_leaks:
+        print("\n  FAILED. A reader who skipped the paper could pass this")
+        print("  round, which is the one thing the design does not allow.")
+        for r in leaks:
+            basis = r.get("basis_notes") or r.get("basis") or ""
+            print(f"    {r['id']}: {basis}")
+        return 1
+    print("  passed")
     return 0
 
 

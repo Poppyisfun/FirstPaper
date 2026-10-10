@@ -62,7 +62,7 @@ export default function Home() {
   /* Derived, not asserted. The landing page and the library card used to
      disagree because each carried its own number; meta.json is the one
      place a paper says how long it takes. */
-  const minutes = Math.min(...getAllPapers().map((p) => p.meta.minutes));
+  const minutes = Math.min(...getAllPapers().map((p) => p.estimated_minutes));
 
   return (
     <>

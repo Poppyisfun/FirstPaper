@@ -1,0 +1,87 @@
+name: content
+
+# Every pull request that touches authored content, plus main. The point is
+# that someone other than the author can open a pull request adding a paper
+# and it can be merged on a green run, without reading all seventeen
+# paragraphs by hand.
+on:
+  pull_request:
+    paths:
+      - "content/**"
+      - "lib/schema.ts"
+      - ".github/workflows/content.yml"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  mechanical:
+    name: Mechanical checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - run: npm ci
+
+      # Word-count ratio, licence, the seven-tag enum, answer keys pointing
+      # at real options, and figure files that exist with lowercase names.
+      # No model, no API key, no network.
+      - name: Content checks
+        run: python content/ingest/check_content.py
+
+      # Zod parses every paper.json at module load, so a schema violation
+      # fails here with the field path rather than at request time.
+      - name: Schema and types
+        run: |
+          npx tsc --noEmit
+          node scripts/verify-content.js
+
+      - name: Build
+        run: npx next build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_placeholder
+          SUPABASE_SECRET_KEY: sb_secret_ci_placeholder
+
+  leak-gate:
+    name: Can the explanations answer the questions?
+    runs-on: ubuntu-latest
+    needs: mechanical
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r content/ingest/requirements.txt
+
+      # The behavioural gate. A reader who skipped the paper and read only
+      # our explanations must not be able to pass the check round.
+      #
+      # Gated on SHAPE LEAKS ONLY. The blind test also flags corpus
+      # recognition and domain knowledge, and neither is actionable: a
+      # distractor has to be factually wrong to be a distractor, and a model
+      # that knows the field will always spot that. A sixteen-year-old will
+      # not. Those two are reported and ignored.
+      #
+      # Threshold: no more than 1 of 10.
+      - name: Leak gate
+        if: ${{ env.ANTHROPIC_API_KEY != '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python content/ingest/verify_questions.py --max-leaks 1
+
+      - name: Skipped notice
+        if: ${{ env.ANTHROPIC_API_KEY == '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "::warning::ANTHROPIC_API_KEY is not set, so the behavioural"
+          echo "::warning::leak gate did not run. Mechanical checks still ran."
+          echo "::warning::Set the secret to enable it before merging content."

@@ -32,11 +32,9 @@ export default async function RecapPage({
      evidence the reader has that any of this landed. It costs nothing to
      put here and nothing else on the screen demonstrates the point as
      plainly. */
-  const abstract = paper.source.sections
-    .find((section) => section.imrad === "abstract")
-    ?.paragraphs[0];
+  const abstract = paper.paragraphs.find((p) => p.imrad === "abstract");
 
-  const paragraphs = paper.meta.plainSummary
+  const paragraphs = paper.recap
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean);
@@ -53,7 +51,7 @@ export default async function RecapPage({
             <span className="rc-then-k">This is where you started</span>
             <p
               className="rc-then-t"
-              dangerouslySetInnerHTML={{ __html: abstract.text }}
+              dangerouslySetInnerHTML={{ __html: abstract.source_text }}
             />
             <p className="rc-then-n">
               You were told not to expect to follow this. Read it again now.
@@ -79,7 +77,7 @@ export default async function RecapPage({
           <b>FirstPaper can be wrong, and that&rsquo;s the point.</b> This
           summary is ours, not the authors&rsquo;.{" "}
           <a
-            href={`https://europepmc.org/article/PMC/${paper.source.pmcid}`}
+            href={`https://europepmc.org/article/PMC/${paper.pmcid}`}
             target="_blank"
             rel="noopener noreferrer"
           >

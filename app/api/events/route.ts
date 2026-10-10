@@ -37,6 +37,11 @@ type IncomingEvent = {
 /** Columns on `events` that are promoted out of the payload blob. */
 const PROMOTED = new Set(["paragraph_id", "question_id", "ms"]);
 
+/* item_id and taxonomy_tag stay in the payload rather than getting columns:
+   the events table is frozen at two tables and these are queryable from
+   jsonb. They are recorded from day one so the record is complete when
+   there is something to compare it against. */
+
 function isEvent(value: unknown): value is IncomingEvent {
   if (typeof value !== "object" || value === null) return false;
   const e = value as Record<string, unknown>;

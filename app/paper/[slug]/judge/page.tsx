@@ -20,5 +20,5 @@ export default async function JudgePage({
   const paper = getPaper(slug);
   if (!paper) notFound();
 
-  return <Judge slug={slug} questions={paper.questions.appraisal} />;
+  return <Judge slug={slug} questions={paper.judge} />;
 }

@@ -20,5 +20,5 @@ export default async function CheckPage({
   const paper = getPaper(slug);
   if (!paper) notFound();
 
-  return <Check slug={slug} questions={paper.questions.comprehension} />;
+  return <Check slug={slug} questions={paper.check} />;
 }

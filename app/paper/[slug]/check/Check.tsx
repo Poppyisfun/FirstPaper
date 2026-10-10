@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { flushNow, track } from "@/lib/events";
 import { sessionSeed, shuffleWithSeed } from "@/lib/shuffle";
-import type { Question } from "@/lib/content-types";
+import type { CheckQuestion } from "@/lib/schema";
 
 /**
  * The check round: did the reading land?
@@ -21,7 +21,7 @@ export default function Check({
   questions,
 }: {
   slug: string;
-  questions: Question[];
+  questions: CheckQuestion[];
 }) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
@@ -56,8 +56,13 @@ export default function Check({
       slug,
       props: {
         question_id: question.id,
+        /* Globally unique across papers, unlike question_id which is only
+           unique within one. Recorded now because it cannot be backfilled
+           and it is what lets us ask whether the skill transfers. */
+        item_id: `${slug}:check:${question.id}`,
+        taxonomy_tag: null,
         chosen_option_id: selected,
-        correct: selected === question.correctOptionId,
+        correct: selected === question.correct,
         ms: Date.now() - startedAt,
       },
     });
@@ -75,7 +80,7 @@ export default function Check({
     setStartedAt(Date.now());
   }
 
-  const isCorrect = answered === question.correctOptionId;
+  const isCorrect = answered === question.correct;
 
   return (
     <div className="ph">
@@ -100,7 +105,7 @@ export default function Check({
         <div className="ph-opts" role="radiogroup" aria-label="Answer options">
           {options.map((option) => {
             const chosen = selected === option.id;
-            const isAnswer = option.id === question.correctOptionId;
+            const isAnswer = option.id === question.correct;
             let cls = "ph-opt";
             if (answered) {
               if (isAnswer) cls += " right";
@@ -139,7 +144,7 @@ export default function Check({
             <p className="ph-fb-v">
               {isCorrect ? "Correct." : "Not quite."}
             </p>
-            <p className="ph-fb-t">{question.why}</p>
+            <p className="ph-fb-t">{question.feedback}</p>
           </div>
         )}
 

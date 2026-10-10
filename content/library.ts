@@ -1,4 +1,4 @@
-import { getAllPapers } from "@/lib/content";
+import { getAllPapers, type Paper } from "@/lib/content";
 
 export type Topic = "Genetics" | "Evolution" | "Medicine" | "Ecology";
 
@@ -39,14 +39,27 @@ const TOPICS: Record<string, Topic> = {
  * exists, so a card can never advertise something that is not there and a
  * title can never drift from the paper's own metadata.
  */
+/**
+ * The most XP a paper can yield on a perfect run.
+ *
+ * Mirrors lib/scoring.ts: eight for each paragraph predicted correctly,
+ * twenty for each correct answer in either round.
+ */
+function maxXpFor(paper: Paper): number {
+  return paper.paragraphs.length * 8 + paper.check.length * 20 +
+    paper.judge.length * 20;
+}
+
 export const LIBRARY: LibraryEntry[] = getAllPapers().map((paper) => ({
-  slug: paper.meta.slug,
-  topic: TOPICS[paper.meta.slug] ?? "Genetics",
-  level: paper.meta.level,
-  title: paper.meta.title,
-  practiceGoal: paper.meta.practiceGoal,
-  minutes: paper.meta.minutes,
-  xp: paper.meta.xp,
+  slug: paper.slug,
+  topic: TOPICS[paper.slug] ?? "Genetics",
+  level: paper.difficulty,
+  title: paper.title,
+  practiceGoal: paper.practice_goal,
+  minutes: paper.estimated_minutes,
+  /* Derived, not authored. The card used to carry its own number and it had
+     already drifted from what the paper can actually yield. */
+  xp: maxXpFor(paper),
 }));
 
 export const FILTERS = [

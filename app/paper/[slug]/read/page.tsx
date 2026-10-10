@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllPaperSlugs, getPaper } from "@/lib/content";
+import { figuresFor, getAllPaperSlugs, getPaper } from "@/lib/content";
 import Reader, { type ReaderStep } from "./Reader";
 
 /** Prerender this phase for every paper that exists. */
@@ -18,8 +18,8 @@ export async function generateMetadata({
   if (!paper) return { title: "Paper not found — FirstPaper" };
 
   return {
-    title: `Read: ${paper.meta.title} — FirstPaper`,
-    description: paper.meta.practiceGoal,
+    title: `Read: ${paper.title} — FirstPaper`,
+    description: paper.practice_goal,
   };
 }
 
@@ -35,41 +35,35 @@ export default async function ReadPage({
   const paper = getPaper(slug);
   if (!paper) notFound();
 
-  /* A figure belongs to the paragraphs whose text cites it by name, which is
-     computed at ingest rather than here. A figure with no image is dropped:
-     there is nothing to show, and a broken thumbnail is worse than none. */
-  const steps: ReaderStep[] = paper.source.sections.flatMap((section) =>
-    section.paragraphs.map((paragraph) => ({
-      id: paragraph.id,
-      text: paragraph.text,
-      sectionHeading: section.heading,
-      imrad: section.imrad,
-      explanation: paper.explanations[paragraph.id] ?? {
-        explorer: "",
-        reader: "",
-        critic: "",
-      },
-      prediction: paper.predictions[paragraph.id] ?? null,
-      figures: paper.source.figures.filter(
-        (figure) =>
-          figure.href && (figure.referenced_by ?? []).includes(paragraph.id),
-      ),
-    })),
-  );
+  /* One flat list now: the schema stores paragraphs in reading order with
+     their section on each, so there is no nesting to walk. A figure belongs
+     to the paragraphs whose text cites it by name, computed at ingest. A
+     figure with no image is dropped — a broken thumbnail is worse than
+     none. */
+  const steps: ReaderStep[] = paper.paragraphs.map((paragraph) => ({
+    id: paragraph.id,
+    text: paragraph.source_text,
+    sectionHeading: paragraph.section,
+    imrad: paragraph.imrad,
+    explanation: paragraph.explanation,
+    caution: paragraph.caution,
+    prediction: paragraph.prediction,
+    figures: figuresFor(paper, paragraph.id),
+  }));
 
   return (
     <Reader
       paper={{
-        slug: paper.meta.slug,
-        title: paper.meta.title,
-        pmcid: paper.source.pmcid,
-        originalUrl: paper.meta.originalUrl,
-        difficulty: paper.meta.level,
-        authors: paper.meta.authors,
-        year: paper.meta.year,
-        journal: paper.meta.journal,
-        licence: paper.meta.licence,
-        licenceUrl: paper.meta.licenceUrl,
+        slug: paper.slug,
+        title: paper.title,
+        pmcid: paper.pmcid,
+        originalUrl: paper.original_url,
+        difficulty: paper.difficulty,
+        authors: paper.authors,
+        year: paper.year,
+        journal: paper.journal,
+        licence: paper.licence,
+        licenceUrl: paper.licence_url,
       }}
       steps={steps}
     />

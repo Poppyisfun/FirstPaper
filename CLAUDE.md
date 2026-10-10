@@ -254,6 +254,60 @@ You MAY NOT change, without being explicitly asked:
 
 If a content change seems necessary, say so and ask. Do not make it silently.
 
+## The content schema is frozen
+
+One JSON file per paper (`paper.json`), one Zod schema (`lib/schema.ts`),
+validated at module load so a malformed paper fails the build rather than a
+request. `content/papers/index.ts` parses; nothing else normalises.
+
+Two file types exist and only two: `Paper` and `ClaimCheck`. Every field the
+roadmap needs is already there with the unused ones nullable, because adding
+a field later means revisiting every authored paper while adding a nullable
+field today costs one line. `ai_summary` is null everywhere and reserved for
+"Spot the AI's mistake".
+
+### The tag enum is seven strings. Do not add an eighth.
+
+    hedging · scope · generalisation · comparison
+    denominator · confounding · demonstration
+
+Per-tag calibration **is** the product. A tag introduced after papers are
+authored makes every earlier record partly incomparable: a reader's
+"confounding: 4 of 6" cannot be set against papers written before the tag
+existed, and that record is the thing we are selling.
+
+All seven exist from day one even where a paper uses three. `demonstration`
+is not a curriculum label — it is what the Jinek paper is about, and without
+it our best paper contributes nothing to a per-tag record.
+
+### Fields added beyond the original list, and why
+
+`journal` and `figures[].label`, because the CC BY attribution line must name
+where the work was published and the figure viewer names the authors' own
+label. `xp` was deliberately **not** added: the library card derives it from
+the paper's length, because the authored number had already drifted from what
+the paper can actually yield.
+
+## The CI gate
+
+`.github/workflows/content.yml` runs on every pull request touching
+`content/`. This is what makes it safe for someone other than the author to
+add a paper.
+
+**Mechanical checks always run** — no model, no key, no network: explanation
+word-count ratio, licence in the permitted set, every tag parsing against the
+enum, answer keys pointing at real options, figure files present and
+lowercase.
+
+The ratio rule is **60–75%, and the ceiling is the only hard one.** Over 75%
+fails the build. Under 60% is a warning: a short paragraph explained in a
+sentence must not be padded, and padding is how commentary becomes filler.
+
+**The leak gate runs when `ANTHROPIC_API_KEY` is set** and fails when more
+than **1 of 10** questions is answerable from the explanations alone. It
+gates on shape leaks only; corpus recognition and domain knowledge are
+recorded and ignored.
+
 ## Writing questions and options
 
 Three rules learned the hard way on this project. Breaking any of them has
