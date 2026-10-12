@@ -64,7 +64,6 @@ export type Calibration =
       accuracy: number;
       /** meanConfidence - accuracy. Negative means underconfident. */
       gap: number;
-      verdict: "overconfident" | "underconfident" | "well calibrated";
     };
 
 /** One answered question, for the per-question breakdown. */
@@ -123,8 +122,9 @@ function prop(event: PaperEvent, key: string): unknown {
 /**
  * Confidence within 10 points of accuracy is calibrated. The threshold is a
  * judgement call, but some band is necessary: demanding an exact match would
- * report almost everyone as miscalibrated on five questions, where one answer
- * moves accuracy by twenty points.
+ * report almost everyone as miscalibrated. It is applied only past
+ * DIRECTION_GATE, in calibrationDirection; one session's five questions never
+ * get a verdict, because one answer moves accuracy by twenty points.
  */
 const CALIBRATION_BAND = 10;
 
@@ -258,18 +258,9 @@ export function deriveCalibration(judged: JudgeAnswer[]): Calibration {
   const accuracy = (100 * judged.filter((j) => j.correct).length) / judged.length;
   const gap = meanConfidence - accuracy;
 
-  return {
-    kind: "measured",
-    meanConfidence,
-    accuracy,
-    gap,
-    verdict:
-      Math.abs(gap) <= CALIBRATION_BAND
-        ? "well calibrated"
-        : gap > 0
-          ? "overconfident"
-          : "underconfident",
-  };
+  /* No verdict here. This is one session, and a session is five questions;
+     which way a reader leans is calibrationDirection's call, past its gate. */
+  return { kind: "measured", meanConfidence, accuracy, gap };
 }
 
 /** Which criteria they missed, worst first, then alphabetically for stability. */
@@ -323,36 +314,6 @@ export function patternLine(
     .slice(0, 3)
     .map((m) => TAG_PHRASE[m.tag] ?? m.tag)
     .join(", ")}.`;
-}
-
-/**
- * The centrepiece sentence. Phrased for whatever the numbers actually are,
- * and never congratulatory about a bad gap or scolding about one.
- */
-export function calibrationSentence(c: Calibration): string {
-  if (c.kind === "none") return "You didn't answer the judging round.";
-
-  const said = Math.round(c.meanConfidence);
-  const were = Math.round(c.accuracy);
-
-  if (c.verdict === "well calibrated") {
-    return `You said you were ${said}% sure. You were right ${were}% of the time.`;
-  }
-  return `You said you were ${said}% sure. You were right ${were}% of the time.`;
-}
-
-/** The quieter line underneath, which is where the reading goes. */
-export function calibrationNote(c: Calibration): string | null {
-  if (c.kind === "none") return null;
-  const gap = Math.round(Math.abs(c.gap));
-
-  if (c.verdict === "well calibrated") {
-    return "Your confidence matched your accuracy. That is the hard part, and you did it.";
-  }
-  if (c.verdict === "overconfident") {
-    return `Your confidence ran ${gap} points ahead of your accuracy. Worth knowing before you trust your own certainty about a paper.`;
-  }
-  return `Your accuracy ran ${gap} points ahead of your confidence. You knew more than you credited yourself for — underconfidence is its own thing to correct.`;
 }
 
 /* ────────────────────────────────────────────────────────────────────────
