@@ -36,9 +36,17 @@ const riseVariants: Variants = {
   },
 };
 
-const staticVariants: Variants = {
-  hidden: { opacity: 1 },
-  shown: { opacity: 1, transition: { duration: 0 } },
+/**
+ * Reduced motion: both states are the resting state, set instantly.
+ *
+ * Every property the animated variant touches has to be named here. The
+ * server cannot know the viewer's preference, so it renders riseVariants'
+ * hidden state; if this only reset opacity, a reduced-motion reader was left
+ * with every section blurred and pushed 28px down for good.
+ */
+export const staticVariants: Variants = {
+  hidden: { opacity: 1, y: 0, filter: "blur(0px)" },
+  shown: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0 } },
 };
 
 /**

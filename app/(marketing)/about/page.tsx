@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Nav from "@/components/Nav";
 import { Rise } from "@/components/motion-primitives";
 import { BtnLink } from "@/components/Btn";
 
-export const metadata: Metadata = {
-  title: "About — FirstPaper",
-  description:
-    "Why FirstPaper exists: a free tool that teaches teenagers to read real scientific research, and to judge whether it's any good.",
-};
+export const metadata: Metadata = pageMetadata(
+  "About — FirstPaper",
+  "Why FirstPaper exists: a free tool that teaches teenagers to read real scientific research, and to judge whether it's any good.",
+);
 
 const steps = [
   {

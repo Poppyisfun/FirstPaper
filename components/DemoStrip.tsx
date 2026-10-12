@@ -44,7 +44,7 @@ export default function DemoStrip() {
             {!revealed ? (
               <motion.div
                 key="ask"
-                exit={{ opacity: 0, y: -6 }}
+                exit={reduce ? undefined : { opacity: 0, y: -6 }}
                 transition={{ duration: 0.2 }}
               >
                 <BtnButton
@@ -66,7 +66,7 @@ export default function DemoStrip() {
                 aria-live="polite"
                 initial={reduce ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: EZ, delay: 0.28 }}
+                transition={reduce ? { duration: 0 } : { duration: 0.5, ease: EZ, delay: 0.28 }}
               >
                 The verb does not match the evidence. The study found a
                 pattern, two things lining up. But the word drives claims a

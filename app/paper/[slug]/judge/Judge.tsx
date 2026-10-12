@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import { flushNow, track } from "@/lib/events";
-import { sessionSeed, shuffleWithSeed } from "@/lib/shuffle";
+import { shuffleWithSeed, useSessionSeed } from "@/lib/shuffle";
 import type { Question } from "@/lib/content-types";
 
 /**
@@ -33,10 +33,9 @@ export default function Judge({
   const [selected, setSelected] = useState<string | null>(null);
   const [answered, setAnswered] = useState<string | null>(null);
   const [error, setError] = useState(false);
-  const [seed, setSeed] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState(() => Date.now());
 
-  useEffect(() => setSeed(sessionSeed()), []);
+  const seed = useSessionSeed();
 
   const question = questions[index];
   const atLast = index === questions.length - 1;
@@ -85,7 +84,10 @@ export default function Judge({
 
   function next() {
     if (atLast) {
-      void flushNow().then(() => router.push(`/paper/${slug}/recap`));
+      /* Not awaited: the post is keepalive and the session log is already
+         written, so a slow connection must not hold the reader here. */
+      void flushNow();
+      router.push(`/paper/${slug}/recap`);
       return;
     }
     setIndex((i) => i + 1);
@@ -138,6 +140,9 @@ export default function Judge({
               value={confidence}
               onChange={(e) => setConfidence(Number(e.target.value))}
               aria-label="How confident are you, 0 to 100 per cent"
+              aria-valuetext={`${confidence} per cent`}
+              /* Drives the filled part of the track in WebKit/Blink. */
+              style={{ "--fill": `${confidence}%` } as CSSProperties}
             />
             <div className="ph-conf-ends">
               <span>No idea</span>
@@ -157,7 +162,17 @@ export default function Judge({
               You said <b>{committed}% sure</b> before seeing these.
             </p>
 
-            <div className="ph-opts" role="radiogroup" aria-label="Answer options">
+            <div className="ph-opts" role="radiogroup" aria-label="Answer options"
+                 aria-busy={options.length === 0}>
+              {options.length === 0 && (
+                /* Order is per session and only exists in the browser; hold the
+                   space until it does. */
+                <>
+                  <span className="ph-skel" aria-hidden="true" />
+                  <span className="ph-skel" aria-hidden="true" />
+                  <span className="ph-skel" aria-hidden="true" />
+                </>
+              )}
               {options.map((option) => {
                 const chosen = selected === option.id;
                 const isAnswer = option.id === question.correctOptionId;

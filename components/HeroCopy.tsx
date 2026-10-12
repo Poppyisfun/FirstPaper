@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { BtnLink, BtnAnchor } from "@/components/Btn";
-import { EZ } from "@/components/motion-primitives";
+import { EZ, staticVariants } from "@/components/motion-primitives";
 
 /**
  * Hero copy, revealed on load in a single staggered cascade rather than on
@@ -25,14 +25,17 @@ const line: Variants = {
 
 export default function HeroCopy() {
   const reduce = useReducedMotion();
-  const v = reduce ? undefined : line;
+  /* Still driven through the variants when motion is reduced, just to the
+     resting state at once: the server renders the hidden state either way,
+     and switching animation off here used to leave the hero at opacity 0. */
+  const v = reduce ? staticVariants : line;
 
   return (
     <motion.div
       className="hero-in"
       variants={reduce ? undefined : container}
-      initial={reduce ? false : "hidden"}
-      animate={reduce ? false : "shown"}
+      initial="hidden"
+      animate="shown"
     >
       <motion.div className="eyebrow" variants={v}>
         <i aria-hidden="true" />
