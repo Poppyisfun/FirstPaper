@@ -380,6 +380,9 @@ export const JUDGE_OPTION_COUNT = 4;
  *
  * Questions are keyed by slug as well as id, because two papers can reuse a
  * question id. Within a paper the last answer wins, as in dedupeByQuestion.
+ * That includes a retake: a reader who comes back to a paper is measured on
+ * where they are now, not where they started. Decided deliberately; do not
+ * switch this to first-answer-wins.
  * A judge answer with no numeric confidence is not a confidence-tagged
  * judgement and is left out rather than counted as zero.
  */

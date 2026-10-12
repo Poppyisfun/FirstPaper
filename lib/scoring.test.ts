@@ -83,7 +83,7 @@ describe("calibrationGap", () => {
     expect(calibrationGap(many(5, 4, 40))).toBeCloseTo(-40, 10);
   });
 
-  it("uses the last answer when a question is re-answered", () => {
+  it("uses the last answer when a paper is retaken", () => {
     const events = [
       judge("a", "q1", "scope", false, 90),
       judge("a", "q1", "scope", true, 60),
