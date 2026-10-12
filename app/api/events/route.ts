@@ -217,3 +217,72 @@ export async function POST(request: Request) {
 
   return response;
 }
+
+/**
+ * This reader's own appraisal judgements, across every paper they have read
+ * in this browser.
+ *
+ * The session log in the browser only holds the current tab's events, and the
+ * 20-judgement gate on the results screen spans four papers, so the count has
+ * to come from the durable record. Same rules as the write path: the reader
+ * is identified only by the httpOnly cookie minted above, the browser never
+ * touches Supabase, and a failure returns an empty list rather than an error
+ * — the screen falls back to the session log and shows a smaller count.
+ *
+ * Only judge_answered events are returned. That is all the gated layer in
+ * lib/scoring.ts reads, and returning less is returning less to leak.
+ */
+export async function GET(request: Request) {
+  const cookie = request.headers
+    .get("cookie")
+    ?.split(";")
+    .map((c) => c.trim())
+    .find((c) => c.startsWith(`${ANON_COOKIE}=`));
+  const anonId = cookie?.slice(ANON_COOKIE.length + 1) || null;
+
+  const empty = NextResponse.json(
+    { ok: true, events: [] },
+    { headers: { "Cache-Control": "no-store" } },
+  );
+  if (!anonId) return empty;
+
+  try {
+    const db = createSupabaseServerClient();
+    const sessions = await db
+      .from("sessions")
+      .select("id, paper_slug")
+      .eq("anon_id", anonId);
+    if (sessions.error || !sessions.data?.length) return empty;
+
+    const slugOf = new Map<string, string>(
+      sessions.data.map((s) => [s.id as string, s.paper_slug as string]),
+    );
+
+    const rows = await db
+      .from("events")
+      .select("session_id, type, question_id, payload, created_at")
+      .in("session_id", [...slugOf.keys()])
+      .eq("type", "judge_answered")
+      .order("created_at", { ascending: true });
+    if (rows.error || !rows.data) return empty;
+
+    const events = rows.data.map((row) => ({
+      name: row.type as string,
+      slug: slugOf.get(row.session_id as string) ?? "",
+      at: Date.parse(row.created_at as string),
+      props: {
+        ...((row.payload as Record<string, unknown>) ?? {}),
+        question_id: row.question_id as string | null,
+      },
+    }));
+
+    return NextResponse.json(
+      { ok: true, events },
+      { headers: { "Cache-Control": "no-store" } },
+    );
+  } catch {
+    /* Missing keys or an outage. The results screen still has the session
+       log, so this degrades to a smaller count, never to an error. */
+    return empty;
+  }
+}

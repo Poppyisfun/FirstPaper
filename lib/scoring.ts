@@ -14,6 +14,7 @@
  */
 
 import type { PaperEvent } from "@/lib/events";
+import { chanceBaseline, wilsonInterval } from "@/lib/stats";
 
 export const XP_PARAGRAPH_PREDICTED = 8;
 export const XP_CHECK_CORRECT = 20;
@@ -352,4 +353,240 @@ export function calibrationNote(c: Calibration): string | null {
     return `Your confidence ran ${gap} points ahead of your accuracy. Worth knowing before you trust your own certainty about a paper.`;
   }
   return `Your accuracy ran ${gap} points ahead of your confidence. You knew more than you credited yourself for — underconfidence is its own thing to correct.`;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Across papers: the gated layer.
+
+   Everything above describes one session. Everything below describes a
+   reader across every paper they have judged, and every function here has a
+   hard gate. Below the gate it returns null, and the caller shows a tally —
+   never a verdict. Five questions cannot say which way a reader leans: 2 of 5
+   has a 95% interval of roughly 12% to 77%, which contains almost every
+   story you could tell about them.
+
+   No Brier score and no calibration curve, deliberately. Both are finer
+   instruments than the sample can feed.
+   ──────────────────────────────────────────────────────────────────────── */
+
+
+/** Judgements needed before we say which direction a reader leans. Four papers. */
+export const DIRECTION_GATE = 20;
+
+/** Judgements in one tag needed before we say anything about that tag. */
+export const TAG_VERDICT_GATE = 6;
+
+/** Questions per judging round. 20 / 5 is where "four papers" comes from. */
+export const JUDGEMENTS_PER_PAPER = 5;
+
+/** One appraisal judgement with its committed confidence, from any paper. */
+export type Judgement = {
+  slug: string;
+  questionId: string;
+  tag: string;
+  correct: boolean;
+  /** 0-100, committed before the options were visible. */
+  confidence: number;
+};
+
+/** Looks up a question's option count; undefined for a question we no longer ship. */
+export type OptionCountLookup = (slug: string, questionId: string) => number | undefined;
+
+/**
+ * Every confidence-tagged judgement in the log, once per question.
+ *
+ * The FIRST answer per paper and question counts, not the last. A second pass
+ * through a paper is made knowing the answers, and counting it would let a
+ * reader reach the gate by reading one paper four times — a calibration
+ * built from answers they already knew.
+ *
+ * Events without a numeric confidence are skipped: an appraisal answer with
+ * no stated confidence cannot say anything about calibration.
+ */
+export function judgementsFrom(events: PaperEvent[]): Judgement[] {
+  const ordered = events
+    .map((event, i) => ({ event, i }))
+    .filter(({ event }) => event.name === "judge_answered")
+    .sort((a, b) => (a.event.at ?? 0) - (b.event.at ?? 0) || a.i - b.i);
+
+  const seen = new Set<string>();
+  const out: Judgement[] = [];
+  for (const { event } of ordered) {
+    const questionId = String(prop(event, "question_id") ?? "");
+    const confidence = prop(event, "confidence");
+    if (!questionId || typeof confidence !== "number") continue;
+    const key = `${event.slug}:${questionId}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      slug: event.slug,
+      questionId,
+      tag: String(prop(event, "tag") ?? "untagged"),
+      correct: prop(event, "correct") === true,
+      confidence,
+    });
+  }
+  return out;
+}
+
+/** Confidence-tagged judgements across all of a reader's sessions. */
+export function judgementCount(events: PaperEvent[]): number {
+  return judgementsFrom(events).length;
+}
+
+/**
+ * Mean stated confidence minus actual accuracy, in percentage points, over
+ * appraisal judgements only. Positive is overconfident, negative is
+ * underconfident. Null when there is nothing to measure.
+ *
+ * Ungated on purpose: this is the arithmetic, and the gate belongs to the
+ * function that turns it into a claim about the reader.
+ */
+export function calibrationGap(events: PaperEvent[]): number | null {
+  const judged = judgementsFrom(events);
+  if (judged.length === 0) return null;
+  const meanConfidence =
+    judged.reduce((sum, j) => sum + j.confidence, 0) / judged.length;
+  const accuracy = (100 * judged.filter((j) => j.correct).length) / judged.length;
+  return meanConfidence - accuracy;
+}
+
+export type Direction = "overconfident" | "underconfident" | "well-calibrated";
+
+export type CalibrationDirection = {
+  direction: Direction;
+  /** Absolute gap in percentage points, rounded. The size, not a precise figure. */
+  gap: number;
+  judgements: number;
+  meanConfidence: number;
+  /** 0-100. */
+  accuracy: number;
+  /** 95% Wilson interval on accuracy, 0-100. Shown beside the direction. */
+  accuracyInterval: [number, number];
+};
+
+/**
+ * Which way the reader leans, and by roughly how much.
+ *
+ * Null below DIRECTION_GATE. Above it, a gap within CALIBRATION_BAND points is
+ * well-calibrated. The interval comes back with the answer because at 20
+ * judgements it is still wide — 8 of 20 is somewhere between 22% and 61% —
+ * and the screen says so rather than letting the gap read as exact.
+ */
+export function calibrationDirection(
+  events: PaperEvent[],
+): CalibrationDirection | null {
+  const judged = judgementsFrom(events);
+  if (judged.length < DIRECTION_GATE) return null;
+
+  const correct = judged.filter((j) => j.correct).length;
+  const meanConfidence =
+    judged.reduce((sum, j) => sum + j.confidence, 0) / judged.length;
+  const accuracy = (100 * correct) / judged.length;
+  const gap = meanConfidence - accuracy;
+  const [lo, hi] = wilsonInterval(correct, judged.length);
+
+  return {
+    direction:
+      Math.abs(gap) <= CALIBRATION_BAND
+        ? "well-calibrated"
+        : gap > 0
+          ? "overconfident"
+          : "underconfident",
+    gap: Math.round(Math.abs(gap)),
+    judgements: judged.length,
+    meanConfidence,
+    accuracy,
+    accuracyInterval: [100 * lo, 100 * hi],
+  };
+}
+
+export type TagTally = {
+  tag: string;
+  correct: number;
+  total: number;
+  /** Mean confidence stated on this tag's questions, 0-100. */
+  meanConfidence: number;
+};
+
+/** Raw tallies per appraisal tag across every paper, alphabetical. No verdicts. */
+export function perTagTally(events: PaperEvent[]): TagTally[] {
+  const byTag = new Map<string, { correct: number; total: number; conf: number }>();
+  for (const j of judgementsFrom(events)) {
+    const t = byTag.get(j.tag) ?? { correct: 0, total: 0, conf: 0 };
+    t.total += 1;
+    t.conf += j.confidence;
+    if (j.correct) t.correct += 1;
+    byTag.set(j.tag, t);
+  }
+  return [...byTag.entries()]
+    .map(([tag, t]) => ({
+      tag,
+      correct: t.correct,
+      total: t.total,
+      meanConfidence: t.conf / t.total,
+    }))
+    .sort((a, b) => a.tag.localeCompare(b.tag));
+}
+
+export type TagVerdictKind =
+  /** The whole interval sits above guessing. */
+  | "better-than-guessing"
+  /** The interval straddles guessing: we cannot yet tell them apart. */
+  | "not-yet-distinguishable"
+  /** The whole interval sits below guessing: something is pulling them to a wrong answer. */
+  | "worse-than-guessing";
+
+export type TagVerdict = {
+  tag: string;
+  verdict: TagVerdictKind;
+  correct: number;
+  total: number;
+  /** 0-100. */
+  accuracyInterval: [number, number];
+  /** 0-100, the mean of 1/options over this tag's questions. */
+  guessing: number;
+};
+
+/**
+ * What can be said about one tag, measured against guessing rather than
+ * against perfection. Null below TAG_VERDICT_GATE judgements in that tag, or
+ * when none of its questions are ones we can count the options of.
+ *
+ * Against guessing because that is the honest floor: on a four-option
+ * question, 25% is what a reader scores without reading, and a tag verdict
+ * that ignored it would call guessing "weak" and a little better than
+ * guessing "fine".
+ */
+export function perTagVerdict(
+  events: PaperEvent[],
+  tag: string,
+  optionCountOf: OptionCountLookup,
+): TagVerdict | null {
+  const judged = judgementsFrom(events).filter((j) => j.tag === tag);
+  if (judged.length < TAG_VERDICT_GATE) return null;
+
+  const baselines = judged
+    .map((j) => optionCountOf(j.slug, j.questionId))
+    .filter((n): n is number => typeof n === "number" && n >= 1)
+    .map(chanceBaseline);
+  if (baselines.length === 0) return null;
+  const guessing = baselines.reduce((a, b) => a + b, 0) / baselines.length;
+
+  const correct = judged.filter((j) => j.correct).length;
+  const [lo, hi] = wilsonInterval(correct, judged.length);
+
+  return {
+    tag,
+    verdict:
+      lo > guessing
+        ? "better-than-guessing"
+        : hi < guessing
+          ? "worse-than-guessing"
+          : "not-yet-distinguishable",
+    correct,
+    total: judged.length,
+    accuracyInterval: [100 * lo, 100 * hi],
+    guessing: 100 * guessing,
+  };
 }
