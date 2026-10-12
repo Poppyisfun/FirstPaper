@@ -14,6 +14,7 @@
  */
 
 import type { PaperEvent } from "@/lib/events";
+import { chanceBaseline, wilsonInterval } from "@/lib/stats";
 
 export const XP_PARAGRAPH_PREDICTED = 8;
 export const XP_CHECK_CORRECT = 20;
@@ -352,4 +353,196 @@ export function calibrationNote(c: Calibration): string | null {
     return `Your confidence ran ${gap} points ahead of your accuracy. Worth knowing before you trust your own certainty about a paper.`;
   }
   return `Your accuracy ran ${gap} points ahead of your confidence. You knew more than you credited yourself for — underconfidence is its own thing to correct.`;
+}
+
+/* ------------------------------------------------------------------------
+ * Across papers: the reader's whole record of confidence-tagged judgements.
+ *
+ * Everything below takes every event this reader has produced, across all
+ * their sessions and papers, and derives from it at read time. Gathering
+ * those events is the caller's job; nothing here stores or caches a result.
+ *
+ * Five appraisal questions a paper means a verdict on one paper is mostly
+ * noise, so these functions are gated. Below the gate they return null and
+ * the caller shows a tally instead. The gates are hard on purpose: a
+ * verdict that flips with one more answer is not a verdict.
+ * --------------------------------------------------------------------- */
+
+/** Judgements needed before we name an overall calibration direction. */
+export const DIRECTION_GATE = 20;
+/** Judgements needed in one appraisal tag before we say anything about it. */
+export const TAG_GATE = 6;
+/** Every judge question currently offers four options. */
+export const JUDGE_OPTION_COUNT = 4;
+
+/**
+ * Every confidence-tagged judgement in the log, one per question per paper.
+ *
+ * Questions are keyed by slug as well as id, because two papers can reuse a
+ * question id. Within a paper the last answer wins, as in dedupeByQuestion.
+ * That includes a retake: a reader who comes back to a paper is measured on
+ * where they are now, not where they started. Decided deliberately; do not
+ * switch this to first-answer-wins.
+ * A judge answer with no numeric confidence is not a confidence-tagged
+ * judgement and is left out rather than counted as zero.
+ */
+function judgementsFrom(events: PaperEvent[]): JudgeAnswer[] {
+  const byKey = new Map<string, PaperEvent>();
+  for (const event of events) {
+    if (event.name !== "judge_answered") continue;
+    if (typeof prop(event, "confidence") !== "number") continue;
+    const id = String(prop(event, "question_id") ?? "");
+    if (id) byKey.set(`${event.slug}\u0000${id}`, event);
+  }
+  return [...byKey.values()].map((e) => ({
+    questionId: String(prop(e, "question_id")),
+    tag: String(prop(e, "tag") ?? "untagged"),
+    correct: prop(e, "correct") === true,
+    confidence: prop(e, "confidence") as number,
+  }));
+}
+
+/** How many confidence-tagged judgements this reader has made, all papers. */
+export function judgementCount(events: PaperEvent[]): number {
+  return judgementsFrom(events).length;
+}
+
+/**
+ * Mean stated confidence minus actual accuracy, both 0-100, appraisal only.
+ *
+ * Negative means underconfident. Null with no judgements: no gap, rather
+ * than a gap of zero, which would read as perfectly calibrated.
+ */
+export function calibrationGap(events: PaperEvent[]): number | null {
+  const judged = judgementsFrom(events);
+  if (judged.length === 0) return null;
+  const meanConfidence =
+    judged.reduce((sum, j) => sum + j.confidence, 0) / judged.length;
+  const accuracy =
+    (100 * judged.filter((j) => j.correct).length) / judged.length;
+  return meanConfidence - accuracy;
+}
+
+export type CalibrationDirection = {
+  direction: "overconfident" | "underconfident" | "well-calibrated";
+  /** Signed gap in points, meanConfidence - accuracy. */
+  gap: number;
+  /** Size of the gap in points, always >= 0. */
+  size: number;
+  judgements: number;
+};
+
+/**
+ * The overall direction, or null below DIRECTION_GATE judgements.
+ *
+ * Uses the same 10-point band as deriveCalibration for "well-calibrated",
+ * so the per-paper and across-paper readings cannot disagree about where
+ * the line sits.
+ */
+export function calibrationDirection(
+  events: PaperEvent[],
+): CalibrationDirection | null {
+  const judgements = judgementCount(events);
+  if (judgements < DIRECTION_GATE) return null;
+  const gap = calibrationGap(events) as number;
+  return {
+    direction:
+      Math.abs(gap) <= CALIBRATION_BAND
+        ? "well-calibrated"
+        : gap > 0
+          ? "overconfident"
+          : "underconfident",
+    gap,
+    size: Math.abs(gap),
+    judgements,
+  };
+}
+
+export type TagTally = {
+  tag: string;
+  correct: number;
+  total: number;
+  /** Mean stated confidence on this tag, 0-100. */
+  meanConfidence: number;
+};
+
+/**
+ * Raw counts per appraisal tag, ungated. This is what the caller shows when
+ * a verdict is not yet earned. Sorted by tag for a stable order on screen.
+ */
+export function perTagTally(events: PaperEvent[]): TagTally[] {
+  const counts = new Map<
+    string,
+    { correct: number; total: number; confidence: number }
+  >();
+  for (const j of judgementsFrom(events)) {
+    const entry = counts.get(j.tag) ?? { correct: 0, total: 0, confidence: 0 };
+    entry.total += 1;
+    entry.confidence += j.confidence;
+    if (j.correct) entry.correct += 1;
+    counts.set(j.tag, entry);
+  }
+  return [...counts.entries()]
+    .map(([tag, v]) => ({
+      tag,
+      correct: v.correct,
+      total: v.total,
+      meanConfidence: v.confidence / v.total,
+    }))
+    .sort((a, b) => a.tag.localeCompare(b.tag));
+}
+
+export type TagVerdict = {
+  tag: string;
+  correct: number;
+  total: number;
+  /** Accuracy on this tag, 0-1. */
+  accuracy: number;
+  /** 95% Wilson interval on that accuracy, 0-1. */
+  interval: [number, number];
+  /** What random picking would score, 0-1. */
+  chance: number;
+  /**
+   * Whether the interval clears chance. "at-chance" means the interval
+   * straddles it: these answers cannot be told apart from guessing.
+   */
+  verdict: "above-chance" | "at-chance" | "below-chance";
+  /** Mean stated confidence minus accuracy on this tag, in points. */
+  gap: number;
+};
+
+/**
+ * A verdict on one appraisal tag, or null below TAG_GATE judgements in it.
+ *
+ * The verdict compares the Wilson interval with the chance baseline, so it
+ * only claims a reader is better (or worse) than guessing when the whole
+ * interval says so.
+ */
+export function perTagVerdict(
+  events: PaperEvent[],
+  tag: string,
+  optionCount = JUDGE_OPTION_COUNT,
+): TagVerdict | null {
+  const tally = perTagTally(events).find((t) => t.tag === tag);
+  if (!tally || tally.total < TAG_GATE) return null;
+
+  const interval = wilsonInterval(tally.correct, tally.total);
+  const chance = chanceBaseline(optionCount);
+  const accuracy = tally.correct / tally.total;
+
+  return {
+    tag,
+    correct: tally.correct,
+    total: tally.total,
+    accuracy,
+    interval,
+    chance,
+    verdict:
+      interval[0] > chance
+        ? "above-chance"
+        : interval[1] < chance
+          ? "below-chance"
+          : "at-chance",
+    gap: tally.meanConfidence - 100 * accuracy,
+  };
 }
