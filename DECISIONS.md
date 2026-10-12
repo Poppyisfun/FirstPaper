@@ -375,3 +375,202 @@ No percentage, no option bar, no "our answer" marker and no paragraph appears an
 **Chose:** Not linked from anywhere in the reading flow or navigation; `noindex`.
 **Over:** A link in the footer or library.
 **Because:** It is for an instructor who is given the address, and a student finding it mid-paper would see other readers' splits before answering.
+
+---
+
+# Phase D: the copy
+
+## What makes the landing page's voice work (written before any rewrite)
+
+Read against the current `app/(marketing)/page.tsx`, `HeroCopy.tsx` and `DemoStrip.tsx`:
+
+1. **It starts from the reader's experience, not the product.** "For anyone who has opened a research paper and closed it again." "When you finally open the real paper, it shuts you out." The product enters only after the reader has recognised themselves.
+2. **Second person, present tense, one reader.** "You saw a headline that said a study shows something." Never "users", never "students will".
+3. **Short declaratives, ending on the shortest.** "The paper is the source. Everything else is someone retelling it." Paragraphs land on a four- or five-word sentence.
+4. **Fragments as rhythm, used sparingly.** "Unfamiliar structure. Technical words. Statistics nobody taught you." "Not a summary." Three in a row at most, then a full sentence.
+5. **Reframing instead of reassurance.** "That is not a failure of intelligence. It is a missing skill." It doesn't tell the reader they're smart; it relocates the problem.
+6. **Concrete nouns.** Headline, summary, post, lab, class, argument, verb. Nothing abstract enough to need a definition.
+7. **Modest, countable claims.** "Five quick questions." "No penalty for a wrong answer." Numbers instead of adjectives.
+8. **Explains its own jargon in passing.** "XP means experience points."
+9. **The founder line is plain.** "I wanted to read real genetics research and could not get past the first page. Nobody teaches you how. So I built the thing I wish I had." No origin myth, no mission; three sentences, the last one a consequence.
+10. **Almost no em dashes.** Full stops do the work. No exclamation marks, no "unlock", no "journey" in body copy (the one exception is the section kicker "The journey", logged below).
+
+What to write to: open from what the reader has done or felt; say what happens in plain verbs; count things; stop on a short sentence; never promise what isn't built.
+
+## Landing, step 1 (Read the real paper)
+**Chose:** "Not a summary. The actual published text, with the real figures. Beside every paragraph is a plain language explanation."
+**Over:** (before) "Not a summary. The actual published text, with the real figures. Beside every paragraph is a plain language explanation. One reading level is written today; Explorer and Critic are coming."
+**Because:** You asked to cut the level sentence. It was also the only semicolon-and-promise in the section.
+
+## Landing, step 3 (Judge the science)
+**Chose:** "Five harder questions on whether the paper holds up. What did they actually show, and what are they only hoping? Does the claim cover more ground than the experiment did? Did the authors say shown, or suggests? Better than what? What is that percentage a fraction of? Before you see the options, you say how sure you are."
+**Over:** (before) "Five harder questions on whether the paper holds up. Does the claim cover more ground than the experiment did? What is that percentage a fraction of? Did the authors say shown, or did they say suggests? Before you see the options, you say how confident you are." (An earlier commit had already removed "Was the sample big enough? Did they prove a cause? Who paid for it?")
+**Because:** All five tags now, one question each, in words a reader recognises: scope, generalisation, hedging, comparison, denominator. "Better than what?" is a fragment on purpose; it is how the question sounds in your head. "How sure" matches the results headline.
+
+## Landing, step 3: the scope question
+**Chose:** "What did they actually show, and what are they only hoping?"
+**Over:** "Is that what they found, or what they hope it means?"
+**Because:** It mirrors the scope question in the paper ("Setting aside what the paper hopes for… which did this study itself establish?") without quoting it.
+
+## Landing, step 5 (See your results)
+**Chose:** "How often you were right, set against how sure you said you were. That gap is the thing worth knowing. One paper is five judgements, which is not much to go on, and the page says so. After four, it can tell you which way you lean."
+**Over:** (before) "How often you were right, set against how sure you said you were. That gap is the thing worth knowing."
+**Because:** The landing page should not promise a verdict from one paper that the results screen now refuses to give. "After four" keeps the promise true and countable.
+
+## Landing: the old "XP and bonus" section, kicker and title
+**Chose:** Kicker "Scoring", title "What earns XP, and what costs nothing".
+**Over:** (before) Kicker "XP and bonus", title "How you earn, and why it matters".
+**Because:** There is no bonus. "Why it matters" was about the rank ladder, which is gone. The new title names both blocks under it.
+
+## Landing: the XP block
+**Chose:** "XP means experience points. You earn it when your first guess about a paragraph matches what it says, and when you answer a question correctly. Nothing you get wrong takes any away."
+**Over:** (before) "XP means experience points. You earn XP when you understand a paragraph on your own, when you answer a question correctly, and when you judge well. XP is a record of real reading. You cannot earn it by skimming."
+**Because:** "You cannot earn it by skimming" is false: guessing scores 25%, and the results screen now says so. "Understand a paragraph on your own" described the retired peek mechanic. The new last line is true in `lib/scoring.ts` (no deductions) and is the reassurance a nervous reader needs.
+
+## Landing: the bonus block replaced by predict-before-reveal
+**Chose:** Heading "Guess first". "Before each explanation, you pick what you think the paragraph says. Then ours appears, and stays. A wrong guess costs nothing. It shows us where people get stuck, which is how the explanations get better."
+**Over:** (before, already rewritten once from the −4 bonus text) "Before each explanation you pick what you think the paragraph says. Getting it wrong costs nothing and is not scored against you. It is how we find out which paragraphs lose people, which is the only way the explanations get better."
+**Because:** Your three points in your order: commit a guess, wrong costs nothing, it's how we learn where people get stuck. "And stays" answers the question a reader who met the old peek mechanic would ask. "The only way" was an overclaim.
+
+## Landing: the "Why collect it" block and the rank ladder
+**Chose:** Both removed.
+**Over:** (before) "XP builds your rank. Everyone starts as an Explorer. Keep reading well and you become a Reader, then a Critic, then a Peer Reviewer. Your rank is proof of something you can do, not a prize for showing up." plus the four-rung ladder.
+**Because:** You asked to cut the ladder, and the block described rank as cumulative across papers, which it isn't (it's per paper and provisional). Rank still appears on the results screen; nothing on the landing page promises it.
+
+## Landing: badges
+**Chose:** Nothing to do.
+**Over:** —
+**Because:** The badges subsection was already removed by commit 54ef36f. Only an unused `.badges` CSS rule remains, left for the design pass.
+
+## Landing: "Your account" section
+**Chose:** "You do not need one. A whole paper works start to finish without signing up for anything, and you see your full results at the end."
+**Over:** (before) "You do not need one. A whole paper works start to finish without signing up for anything, and your results are yours either way. Later, an account will carry your XP between papers and keep a record of what you have read."
+**Because:** "Later, an account will…" is two features promised. The heading "Accounts are coming" already says the one thing that's true.
+
+## Landing: "Where this is going" section
+**Chose:** Removed.
+**Over:** (before) "Soon, any paper in the world. Right now FirstPaper walks you through papers we have prepared by hand. Soon you will be able to drop in any research paper and FirstPaper will decode it. The same plain explanations. The same questions. The same judgment. Any paper, any field."
+**Because:** Not on your list, but it is the largest stale promise on the page and exactly the kind you said you'd feel obliged to build. It also contradicts the About page: every set of options is blind-tested before it ships, which "drop in any paper" can't do. **Revert if you want it back; it is the one cut I made unasked.**
+
+## Landing: "The journey" kicker
+**Chose:** "How it works"
+**Over:** "The journey"
+**Because:** "Journey" is on your banned list. "How it works" is what the hero's "See how it works" button already promises at that anchor.
+
+## Landing: minutes
+**Chose:** Nothing to change; both already derive from `meta.json` (18).
+**Over:** —
+**Because:** Commit 54ef36f already made the landing and the card read the same field.
+
+## Landing: hero headline (kept)
+**Chose:** "Read any research paper. Understand it. Know if you can trust it."
+**Over:** "Read a research paper. Understand it. Know if you can trust it."
+**Because:** "Any" here is about the skill transferring, not about the product ingesting any paper; with "Where this is going" gone, it no longer reads as a product promise.
+
+## Landing: hero demo label (NOT CHANGED, needs your answer)
+**Chose:** Left as "Try it. One sentence from a real study."
+**Over:** "Try it. One sentence, written the way studies are written."
+**Because:** The A-allele/morning alertness sentence also appears in `refrence/index2.html` with "from a real study", but I can't find the study. If it's invented, the label is a false claim on a product about checking claims. If it's real, it should be cited. Your call either way.
+
+## Account page: body
+**Chose:** "There is nothing to sign up for yet, and you don't need to. A whole paper works start to finish without an account, and your results are on the last screen."
+**Over:** (before) "There is nothing to sign up for yet, and nothing you are missing: a whole paper works start to finish without an account, and you get your full results at the end. What an account will add later is memory across papers — your XP carried forward, a record of what you have read, and suggestions based on it."
+**Because:** You asked for "accounts are coming and the reading works without one", plainly. The old version promised three features and suggestions. The heading "Accounts are coming" stays.
+
+## Account page: button
+**Chose:** "Read a paper"
+**Over:** (before) "Read a paper for now"
+**Because:** "For now" implies the account is the real thing and reading is the stopgap. It's the other way round.
+
+## Account page: meta description
+**Chose:** "Accounts are coming. Reading works without one."
+**Over:** (before) "Accounts are coming. Soon you will be able to keep your XP, see every paper you have read, and get suggestions based on what you are interested in."
+**Because:** Same three promises as the body, in search results.
+
+## "Create your account" link
+**Chose:** Nothing to change.
+**Over:** —
+**Because:** An earlier commit already replaced it with "Read a paper instead" on the landing; no "Create your account" text remains anywhere in `app/` or `components/`.
+
+## Library: closing note
+**Chose:** "Each paper here is prepared by hand, paragraph by paragraph. So they arrive slowly."
+**Over:** (before) "New papers land every few weeks. If there's one you want built out, tell me and I'll look at it."
+**Because:** "Every few weeks" is a cadence promise, and "tell me" was bold text with no way to tell you. The new line explains why the shelf is short without committing to when it grows.
+
+## Library: "Most people begin with an Explorer paper"
+**Chose:** Nothing to change.
+**Over:** —
+**Because:** Already gone before this session.
+
+## Library: filters
+**Chose:** Left as they are: hidden below four papers (`MIN_PAPERS_FOR_FILTERS`), so hidden with one.
+**Over:** Hiding them at exactly one paper.
+**Because:** Already done by commit 54ef36f, and with two or three papers most filters would still return nothing.
+
+## Library card: XP
+**Chose:** 336, derived from the paper's content and the scoring constants (17 predictions × 8 + 5 × 20 + 5 × 20).
+**Over:** 320 from `meta.json`.
+**Because:** Not on your list, but the card disagreed with the rank thresholds in CLAUDE.md (set against a ceiling of 336), the same drift you fixed for minutes. Derived in `content/library.ts` rather than by editing `meta.json`, whose teaching fields are edit-on-request.
+
+## Footer: sources
+**Chose:** "Papers from PubMed Central · Built by a high schooler"
+**Over:** (before) "Papers from PubMed Central and bioRxiv · Built by a high schooler"
+**Because:** No paper in the library comes from bioRxiv.
+
+## About: everything
+The old page made claims that are no longer true: a "green dot" peek, "controls, sample size, claim strength, funding" as the criteria, "three reading levels… you pick, and you can change it mid-paper", "Explorer level assumes nothing past middle-school science", "PubMed Central and bioRxiv", "Nothing is graded, nothing is recorded" (events are recorded, anonymously), and a long founder narrative ("The wall", "The bet", "built the tool he wished had existed"). It is rewritten, not edited. Each passage below.
+
+## About: title and lede
+**Chose:** "What this is, and how it's made." / "FirstPaper is a free place to read a real research paper, one paragraph at a time, and to practise judging whether it holds up."
+**Over:** (before) "Why FirstPaper exists." / "A free tool that teaches teenagers to read real scientific research, and to judge whether it's any good. Built by a high schooler who couldn't do either."
+**Because:** "Why it exists" invites the mission statement you asked to avoid. The new title promises the two things the page then does.
+
+## About: what it is
+**Chose:** "You get the paper on one side, word for word. Our explanation sits beside it. Before the explanation appears, you guess what the paragraph says. Then you see what we think it says. / After the paper come two short rounds of questions. The first checks that the reading landed. The second asks whether the paper holds up, and before you see the options, you say how sure you are. The last screen sets what you said against what was true. / It's free. There are no ads, and you don't need an account."
+**Over:** A numbered four-step list (the old "How it works" with 01–04).
+**Because:** The landing page already has the numbered steps; here prose reads as an explanation rather than a second sales pass.
+
+## About: who it's for
+**Chose:** "Anyone who has opened a research paper and closed it again. Mostly that means teenagers. A student with a science fair project. Someone in a summer research program. Someone who read a headline and wanted the source. / It also works if you have just joined a lab or started a college course and are expected to read papers nobody taught you to read. The paper here now is pitched at someone who has taken high school biology. You don't need more than that."
+**Over:** "FirstPaper is for teenagers who want to read real science."
+**Because:** Opens on the hero's eyebrow line, which you said does real work. Three fragments, then a full sentence, per the voice notes. The level claim is the true one for the Reader-level paper; the old "assumes nothing past middle school" described Explorer, which isn't written.
+
+## About: what the judging questions ask
+**Chose:** "Reading what a paper says and judging whether it holds up are different skills. The second one is rarer. Every judging question comes back to one of five things." then Hedging / Scope / Generalisation / Comparison / Denominator with the same questions as landing step 3, then "None of them need statistics. They need you to read slowly and ask one more question than the paper answers."
+**Over:** The old "The bet" section: "knowing whether the sample was big enough, whether a correlation got dressed up as a cause, whether the conclusion outran the data, whether the funder happens to sell the thing…"
+**Because:** The old list named criteria we don't test. Same five questions as the landing page so the two pages can't drift apart in different words.
+
+## About: how the commentary is made
+**Chose:** "Everything that isn't the paper is ours. The explanations, the guesses you choose from, the questions, the answers we mark as right, and the plain-English recap at the end. We write it with help from an AI model, and then we test it. / The guesses are written from the authors' paragraph alone, never from our explanation, so you can't pick the right one by recognising how we sound. Then every set is shown to a model with no paragraph at all. If it can still pick the right answer from how the options look, say because it's the longest or the most careful, the set is thrown out. A reader learns those patterns fast, and then stops reading the paper. / The questions go through the same test. We also check that our explanations never state the answer to a question that comes after them."
+**Over:** "The explanations here are written with care and checked, and they can still be wrong." (the old line)
+**Because:** You asked for how it's made; "with care" says nothing. Every claim is from `content/ingest/predictions.py`, `verify_questions.py` and CLAUDE.md. **Needs your confirmation:** "We write it with help from an AI model" is inferred from the ingest scripts (which call a Claude model for options and verification) and co-authored commits; if the explanations themselves are written differently, this sentence should say how.
+
+## About: pull quote
+**Chose:** "FirstPaper can be wrong, and that's the point."
+**Over:** (before) "Reading a research paper is a learnable skill. Almost nobody teaches it before university, and that gap decides who gets to participate in science."
+**Because:** The old pull quote was the closest thing on the page to a mission statement. The honesty line is the product's own, word for word.
+
+## About: it can be wrong
+**Chose:** "Our explanations are a reading of the paper, not the paper. The answers we mark as right are our judgement. Tests catch some mistakes. They don't catch all of them. / So every screen says so, and the original paper is one click away from every paragraph. If you disagree with us and can point to the sentence in the paper that backs you up, you have done exactly what this is for."
+**Over:** (before) "A tool whose whole subject is accuracy has no business pretending to be infallible… Checking us is part of the exercise. If you finish a paper here and never once opened the source, you've learned less than you think."
+**Because:** The old last line scolded. The new one says what a good disagreement looks like, which is a skill, and ties the tests in the previous section to their limits.
+
+## About: where the papers come from
+**Chose:** "Every paper here is open access. The authors published it under a licence that lets anyone reproduce it, as long as the work is credited. We reproduce the text and figures word for word. We don't fix typos, shorten anything or modernise the wording. The authors are credited on every paragraph, with a link to the original." then one line per paper, generated from `meta.json`: title, authors, journal, year, licence (linked), "Read the original".
+**Over:** (before) "No account, no paywall, no ads. Every paper in the library is open-access, from PubMed Central and bioRxiv, reproduced under licences that permit it and always credited to the authors who did the work."
+**Because:** You asked for "under what licence"; naming the actual licence per paper, from the file, can't go stale. "Open access" is explained in one sentence because the reader may not know it.
+
+## About: who built it
+**Chose:** "A high school junior who tried to read real genetics research and couldn't get past the first page. Nobody teaches you how. This is the thing that would have helped."
+**Over:** (before) "A high school junior who hit this exact wall trying to read genetics research, got frustrated enough to do something about it, and built the tool he wished had existed. Which is also why the judging layer sits at the centre of the product instead of being bolted on at the end. Learning to be appropriately skeptical was the harder half, and nobody was teaching it."
+**Because:** Three sentences that echo the landing page's founder line without repeating it. Drops the frustration arc (mythology) and the gendered pronoun, which I can't confirm and the page doesn't need.
+
+## About: FAQ
+**Chose:** Removed.
+**Over:** Keeping and correcting it.
+**Because:** Every answer either restated a section above or made a stale claim ("Explorer level assumes nothing", "Nothing is graded, nothing is recorded", "The library deliberately includes papers with weaknesses"). The rewritten sections answer the same questions.
+
+## About: closing button (kept)
+**Chose:** "Read your first paper"
+**Over:** "Start reading"
+**Because:** Same words as the hero and the final call on the landing page.
