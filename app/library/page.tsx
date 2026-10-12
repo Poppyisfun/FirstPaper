@@ -1,14 +1,15 @@
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Nav from "@/components/Nav";
 import LibraryGrid from "@/components/LibraryGrid";
 import { Rise } from "@/components/motion-primitives";
 
-export const metadata: Metadata = {
-  title: "Library — FirstPaper",
-  description:
-    "Free, open-access papers to work through, picked because they're worth your time.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Library — FirstPaper",
+  "Free, open-access papers to work through, picked because they're worth your time.",
+  "/library/opengraph-image",
+);
 
 export default function Library() {
   return (

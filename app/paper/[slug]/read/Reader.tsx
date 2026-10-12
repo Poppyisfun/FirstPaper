@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { track } from "@/lib/events";
-import { sessionSeed, shuffleWithSeed } from "@/lib/shuffle";
+import { shuffleWithSeed, useSessionSeed } from "@/lib/shuffle";
 import type {
   Explanation,
   Figure,
@@ -84,9 +84,10 @@ export default function Reader({
   /* Options are ordered from a per-session seed, which only exists in the
      browser. Rendering them before mount would order them one way on the
      server and another after hydration. */
-  const [seed, setSeed] = useState<string | null>(null);
-
-  useEffect(() => setSeed(sessionSeed()), []);
+  const seed = useSessionSeed();
+  /** The figure button that opened the dialog, so focus can go back to it. */
+  const zoomOpener = useRef<HTMLElement | null>(null);
+  const zoomClose = useRef<HTMLButtonElement>(null);
 
   /* Opening the paper is what creates the session row. Fired once per mount
      and carrying the level, which the session needs and no later event is
@@ -140,11 +141,23 @@ export default function Reader({
      the right thing is a trap for keyboard users. */
   useEffect(() => {
     if (!zoomed) return;
+    /* Focus goes into the dialog when it opens and back to the figure that
+       opened it when it closes, and Tab stays inside while it is open: the
+       only control in it is Close. */
+    const opener = zoomOpener.current;
+    zoomClose.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setZoomed(null);
+      if (e.key === "Tab") {
+        e.preventDefault();
+        zoomClose.current?.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      opener?.focus();
+    };
   }, [zoomed]);
 
   function predict(optionId: string) {
@@ -246,7 +259,10 @@ export default function Reader({
                   key={figure.id}
                   type="button"
                   className="rd-fig"
-                  onClick={() => setZoomed(figure)}
+                  onClick={(e) => {
+                    zoomOpener.current = e.currentTarget;
+                    setZoomed(figure);
+                  }}
                   aria-label={`Open ${figure.label ?? "figure"} full size`}
                 >
                   {/* Not next/image: these are the authors' figures served
@@ -306,6 +322,15 @@ export default function Reader({
                 Commit before you read ours. Getting it wrong costs nothing and
                 tells us more than getting it right.
               </p>
+              {options.length === 0 && (
+                /* Order is per session and only exists in the browser; hold
+                   the space until it does. */
+                <div aria-busy="true">
+                  <span className="rd-skel" aria-hidden="true" />
+                  <span className="rd-skel" aria-hidden="true" />
+                  <span className="rd-skel" aria-hidden="true" />
+                </div>
+              )}
               {options.map((option) => (
                 <button
                   key={option.id}
@@ -411,6 +436,7 @@ export default function Reader({
               <p>{captionProse(zoomed.caption)}</p>
             </div>
             <button
+              ref={zoomClose}
               type="button"
               className="rd-zoom-x"
               onClick={() => setZoomed(null)}
