@@ -4,6 +4,7 @@ import {
   getAllPapers,
   getAllPaperSlugs,
   getPaper,
+  openingWords,
 } from "@/lib/content";
 import Results, { type ParagraphRef, type QuestionRef } from "./Results";
 
@@ -13,21 +14,6 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = false;
-
-/** How many words of a paragraph to quote when pointing back at it. */
-const OPENING_WORDS = 9;
-
-/** The paragraph's first few words, as a pointer back to it, never a rewording. */
-function opening(html: string): string {
-  const words = html
-    .replace(/<[^>]+>/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .split(" ");
-  return words.length > OPENING_WORDS
-    ? `${words.slice(0, OPENING_WORDS).join(" ")}…`
-    : words.join(" ");
-}
 
 /**
  * Server component. It supplies only what is fixed about the paper; every
@@ -56,7 +42,7 @@ export default async function ResultsPage({
       paragraphs[paragraph.id] = {
         section: section.heading ?? section.imrad,
         label: isAbstract ? "Abstract" : `Paragraph ${bodyNumber}`,
-        opening: opening(paragraph.text),
+        opening: openingWords(paragraph.text),
       };
     }
   }

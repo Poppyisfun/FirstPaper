@@ -236,3 +236,142 @@ The test for every line below: does it read as a mirror (something true about yo
 **Chose:** The reader's own judge events from GET /api/events, merged with the tab's session log, each question counted once.
 **Over:** The session log alone.
 **Because:** Without it the counter could never pass 5 in a new tab, so "four papers" would be false.
+
+---
+
+# Phase C: the class view
+
+## What /paper/[slug]/class renders with 2 readers
+Pinned by the last test in `lib/aggregate.test.tsx` (it renders the component with two synthetic readers and asserts this text). Reader one finished and missed the first paragraph's guess; reader two stopped before results. The page reads, top to bottom:
+
+> CLASS VIEW
+> *RNA-programmed genome editing in human cells*
+> **Where readers of this paper agreed, and where they split.**
+> This page pools everyone who has read this paper on FirstPaper. There are no names and no rows per student, because FirstPaper never knows who is reading. If your class is the only group reading this paper, these readers are your class.
+> Any line built from fewer than 5 readers is hidden, and says so. A split across three people is three people, not a pattern. We hold this page to the same rule as a reader's own results.
+> 2 readers started this paper. 1 reached their results.
+>
+> **Where they divided hardest**
+> Not enough readers yet to say where they divided. This needs 5 readers on at least one judging question.
+>
+> **Every judging question** — each of the five, with its tag line ("Tests HEDGING: noticing when authors decline to settle something") and prompt, then: `2 of 5 readers. Hidden until 5.`
+>
+> **Comprehension questions** — each of the five prompts, then: `2 of 5 readers. Hidden until 5.`
+>
+> **Paragraphs where first guesses most often missed** — the explanation sentence, then: `No paragraph has 5 guesses yet.`
+>
+> **Confidence against accuracy** — `2 of 5 readers. Hidden until 5.`
+>
+> FirstPaper can be wrong, and that's the point. "Our answer" is our judgement. A question the room split on may be one we wrote badly, and that is worth checking against the original paper.
+
+No percentage, no option bar, no "our answer" marker and no paragraph appears anywhere. The test asserts all four absences.
+
+## Class view: whether the reader counts are suppressed
+**Chose:** "2 readers started this paper. 1 reached their results." is always shown, even below 5.
+**Over:** Suppressing the counts too.
+**Because:** They are counts, not estimates, and without them the instructor cannot tell "hidden because 2 readers" from "hidden because broken". Every hidden line says its own count for the same reason.
+
+## Class view: what "fewer than 5 readers" counts
+**Chose:** Distinct sessions (one per browser per paper) behind that specific line. A question is gated on readers who answered it; the group calibration on readers who judged; each paragraph on readers who guessed it.
+**Over:** One page-wide gate on readers who started.
+**Because:** Seven readers can start and three finish; a judging split from three readers is still three people.
+
+## Class view: whose answer counts when someone goes through twice
+**Chose:** Each reader's first answer per question and first guess per paragraph.
+**Over:** The last answer.
+**Because:** Same rule as the gated scoring: a second pass is made knowing the answers and says nothing about how the paper read.
+
+## Class view: what "divided hardest" means
+**Chose:** The judging question whose most popular answer has the smallest share; ties go to the more even spread (entropy).
+**Over:** The question with the lowest share choosing our answer.
+**Because:** You asked where they divided, not where they were wrong. A question 90% of the room got wrong the same way is agreement, and a different lesson.
+
+## Class view: the paragraph shown with the hardest question
+**Chose:** The first paragraph the question lists in `paragraph_ids`, in full, verbatim, in the paper's serif.
+**Over:** All the listed paragraphs, or an excerpt.
+**Because:** One paragraph is a lesson plan; three is homework. Verbatim and in full because it is the authors' text and excerpting is a form of editing.
+
+## Class view: page title
+**Chose:** "Where readers of this paper agreed, and where they split."
+**Over:** "How your class did on this paper"
+**Because:** "Did" frames it as a grade, and "your class" claims a roster we don't have. Agreement and disagreement is the framing you asked for.
+
+## Class view: who the readers are
+**Chose:** "This page pools everyone who has read this paper on FirstPaper. There are no names and no rows per student, because FirstPaper never knows who is reading. If your class is the only group reading this paper, these readers are your class."
+**Over:** "These are the anonymous results of everyone who read this paper."
+**Because:** "Results" invites marking. The last sentence is the condition under which the page is about their class, stated as a condition, so an instructor knows when it isn't.
+
+## Class view: the suppression rule
+**Chose:** "Any line built from fewer than 5 readers is hidden, and says so. A split across three people is three people, not a pattern. We hold this page to the same rule as a reader's own results."
+**Over:** "To protect privacy, results from fewer than 5 readers are hidden."
+**Because:** Privacy is not the reason (there's no identity to protect). The reason is that the number can't support itself, and the instructor should hear the real one.
+
+## Class view: the hidden line
+**Chose:** "2 of 5 readers. Hidden until 5."
+**Over:** "Not enough data."
+**Because:** Mirrors "N of 20" on the results screen, and tells the instructor exactly how far off it is.
+
+## Class view: data unavailable
+**Chose:** "The reading data can't be loaded right now, so there is nothing to show. That is a problem on our side, not a sign that nobody has read the paper."
+**Over:** "0 readers started this paper."
+**Because:** A failed query is not zero readers, and an instructor who assigned the paper would otherwise conclude nobody did it.
+
+## Class view: hardest-question framing
+**Chose:** "No answer to this question won more than 29% of 7 readers. A question the room disagrees on is usually the best place to start a discussion."
+**Over:** "Your students struggled most with this question."
+**Because:** "Struggled" is a verdict on students; "disagrees" is a fact about the room and points at what to do with it.
+
+## Class view: tag line
+**Chose:** "Tests GENERALISATION: how far a result reaches"
+**Over:** A coloured chip with the tag alone.
+**Because:** The tag name means nothing to an instructor without the phrase, and colours belong to commentary.
+
+## Class view: marking our answer
+**Chose:** A bordered "our answer" label in mono, and a darker bar; every other bar neutral grey.
+**Over:** Green for correct, red for wrong.
+**Because:** Green means explanation and red means a failed check verdict in this design system; neither belongs here. "Our answer" rather than "correct" for the same reason as the results screen.
+
+## Class view: option order
+**Chose:** Options in the paper's stored order, not sorted by popularity.
+**Over:** Most-chosen first.
+**Because:** Every question's bars read the same way, and position never hints at which is ours.
+
+## Class view: comprehension, more briefly
+**Chose:** One sentence per question: "80% of 7 readers chose our answer. The most-chosen other answer, at 14%: "<text>""
+**Over:** The full option bars, smaller.
+**Because:** You asked for briefer; the one wrong answer that pulled people is what an instructor can use, the rest is noise at this size.
+
+## Class view: missed-paragraph explanation
+**Chose:** "Before each explanation, readers guess what the paragraph says. These are the paragraphs where that guess missed most often, which is where the paper lost people."
+**Over:** "These paragraphs had the most wrong predictions."
+**Because:** An instructor has never seen the prediction step; one sentence of how it works makes the list readable. "Lost people" puts the difficulty in the paper, not the students.
+
+## Class view: missed-paragraph row
+**Chose:** "Results, paragraph 6 · 3 of 6 missed (50%)" then the paragraph's opening words in serif.
+**Over:** A percentage alone.
+**Because:** The count shows the denominator, which is the product's own lesson.
+
+## Class view: suppressed paragraphs note
+**Chose:** "4 paragraphs have fewer than 5 guesses and are hidden."
+**Over:** Silently omitting them.
+**Because:** Readers drop off as a paper goes on, so late paragraphs are the ones most often hidden; an instructor should know the list is partial and why.
+
+## Class view: group calibration
+**Chose:** "On the judging questions, readers said they were 72% sure on average. They were right 46% of the time. Guessing scores 25%." then "Pooled across 7 readers. It says how the group read the paper, not how any one reader did."
+**Over:** "The class was overconfident by 26 points."
+**Because:** Same shape as the reader's headline, so the instructor sees what the student saw; no direction verdict, because pooled answers from one paper are not independent judgements and the direction gate is about one reader's twenty.
+
+## Class view: honesty note
+**Chose:** "FirstPaper can be wrong, and that's the point. "Our answer" is our judgement. A question the room split on may be one we wrote badly, and that is worth checking against the original paper."
+**Over:** Reusing the results screen's note verbatim.
+**Because:** The note is required on every learning screen; on this one the honest caveat is that a split can be our fault, which is also the framing that keeps it from reading as a cheating or failure report.
+
+## Class view: caching and query
+**Chose:** `unstable_cache` with a five-minute revalidate around one paged query (`events` joined to `sessions!inner(paper_slug)`, only the five event types the page reads); the page is `force-dynamic`, so the build never queries the database.
+**Over:** The `use cache` directive.
+**Because:** `use cache` needs `cacheComponents` turned on project-wide, which is a config change beyond this page. The embedded join assumes `events.session_id` is a foreign key to `sessions.id`; if it isn't, the page shows the "can't be loaded" line rather than wrong numbers. **Worth confirming on the live database.**
+
+## Class view: discoverability
+**Chose:** Not linked from anywhere in the reading flow or navigation; `noindex`.
+**Over:** A link in the footer or library.
+**Because:** It is for an instructor who is given the address, and a student finding it mid-paper would see other readers' splits before answering.
