@@ -13,8 +13,7 @@ export default function Footer() {
           </span>
         </p>
         <div className="foot-b">
-          Papers from PubMed Central and bioRxiv &middot; Built by a high
-          schooler
+          Papers from PubMed Central &middot; Built by a high schooler
         </div>
       </div>
     </footer>

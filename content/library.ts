@@ -1,4 +1,9 @@
 import { getAllPapers } from "@/lib/content";
+import {
+  XP_CHECK_CORRECT,
+  XP_JUDGE_CORRECT,
+  XP_PARAGRAPH_PREDICTED,
+} from "@/lib/scoring";
 
 export type Topic = "Genetics" | "Evolution" | "Medicine" | "Ecology";
 
@@ -22,6 +27,7 @@ export type LibraryEntry = {
    */
   practiceGoal: string;
   minutes: number;
+  /** The most XP the paper can award, derived from its content and the scoring rules. */
   xp: number;
 };
 
@@ -46,7 +52,16 @@ export const LIBRARY: LibraryEntry[] = getAllPapers().map((paper) => ({
   title: paper.meta.title,
   practiceGoal: paper.meta.practiceGoal,
   minutes: paper.meta.minutes,
-  xp: paper.meta.xp,
+  /* Derived rather than read from meta.json, whose figure (320) had drifted
+     from what perfect play actually earns (336). Same reasoning as minutes:
+     one source, so the card can't disagree with the results screen. */
+  xp:
+    paper.source.sections
+      .flatMap((section) => section.paragraphs)
+      .filter((p) => paper.predictions[p.id]).length *
+      XP_PARAGRAPH_PREDICTED +
+    paper.questions.comprehension.length * XP_CHECK_CORRECT +
+    paper.questions.appraisal.length * XP_JUDGE_CORRECT,
 }));
 
 export const FILTERS = [

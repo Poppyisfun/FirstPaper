@@ -133,3 +133,21 @@ export function countParagraphs(paper: LoadedPaper): number {
 export function countFigures(paper: LoadedPaper): number {
   return paper.source.figures.length;
 }
+
+/**
+ * A paragraph's first few words, tags stripped, with an ellipsis when cut.
+ *
+ * For pointing back at a paragraph from another screen. It quotes the
+ * authors; it never rewords them, so it only ever cuts at a word boundary
+ * and marks the cut.
+ */
+export function openingWords(html: string, count = 9): string {
+  const words = html
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ");
+  return words.length > count
+    ? `${words.slice(0, count).join(" ")}…`
+    : words.join(" ");
+}

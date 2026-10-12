@@ -38,9 +38,8 @@ export default function Library() {
           as="p"
           className="mx-auto my-[76px] max-w-[620px] rounded-[20px] border border-dashed border-line bg-surface px-6 py-7 text-center text-[13.5px] leading-relaxed text-ink-soft"
         >
-          New papers land every few weeks. If there&rsquo;s one you want built
-          out, <b className="font-semibold text-ink">tell me</b> and I&rsquo;ll
-          look at it.
+          Each paper here is prepared by hand, paragraph by paragraph. So they
+          arrive slowly.
         </Rise>
       </main>
       <Footer />

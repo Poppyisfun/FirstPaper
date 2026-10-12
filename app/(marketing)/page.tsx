@@ -30,11 +30,11 @@ const gains = [
 ];
 
 /** Marker colour follows the phase colours used inside the paper itself. */
-const journey = [
+const steps = [
   {
     tone: "g",
     t: "Read the real paper",
-    d: "Not a summary. The actual published text, with the real figures. Beside every paragraph is a plain language explanation. One reading level is written today; Explorer and Critic are coming.",
+    d: "Not a summary. The actual published text, with the real figures. Beside every paragraph is a plain language explanation.",
   },
   {
     tone: "g",
@@ -44,7 +44,7 @@ const journey = [
   {
     tone: "a",
     t: "Judge the science",
-    d: "Five harder questions on whether the paper holds up. Does the claim cover more ground than the experiment did? What is that percentage a fraction of? Did the authors say shown, or did they say suggests? Before you see the options, you say how confident you are.",
+    d: "Five harder questions on whether the paper holds up. What did they actually show, and what are they only hoping? Does the claim cover more ground than the experiment did? Did the authors say shown, or suggests? Better than what? What is that percentage a fraction of? Before you see the options, you say how sure you are.",
   },
   {
     tone: "g",
@@ -54,12 +54,9 @@ const journey = [
   {
     tone: "v",
     t: "See your results",
-    d: "How often you were right, set against how sure you said you were. That gap is the thing worth knowing.",
+    d: "How often you were right, set against how sure you said you were. That gap is the thing worth knowing. One paper is five judgements, which is not much to go on, and the page says so. After four, it can tell you which way you lean.",
   },
 ];
-
-/** Bottom to top, so the ladder is rendered in reverse. */
-const ranks = ["Explorer", "Reader", "Critic", "Peer Reviewer"];
 
 export default function Home() {
   /* Derived, not asserted. The landing page and the library card used to
@@ -152,10 +149,10 @@ export default function Home() {
           </Stagger>
         </section>
 
-        {/* ── The journey ── */}
+        {/* ── How it works ── */}
         <section className="sect" id="how">
           <Rise className="shead">
-            <div className="skick">The journey</div>
+            <div className="skick">How it works</div>
             <h2 className="stitle">What happens when you open a paper</h2>
             <p className="ssub">
               One paper takes about {minutes} minutes. Here is exactly what
@@ -164,7 +161,7 @@ export default function Home() {
           </Rise>
 
           <Stagger className="jrn">
-            {journey.map((step, i) => (
+            {steps.map((step, i) => (
               <RiseItem key={step.t} className="jrn-step">
                 <div className={`jrn-m ${step.tone}`} aria-hidden="true">
                   {i + 1}
@@ -178,69 +175,33 @@ export default function Home() {
           </Stagger>
         </section>
 
-        {/* ── XP and bonus ── */}
+        {/* ── Scoring ── */}
         <section className="sect">
           <Rise className="shead">
-            <div className="skick">XP and bonus</div>
-            <h2 className="stitle">How you earn, and why it matters</h2>
+            <div className="skick">Scoring</div>
+            <h2 className="stitle">What earns XP, and what costs nothing</h2>
           </Rise>
 
-          <div className="xpg">
-            <Stagger className="xp-col">
-              <RiseItem className="xp-b v">
-                <h3>XP</h3>
-                <p>
-                  XP means experience points. You earn XP when you understand a
-                  paragraph on your own, when you answer a question correctly,
-                  and when you judge well. XP is a record of real reading. You
-                  cannot earn it by skimming.
-                </p>
-              </RiseItem>
+          <Stagger className="xp-col">
+            <RiseItem className="xp-b v">
+              <h3>XP</h3>
+              <p>
+                XP means experience points. You earn it when your first guess
+                about a paragraph matches what it says, and when you answer a
+                question correctly. Nothing you get wrong takes any away.
+              </p>
+            </RiseItem>
 
-              <RiseItem className="xp-b a">
-                <h3>Guess first</h3>
-                <p>
-                  Before each explanation you pick what you think the
-                  paragraph says. Getting it wrong costs nothing and is not
-                  scored against you. It is how we find out which paragraphs
-                  lose people, which is the only way the explanations get
-                  better.
-                </p>
-              </RiseItem>
-
-              <RiseItem className="xp-b">
-                <h3>Why collect it</h3>
-                <p>
-                  XP builds your rank. Everyone starts as an Explorer. Keep
-                  reading well and you become a Reader, then a Critic, then a
-                  Peer Reviewer. Your rank is proof of something you can do,
-                  not a prize for showing up.
-                </p>
-              </RiseItem>
-
-            </Stagger>
-
-            <Rise className="ladder" delay={0.1}>
-              <ol>
-                {[...ranks].reverse().map((r, i) => {
-                  const isStart = r === "Explorer";
-                  return (
-                    <li key={r}>
-                      <div className={isStart ? "rung on" : "rung"}>
-                        <span className="rung-n">{r}</span>
-                        {isStart && <span className="rung-tag">You start here</span>}
-                      </div>
-                      {i < ranks.length - 1 && (
-                        <span className="rung-c" aria-hidden="true">
-                          ⌃
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </Rise>
-          </div>
+            <RiseItem className="xp-b a">
+              <h3>Guess first</h3>
+              <p>
+                Before each explanation, you pick what you think the paragraph
+                says. Then ours appears, and stays. A wrong guess costs
+                nothing. It shows us where people get stuck, which is how the
+                explanations get better.
+              </p>
+            </RiseItem>
+          </Stagger>
         </section>
 
         {/* ── Your account ── */}
@@ -250,30 +211,12 @@ export default function Home() {
             <h2 className="stitle">Accounts are coming</h2>
             <p>
               You do not need one. A whole paper works start to finish without
-              signing up for anything, and your results are yours either way.
-              Later, an account will carry your XP between papers and keep a
-              record of what you have read.
+              signing up for anything, and you see your full results at the
+              end.
             </p>
             <BtnLink href="/library" variant="v lg" icon="→">
               Read a paper instead
             </BtnLink>
-          </Rise>
-        </section>
-
-        {/* ── Where this is going ── */}
-        <section className="sect tight">
-          <Rise className="strip">
-            <div className="glow" />
-            <div className="strip-prose">
-              <div className="skick on-dark">Where this is going</div>
-              <h2 className="strip-h">Soon, any paper in the world</h2>
-              <p>
-                Right now FirstPaper walks you through papers we have prepared
-                by hand. Soon you will be able to drop in any research paper
-                and FirstPaper will decode it. The same plain explanations. The
-                same questions. The same judgment. Any paper, any field.
-              </p>
-            </div>
           </Rise>
         </section>
 
