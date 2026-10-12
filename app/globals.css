@@ -1449,6 +1449,62 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 }
 
 /* ===========================================================================
+   CLASS VIEW. One paper, everyone reading it, taken together. Same quiet
+   column as results; bars in ink, because green, amber and violet mean our
+   commentary and nothing here is commentary.
+   ======================================================================== */
+@layer components {
+  .cl-intro,.cl-sub{font-family:var(--ui);font-size:15px;line-height:1.6;
+    color:var(--soft);margin:0;max-width:38em}
+  .cl-sub{font-size:14px;margin-bottom:20px}
+  .cl-k{display:block;font-family:var(--mo);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--soft);margin-bottom:8px}
+  .cl-sec,.cl-lead{margin-top:46px;padding-top:26px;border-top:1px solid var(--line)}
+  .cl-reach{margin:0;padding:0;border:0}
+  .cl-h{font-family:var(--disp);font-variation-settings:var(--fv-sm);
+    font-size:24px;font-weight:550;color:var(--ink);margin:0 0 18px}
+  .cl-q{font-family:var(--ui);font-size:20px;line-height:1.4;font-weight:650;
+    color:var(--ink);margin:0 0 10px;max-width:34em}
+  .cl-iq{font-family:var(--ui);font-size:15.5px;line-height:1.5;font-weight:600;
+    color:var(--ink);margin:0 0 14px;max-width:38em}
+  .cl-tag{font-family:var(--ui);font-size:13.5px;color:var(--soft);margin:0 0 20px}
+  .cl-tag span{font-family:var(--mo);font-size:10.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink);border:1px solid var(--line);
+    border-radius:99px;padding:2px 8px;margin-right:6px}
+
+  .cl-item{margin-bottom:34px}
+  .cl-split{list-style:none;margin:0;padding:0;display:flex;
+    flex-direction:column;gap:14px}
+  .cl-split-brief{gap:9px}
+  .cl-opt-top{display:flex;justify-content:space-between;gap:16px;
+    align-items:baseline;margin-bottom:6px}
+  .cl-opt-t{font-family:var(--ui);font-size:13.5px;line-height:1.5;
+    color:var(--ink-2);max-width:36em}
+  .cl-split-brief .cl-opt-t{font-size:12.5px}
+  .cl-opt-n{font-family:var(--mo);font-size:12.5px;color:var(--ink);
+    font-variant-numeric:tabular-nums;flex-shrink:0}
+  .cl-key{font-family:var(--mo);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:600;color:var(--ink)}
+  .cl-track{height:6px;background:var(--line-2);border-radius:99px;overflow:hidden}
+  .cl-track i{display:block;height:100%;background:var(--soft);border-radius:99px}
+  .cl-opt.right .cl-track i{background:var(--ink)}
+  .cl-opt.right .cl-opt-t{color:var(--ink)}
+  .cl-n{font-family:var(--mo);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--soft);margin:12px 0 0}
+
+  .cl-para{margin:26px 0 0;padding:0 0 0 18px;border-left:2px solid var(--line)}
+  .cl-para p,.cl-para-t{font-family:var(--rd);font-size:16px;line-height:1.7;
+    color:var(--ink-2);margin:0;max-width:62ch}
+  .cl-paras{list-style:none;margin:0;padding:0;display:flex;
+    flex-direction:column;gap:26px}
+  .cl-para-t{font-size:15px}
+
+  .cl-withheld{font-family:var(--ui);font-size:13.5px;line-height:1.6;
+    color:var(--soft);margin:0;padding:12px 14px;border:1px dashed var(--line);
+    border-radius:6px;max-width:38em}
+}
+
+/* ===========================================================================
    Orientation step, the prediction gate, the recap's second look at the
    abstract, and the per-session breakdown on results.
    ======================================================================== */
