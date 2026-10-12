@@ -365,6 +365,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     font-size:clamp(26px,3.5vw,34px);line-height:1.16;letter-spacing:-.014em;
     margin:0 0 16px;font-weight:400}
   .ab-sec p{font-family:var(--rd);font-size:17px;line-height:1.8;color:var(--ink-2);margin:0 0 17px}
+  .ab-sec a{color:inherit;text-decoration:underline;text-underline-offset:2px}
   .ab-sec p b{color:var(--ink);font-weight:600}
   .ab-kick{display:inline-flex;font-family:var(--mo);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
     color:var(--green);margin-bottom:16px;padding:6px 13px;border-radius:99px;
