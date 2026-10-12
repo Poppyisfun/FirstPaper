@@ -293,43 +293,118 @@ export function aggregate(
 
 /** PostgREST caps a response; page through rather than silently truncate. */
 const PAGE = 1000;
+/** Session ids per request on the fallback path, to keep the URL short. */
+const ID_CHUNK = 100;
+
+const EVENT_COLUMNS = "session_id,type,paragraph_id,question_id,payload,created_at";
+
+/* Paging needs a total order. Nothing here assumes `events` has an id column,
+   so the order is every column aggregation reads; rows tied on all of them
+   aggregate identically, so which page one lands on cannot change a number. */
+const ORDER = [
+  "created_at",
+  "session_id",
+  "type",
+  "question_id",
+  "paragraph_id",
+] as const;
+
+/** PostgREST's code for "no relationship between these tables". */
+const NO_RELATIONSHIP = "PGRST200";
+
+type Page = {
+  data: Record<string, unknown>[] | null;
+  error: { code?: string; message: string } | null;
+};
+
+class NoRelationship extends Error {}
+
+/** Runs a paged query to exhaustion. `page` builds one page's request. */
+async function pageAll(
+  page: (from: number, to: number) => PromiseLike<Page>,
+): Promise<Record<string, unknown>[]> {
+  const all: Record<string, unknown>[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await page(from, from + PAGE - 1);
+    if (error?.code === NO_RELATIONSHIP) throw new NoRelationship(error.message);
+    if (error) throw new Error(`class aggregate query failed: ${error.message}`);
+    all.push(...(data ?? []));
+    if (!data || data.length < PAGE) return all;
+  }
+}
+
+function toRow(r: Record<string, unknown>): EventRow {
+  return {
+    session_id: String(r.session_id),
+    type: String(r.type),
+    paragraph_id: typeof r.paragraph_id === "string" ? r.paragraph_id : null,
+    question_id: typeof r.question_id === "string" ? r.question_id : null,
+    payload: (r.payload as Record<string, unknown> | null) ?? null,
+    created_at: String(r.created_at),
+  };
+}
 
 /**
  * Every event this aggregate reads, for one paper, oldest first.
  *
- * One query over `events`, filtered to the paper through its session (events
- * carry no slug of their own) with an inner embed, and paged so a busy paper
- * is not cut off at the API's row cap.
+ * Events carry no slug of their own, so the paper is reached through the
+ * session. The primary path is one query over `events` with an inner embed of
+ * `sessions`, paged so a busy paper is not cut off at the API's row cap.
+ *
+ * The embed needs a foreign key from events.session_id to sessions.id. If the
+ * project has none, PostgREST refuses the embed, and the fallback reads the
+ * paper's session ids first and then their events in chunks. Same rows, more
+ * round trips; the cache in front of this keeps that rare.
  */
 async function fetchRows(slug: string): Promise<EventRow[]> {
   const db = createSupabaseServerClient();
-  const rows: EventRow[] = [];
-  for (let from = 0; ; from += PAGE) {
-    const { data, error } = await db
-      .from("events")
-      .select(
-        "session_id,type,paragraph_id,question_id,payload,created_at,sessions!inner(paper_slug)",
-      )
-      .eq("sessions.paper_slug", slug)
-      .in("type", [...TYPES])
-      .order("created_at", { ascending: true })
-      // A unique tiebreak, so paging cannot skip or repeat a row.
-      .order("id", { ascending: true })
-      .range(from, from + PAGE - 1);
-    if (error) throw new Error(`class aggregate query failed: ${error.message}`);
-    for (const r of data ?? []) {
-      rows.push({
-        session_id: String(r.session_id),
-        type: String(r.type),
-        paragraph_id: r.paragraph_id ?? null,
-        question_id: r.question_id ?? null,
-        payload: (r.payload as Record<string, unknown> | null) ?? null,
-        created_at: String(r.created_at),
-      });
+  const ordered = <T extends { order: (c: string) => T }>(q: T) =>
+    ORDER.reduce((acc, column) => acc.order(column), q);
+
+  let raw: Record<string, unknown>[];
+  try {
+    raw = await pageAll((from, to) =>
+      ordered(
+        db
+          .from("events")
+          .select(`${EVENT_COLUMNS},sessions!inner(paper_slug)`)
+          .eq("sessions.paper_slug", slug)
+          .in("type", [...TYPES]),
+      ).range(from, to),
+    );
+  } catch (err) {
+    if (!(err instanceof NoRelationship)) throw err;
+    const sessions = await pageAll((from, to) =>
+      db
+        .from("sessions")
+        .select("id")
+        .eq("paper_slug", slug)
+        .order("id")
+        .range(from, to),
+    );
+    const ids = sessions.map((s) => String(s.id));
+    raw = [];
+    for (let i = 0; i < ids.length; i += ID_CHUNK) {
+      const chunk = ids.slice(i, i + ID_CHUNK);
+      raw.push(
+        ...(await pageAll((from, to) =>
+          ordered(
+            db
+              .from("events")
+              .select(EVENT_COLUMNS)
+              .in("session_id", chunk)
+              .in("type", [...TYPES]),
+          ).range(from, to),
+        )),
+      );
     }
-    if (!data || data.length < PAGE) break;
   }
-  return rows;
+
+  /* Oldest first is what the dedupe rules rely on, whichever path ran and
+     however chunks interleave. Array sort is stable. */
+  return raw
+    .map(toRow)
+    .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at));
 }
 
 /** How long a computed aggregate is served before the query runs again. */
