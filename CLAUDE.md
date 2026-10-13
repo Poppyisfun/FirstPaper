@@ -137,10 +137,63 @@ XP, scores, ranks and calibration are **computed from `events` at read time.**
 Nothing writes a score to the database. A stored total is a number that can
 drift away from the events that produced it; a derived one cannot.
 
+### Statistics: gates, not verdicts
+
+`lib/stats.ts` holds `wilsonInterval` and `chanceBaseline`, pinned by tests to
+the numbers the UI quotes (2 of 5 is 12% to 77%; 8 of 20 is 22% to 61%). Any
+sentence on screen that carries a number is built in a tested function
+(`lib/results-copy.ts`), never typed into a component.
+
+The gated layer in `lib/scoring.ts` works across all of a reader's papers:
+
+- **Which way a reader leans is gated at 20 judgements** (`DIRECTION_GATE`),
+  which is four papers of five. Past it: a direction plus a rounded gap size,
+  with the accuracy interval beside it, never a precise figure.
+- **Each appraisal tag gates at 6** (`TAG_VERDICT_GATE`), and its verdict is
+  measured against guessing: better than, not yet distinguishable from, or
+  below guessing.
+- **Below a gate the function returns null and the screen shows a count and
+  the distance to the gate.** No verdict, not a kind one either. One session's
+  five questions never get "overconfident" or "well calibrated".
+- **The first answer per paper and question counts.** A second pass is made
+  knowing the answers; counting it would let one paper read four times reach
+  the gate.
+- No Brier score and no calibration curve. Both are finer than the sample.
+
+`GET /api/events` returns the reader's own judge events across papers, by the
+httpOnly anon cookie, so the count spans tabs and sessions.
+
+### The results screen is a mirror, not a grade
+
+The headline ("You said you were 82% sure. You were right 40% of the time.")
+stays. Under it, small print gives how many questions it rests on, the
+interval, and what guessing scores. Both bars carry a guessing line from the
+real option counts. Nothing congratulates a gap and nothing scolds one;
+underconfidence is stated in the same sentence shape as overconfidence.
+Every sentence on that screen and its alternatives are in `DECISIONS.md`.
+
+### The class view
+
+`/paper/[slug]/class` pools everyone who has read one paper, for an instructor
+who assigned it. No accounts, roster, class code or per-student rows; there is
+no student identity in the system and we are not adding one. It is not linked
+from the reading flow and is `noindex`.
+
+`lib/aggregate.ts` is one cached (five-minute), paged query over `events`
+joined to `sessions` for the paper, then pure arithmetic. **Any line computed
+from fewer than 5 readers (`MIN_READERS`) is replaced by its count and
+"Hidden until 5."** That rule is the product's thesis and this page is not
+exempt. Frame it as agreement and disagreement, never as a cheating or
+failure report. The query assumes `events.session_id` is a foreign key to
+`sessions.id`.
+
 ### Accounts
 
-**A reader can finish an entire paper with no account.** Signup is offered on
-`/results`, after the work is done, never before it and never as a gate.
+**A reader can finish an entire paper with no account.** Auth is not built.
+When it is, signup is offered on `/results`, after the work is done, never
+before it and never as a gate. Until then `/account` says plainly that
+accounts are coming and reading works without one, and nothing promises what
+an account will add.
 
 ## Design
 
@@ -212,14 +265,16 @@ highlighter swipe when a paragraph resolves. Always respect
 
 - `/` landing
 - `/library` browse papers
-- `/about` mission, method, honesty, origin story
-- `/account` account placeholder
+- `/about` what it is, who it's for, how the commentary is made, where the
+  papers come from, who built it
+- `/account` says accounts are coming; reading works without one
 - `/paper/[slug]/read` the paper, with commentary
 - `/paper/[slug]/check` comprehension questions
 - `/paper/[slug]/judge` evaluation questions
 - `/paper/[slug]/recap` the whole paper in plain English
-- `/paper/[slug]/results` score, rank, and the signup offer
-- `/api/events` event intake
+- `/paper/[slug]/results` calibration, gated cross-paper verdicts, breakdown
+- `/paper/[slug]/class` the instructor's aggregate (not linked from the flow)
+- `/api/events` event intake (POST) and the reader's own judge events (GET)
 
 ## What may and may not change
 
@@ -245,9 +300,12 @@ You MAY NOT change, without being explicitly asked:
    takeaways, the plain-English recap. These are pedagogically tuned. Do not
    rewrite for tone or brevity.
 3. **The flow order:** Read → Check → Judge → Recap → Results.
-4. **The scoring rules:** solo +8 XP, peek −5 from a bonus pool that floors at 0
-   and never touches XP, quiz +20, judge +20 × confidence multiplier,
-   wrong-while-confident −20, XP floors at 0.
+4. **The scoring rules:** a first prediction that matches +8 XP, check +20,
+   judge +20, nothing deducted, XP floors at 0. (This line used to describe
+   the retired peek charge and wager multiplier; it now matches
+   `lib/scoring.ts` and the sections above.) The gates — 20 judgements for a
+   direction, 6 per tag, 5 readers per class-view line — are scoring rules
+   too.
 5. **The three reading levels** (explorer / reader / critic), or the fact that
    the level changes ONLY the commentary, never the paper text.
 6. **The honesty notice**, the licence attribution, or the link to the original.
@@ -307,6 +365,29 @@ sentence must not be padded, and padding is how commentary becomes filler.
 than **1 of 10** questions is answerable from the explanations alone. It
 gates on shape leaks only; corpus recognition and domain knowledge are
 recorded and ignored.
+
+## Copy and voice
+
+The landing page's voice is the strongest thing on the site; write to it.
+Second person, present tense, one reader. Start from what the reader has done
+or felt, then say what happens in plain verbs. Short declaratives that land on
+the shortest sentence; fragments sparingly. Count things instead of using
+adjectives. Sentence case. No exclamation marks, no em-dash-heavy rhythm, no
+"unlock", "empower", "seamless", "dive into", "revolutionize", "journey",
+"transform".
+
+**Never promise a feature that isn't built.** Every stale promise becomes a
+thing someone feels obliged to build. Numbers a page quotes about a paper
+(minutes, XP) are derived from the paper's files, never typed. Library card
+XP is computed from content and the scoring constants in `content/library.ts`.
+
+Judgement calls on wording are logged in `DECISIONS.md` as chose / over /
+because.
+
+## Tests
+
+`npm test` runs vitest over `lib/**/*.test.{ts,tsx}`. `npx tsc --noEmit` needs
+`npx next typegen` (or a build) first, for the generated route types.
 
 ## Writing questions and options
 

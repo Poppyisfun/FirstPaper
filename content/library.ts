@@ -1,4 +1,9 @@
-import { getAllPapers, type Paper } from "@/lib/content";
+import { getAllPapers } from "@/lib/content";
+import {
+  XP_CHECK_CORRECT,
+  XP_JUDGE_CORRECT,
+  XP_PARAGRAPH_PREDICTED,
+} from "@/lib/scoring";
 
 export type Topic = "Genetics" | "Evolution" | "Medicine" | "Ecology";
 
@@ -22,6 +27,7 @@ export type LibraryEntry = {
    */
   practiceGoal: string;
   minutes: number;
+  /** The most XP the paper can award, derived from its content and the scoring rules. */
   xp: number;
 };
 
@@ -39,17 +45,6 @@ const TOPICS: Record<string, Topic> = {
  * exists, so a card can never advertise something that is not there and a
  * title can never drift from the paper's own metadata.
  */
-/**
- * The most XP a paper can yield on a perfect run.
- *
- * Mirrors lib/scoring.ts: eight for each paragraph predicted correctly,
- * twenty for each correct answer in either round.
- */
-function maxXpFor(paper: Paper): number {
-  return paper.paragraphs.length * 8 + paper.check.length * 20 +
-    paper.judge.length * 20;
-}
-
 export const LIBRARY: LibraryEntry[] = getAllPapers().map((paper) => ({
   slug: paper.slug,
   topic: TOPICS[paper.slug] ?? "Genetics",
@@ -57,9 +52,13 @@ export const LIBRARY: LibraryEntry[] = getAllPapers().map((paper) => ({
   title: paper.title,
   practiceGoal: paper.practice_goal,
   minutes: paper.estimated_minutes,
-  /* Derived, not authored. The card used to carry its own number and it had
-     already drifted from what the paper can actually yield. */
-  xp: maxXpFor(paper),
+  /* Derived rather than read from meta.json, whose figure (320) had drifted
+     from what perfect play actually earns (336). Same reasoning as minutes:
+     one source, so the card can't disagree with the results screen. */
+  xp:
+    paper.paragraphs.length * XP_PARAGRAPH_PREDICTED +
+    paper.check.length * XP_CHECK_CORRECT +
+    paper.judge.length * XP_JUDGE_CORRECT,
 }));
 
 export const FILTERS = [

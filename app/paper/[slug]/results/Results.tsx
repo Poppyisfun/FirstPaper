@@ -1,59 +1,130 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { flushNow, readLog, track } from "@/lib/events";
+import { flushNow, readLog, track, type PaperEvent } from "@/lib/events";
 import {
   TAG_PHRASE,
-  calibrationNote,
-  calibrationSentence,
+  calibrationDirection,
   deriveResults,
-  patternLine,
+  judgementCount,
+  perTagTally,
+  perTagVerdict,
+  type AnsweredQuestion,
   type Results as ResultsData,
 } from "@/lib/scoring";
+import {
+  counter,
+  counterNote,
+  directionLines,
+  gateNote,
+  guessingFor,
+  headline,
+  smallPrint,
+  tagRule,
+  tagTallyLine,
+  tagVerdictLine,
+} from "@/lib/results-copy";
+
+/** What the screen needs to know about one question in this paper. */
+export type QuestionRef = {
+  prompt: string;
+  tag: string | null;
+  correct: string;
+  /** Option id to option text. */
+  options: Record<string, string>;
+};
+
+/** How to point back at one paragraph of the paper. */
+export type ParagraphRef = {
+  section: string;
+  /** "Paragraph 9", numbered as the reading screen numbers it, or "Abstract". */
+  label: string;
+  /** The paragraph's first few words, verbatim. */
+  opening: string;
+};
 
 /**
  * The results screen.
  *
  * One number is the point of this product, and it gets the room: what the
- * reader claimed, against what was true. Everything else on the screen is
- * quieter than it so that it lands.
+ * reader claimed, against what was true. It is a tally, and it is shown as
+ * one. Under it, in small print, is how little five questions can carry and
+ * where guessing sits, because 40% on four-option questions is a point and a
+ * half above guessing, and that is the actual finding.
  *
- * The two bars underneath carry the second finding. Most people read well and
- * judge badly, and seeing comprehension sit above appraisal is more use than
- * being told it.
+ * Which way a reader leans is gated at 20 judgements across papers, and each
+ * appraisal tag at 6. Below a gate the screen shows the count and the
+ * distance to the gate, never a verdict, kind or otherwise.
  *
- * Nothing here congratulates a bad calibration gap or scolds one. Being
- * underconfident is stated as what it is: a real result, and a different one.
+ * The register is a mirror, not a grade. Underconfidence is stated as plainly
+ * as overconfidence. Nothing congratulates a gap and nothing scolds one.
  */
 export default function Results({
   slug,
   title,
   paragraphsTotal,
-  sectionOf,
-  questionPrompts,
+  paragraphs,
+  checkIds,
+  judgeIds,
+  questions,
+  optionCounts,
 }: {
   slug: string;
   title: string;
   paragraphsTotal: number;
-  sectionOf: Record<string, string>;
-  questionPrompts: Record<string, string>;
+  paragraphs: Record<string, ParagraphRef>;
+  checkIds: string[];
+  judgeIds: string[];
+  questions: Record<string, QuestionRef>;
+  /** "<slug>:<questionId>" to option count, for every paper. */
+  optionCounts: Record<string, number>;
 }) {
-  /* Derived from the session's events at read time, never stored. Reading
-     happens after mount because the log lives in the browser. */
+  /* Derived from events at read time, never stored. Reading happens after
+     mount because the session log lives in the browser. */
   const [data, setData] = useState<ResultsData | null>(null);
+  const [local, setLocal] = useState<PaperEvent[]>([]);
+  /* This reader's judgements on every paper, from the durable record. Null
+     until it answers; an empty list if it cannot. */
+  const [history, setHistory] = useState<PaperEvent[] | null>(null);
 
   useEffect(() => {
+    const sectionOf = Object.fromEntries(
+      Object.entries(paragraphs).map(([id, p]) => [id, p.section]),
+    );
     const log = readLog(slug);
     setData(deriveResults(log, paragraphsTotal, sectionOf));
+    setLocal(readLog());
     /* Reaching this screen is the end of the paper. Recorded so the session
        can be closed server-side; the number on screen does not wait for it. */
     if (log.length > 0) {
       void track({ name: "paper_completed", slug }).then(() => flushNow());
     }
-    // sectionOf is a fixed server-rendered map; it never changes.
+    // paragraphs is a fixed server-rendered map; it never changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, paragraphsTotal]);
+
+  useEffect(() => {
+    let live = true;
+    /* After the flush above has had a chance to land, so this paper's
+       judgements are in the count even on a first visit. Duplicates of the
+       local log are harmless: each question counts once. */
+    const t = setTimeout(() => {
+      fetch("/api/events", { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : { events: [] }))
+        .then((body: { events?: PaperEvent[] }) => {
+          if (live) setHistory(Array.isArray(body.events) ? body.events : []);
+        })
+        .catch(() => live && setHistory([]));
+    }, 600);
+    return () => {
+      live = false;
+      clearTimeout(t);
+    };
+  }, []);
+
+  const everything = useMemo(() => [...(history ?? []), ...local], [history, local]);
+  const optionCountOf = (s: string, q: string) => optionCounts[`${s}:${q}`];
 
   if (!data) {
     return (
@@ -74,24 +145,54 @@ export default function Results({
     return (
       <div className="ph ph-res">
         <main className="rs">
-          <h1 className="rs-big">Nothing to score yet.</h1>
+          <h1 className="rs-big">Nothing to show you yet.</h1>
           <p className="rs-note">
-            There are no answers recorded for this session, so there is no
-            calibration to report. Start the paper and the numbers will mean
-            something.
+            This page holds up what you said against what turned out to be
+            true. There are no answers from this session to hold up. Read the
+            paper, and this page will have something to tell you.
           </p>
           <div className="ph-acts">
             <Link className="ph-go" href={`/paper/${slug}/read`}>
               Start reading →
             </Link>
           </div>
+          <Honesty />
         </main>
       </div>
     );
   }
 
-  const pattern = patternLine(data.missedTags);
-  const note = calibrationNote(data.calibration);
+  /* Guessing, per round, from the real option counts of the questions the
+     reader actually answered (or the whole round, if they answered none). */
+  const countsFor = (answers: AnsweredQuestion[], ids: string[]) =>
+    (answers.length > 0 ? answers.map((a) => a.questionId) : ids)
+      .map((id) => optionCounts[`${slug}:${id}`])
+      .filter((n): n is number => typeof n === "number");
+  const checkGuessing = guessingFor(countsFor(data.checkAnswers, checkIds));
+  const judgeGuessing = guessingFor(countsFor(data.judgeAnswers, judgeIds));
+
+  const meanConfidence =
+    data.calibration.kind === "measured" ? data.calibration.meanConfidence : 0;
+  const total = judgementCount(everything);
+  const direction = calibrationDirection(everything);
+  const tallies = perTagTally(everything);
+  const print = smallPrint(data.judgeAnswered, data.judgeCorrect, judgeGuessing, total);
+  const toGo = counterNote(total);
+
+  /* This session's appraisal answers, grouped by what they tested, so a
+     "0 of 1" sits where it can be seen next to a "1 of 1". */
+  const byTag = new Map<string, AnsweredQuestion[]>();
+  for (const a of data.judgeAnswers) {
+    const tag = a.tag ?? questions[a.questionId]?.tag ?? "untagged";
+    byTag.set(tag, [...(byTag.get(tag) ?? []), a]);
+  }
+
+  /* Missed predictions, grouped by section in reading order. */
+  const missedBySection = new Map<string, string[]>();
+  for (const m of data.missedPredictions) {
+    const key = m.section || "Elsewhere";
+    missedBySection.set(key, [...(missedBySection.get(key) ?? []), m.paragraphId]);
+  }
 
   return (
     <div className="ph ph-res">
@@ -101,101 +202,131 @@ export default function Results({
 
       <main className="rs">
         {/* The centrepiece. Real size, real space, nothing beside it. */}
-        <h1 className="rs-big">{calibrationSentence(data.calibration)}</h1>
-        {note && <p className="rs-note">{note}</p>}
+        <h1 className="rs-big">
+          {headline(data.judgeAnswered, meanConfidence, data.appraisalAccuracy ?? 0)}
+        </h1>
+        {print && <p className="rs-print">{print}</p>}
 
-        {/* The gap between these two is the real story. */}
+        {/* The gap between these two is the real story, and the guessing line
+            makes it larger, not smaller. */}
         <section className="rs-bars" aria-label="Accuracy by round">
           <Bar
             label="Comprehension"
             sub="What the paper said"
             value={data.checkAccuracy}
-            count={`${data.checkCorrect}/${data.checkAnswered}`}
+            guessing={checkGuessing}
+            count={`${data.checkCorrect} of ${data.checkAnswered}`}
           />
           <Bar
             label="Appraisal"
             sub="Whether it holds up"
             value={data.appraisalAccuracy}
-            count={`${data.judgeCorrect}/${data.judgeAnswered}`}
+            guessing={judgeGuessing}
+            count={`${data.judgeCorrect} of ${data.judgeAnswered}`}
           />
         </section>
 
-        {pattern && <p className="rs-pattern">{pattern}</p>}
+        {/* ── Across papers: the gated layer ───────────────────────── */}
+        <section className="rs-gate" aria-label="Across every paper you've judged">
+          <h2 className="rs-detail-h">Across every paper you&rsquo;ve judged</h2>
 
-        {/* XP lives in the library as a progress marker. It is not on this
-            screen: results gets one headline and it is the confidence
-            sentence. Rank is gone entirely. */}
+          {direction ? (
+            <>
+              {directionLines(direction).map((line) => (
+                <p key={line} className="rs-gate-p">
+                  {line}
+                </p>
+              ))}
+            </>
+          ) : (
+            <div className="rs-count">
+              <p className="rs-count-n">
+                <b>{counter(total)}</b> judgements
+              </p>
+              {toGo && <p className="rs-gate-p">{toGo}</p>}
+              <p className="rs-gate-n">{gateNote()}</p>
+            </div>
+          )}
+
+          {tallies.length > 0 && <p className="rs-gate-n">{tagRule()}</p>}
+          {tallies.length > 0 && (
+            <ul className="rs-tags">
+              {tallies.map((t) => {
+                const verdict = perTagVerdict(everything, t.tag, optionCountOf);
+                return (
+                  <li key={t.tag}>
+                    <b>{t.tag}</b>
+                    <span>
+                      {t.correct} of {t.total} right
+                    </span>
+                    <i>
+                      {verdict
+                        ? tagVerdictLine(verdict)
+                        : tagTallyLine(TAG_PHRASE[t.tag], t.total)}
+                    </i>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
         <dl className="rs-stats">
           <div>
-            <dt>Read without a wrong prediction</dt>
+            <dt>XP</dt>
+            <dd>{data.xp}</dd>
+          </div>
+          <div>
+            <dt>First guesses that matched ours</dt>
             <dd>
               {data.paragraphsPredictedCorrectly} of {data.paragraphsTotal}
             </dd>
           </div>
         </dl>
 
-        {/* ── The per-session breakdown ──────────────────────────────
-            Everything above is the headline. This is the working: which
-            question, which answer, and for the judging round what they
-            staked on it. No account needed; it is all in this session. */}
+        {/* ── This paper, question by question ─────────────────────── */}
         <section className="rs-detail" aria-label="Question by question">
-          <h2 className="rs-detail-h">Question by question</h2>
+          <h2 className="rs-detail-h">This paper, question by question</h2>
 
           {data.checkAnswers.length > 0 && (
             <div className="rs-grp">
               <h3 className="rs-grp-h">
-                Comprehension <span>{data.checkCorrect} of {data.checkAnswered}</span>
+                Comprehension{" "}
+                <span>
+                  {data.checkCorrect} of {data.checkAnswered}
+                </span>
               </h3>
               <ol className="rs-qs">
                 {data.checkAnswers.map((a) => (
-                  <li key={a.questionId} className={a.correct ? "ok" : "no"}>
-                    <span className="rs-q-v">{a.correct ? "right" : "wrong"}</span>
-                    <span className="rs-q-t">
-                      {questionPrompts[a.questionId] ?? a.questionId}
-                    </span>
-                  </li>
+                  <Answer key={a.questionId} a={a} q={questions[a.questionId]} />
                 ))}
               </ol>
             </div>
           )}
 
-          {data.judgeAnswers.length > 0 && (
-            <div className="rs-grp">
-              <h3 className="rs-grp-h">
-                Appraisal <span>{data.judgeCorrect} of {data.judgeAnswered}</span>
-              </h3>
-              <ol className="rs-qs">
-                {data.judgeAnswers.map((a) => (
-                  <li key={a.questionId} className={a.correct ? "ok" : "no"}>
-                    <span className="rs-q-v">{a.correct ? "right" : "wrong"}</span>
-                    <span className="rs-q-t">
-                      {questionPrompts[a.questionId] ?? a.questionId}
-                    </span>
-                    {a.confidence !== null && (
-                      <span className="rs-q-c">
-                        said {a.confidence}% sure
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-
-          {data.tagBreakdown.length > 0 && (
-            <div className="rs-grp">
-              <h3 className="rs-grp-h">By what it tested</h3>
-              <ul className="rs-tags">
-                {data.tagBreakdown.map((t) => (
-                  <li key={t.tag} className={t.correct === 0 ? "zero" : ""}>
-                    <b>{t.tag}</b>
-                    <span>{t.correct} of {t.total}</span>
-                    <i>{TAG_PHRASE[t.tag] ?? ""}</i>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {[...byTag.entries()].map(([tag, answers]) => {
+            const right = answers.filter((a) => a.correct).length;
+            return (
+              <div className="rs-grp" key={tag}>
+                <h3 className="rs-grp-h">
+                  Appraisal · {tag}{" "}
+                  <span>
+                    {right} of {answers.length}
+                  </span>
+                </h3>
+                {TAG_PHRASE[tag] && (
+                  <p className="rs-grp-n">
+                    {TAG_PHRASE[tag].charAt(0).toUpperCase() + TAG_PHRASE[tag].slice(1)}.
+                  </p>
+                )}
+                <ol className="rs-qs">
+                  {answers.map((a) => (
+                    <Answer key={a.questionId} a={a} q={questions[a.questionId]} />
+                  ))}
+                </ol>
+              </div>
+            );
+          })}
 
           {data.missedPredictions.length > 0 && (
             <div className="rs-grp">
@@ -207,39 +338,66 @@ export default function Results({
               </h3>
               <p className="rs-grp-n">
                 Your first guess did not match ours here. That is not a score
-                against you — it is where our explanation had the most work to
+                against you. It is where our explanation had the most work to
                 do.
               </p>
-              <ul className="rs-miss">
-                {Object.entries(
-                  data.missedPredictions.reduce<Record<string, number>>(
-                    (acc, m) => {
-                      const key = m.section || "Elsewhere";
-                      acc[key] = (acc[key] ?? 0) + 1;
-                      return acc;
-                    },
-                    {},
-                  ),
-                ).map(([section, count]) => (
-                  <li key={section}>
-                    <b>{section}</b>
-                    <span>{count}</span>
-                  </li>
-                ))}
-              </ul>
+              {[...missedBySection.entries()].map(([section, ids]) => (
+                <div key={section} className="rs-miss">
+                  <h4 className="rs-miss-h">{section}</h4>
+                  <ul>
+                    {ids.map((id) => (
+                      <li key={id}>
+                        <b>{paragraphs[id]?.label ?? id}</b>
+                        <q>{paragraphs[id]?.opening}</q>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           )}
         </section>
 
         <p className="rs-paper">{title}</p>
 
-        <p className="ph-honest">
-          <b>FirstPaper can be wrong, and that&rsquo;s the point.</b> These
-          scores measure you against our judgement, which is not the same as
-          measuring you against the truth.
-        </p>
+        <Honesty />
       </main>
     </div>
+  );
+}
+
+function Honesty() {
+  return (
+    <p className="ph-honest">
+      <b>FirstPaper can be wrong, and that&rsquo;s the point.</b> These scores
+      measure you against our judgement, which is not the same as measuring you
+      against the truth.
+    </p>
+  );
+}
+
+/** One answered question: what they chose, whether it matched, what they staked. */
+function Answer({ a, q }: { a: AnsweredQuestion; q: QuestionRef | undefined }) {
+  const chosen = q?.options[a.chosenOptionId];
+  const ours = q?.options[q.correct];
+  return (
+    <li className={a.correct ? "ok" : "no"}>
+      <span className="rs-q-v">{a.correct ? "right" : "wrong"}</span>
+      <span className="rs-q-t">
+        {q?.prompt ?? a.questionId}
+        {chosen && (
+          <span className="rs-q-a">
+            You said: {chosen}
+          </span>
+        )}
+        {!a.correct && ours && (
+          <span className="rs-q-a">Our answer: {ours}</span>
+        )}
+      </span>
+      {a.confidence !== null && (
+        <span className="rs-q-c">said {a.confidence}% sure</span>
+      )}
+    </li>
   );
 }
 
@@ -248,14 +406,18 @@ function Bar({
   label,
   sub,
   value,
+  guessing,
   count,
 }: {
   label: string;
   sub: string;
   value: number | null;
+  /** 0-100, from the real option counts. */
+  guessing: number;
   count: string;
 }) {
   const pct = value ?? 0;
+  const g = Math.round(guessing);
   return (
     <div className="rs-bar">
       <div className="rs-bar-top">
@@ -270,9 +432,14 @@ function Bar({
         aria-valuenow={Math.round(pct)}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={`${label} accuracy`}
+        aria-label={`${label} accuracy. Guessing scores ${g}%.`}
       >
         <i style={{ width: `${pct}%` }} />
+        {g > 0 && (
+          <span className="rs-bar-g" style={{ left: `${guessing}%` }} aria-hidden="true">
+            <em>guessing</em>
+          </span>
+        )}
       </div>
       <div className="rs-bar-sub">
         <span>{sub}</span>

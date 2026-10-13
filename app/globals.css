@@ -370,6 +370,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     font-size:clamp(26px,3.5vw,34px);line-height:1.16;letter-spacing:-.014em;
     margin:0 0 16px;font-weight:400}
   .ab-sec p{font-family:var(--rd);font-size:17px;line-height:1.8;color:var(--ink-2);margin:0 0 17px}
+  .ab-sec a{color:inherit;text-decoration:underline;text-underline-offset:2px}
   .ab-sec p b{color:var(--ink);font-weight:600}
   .ab-kick{display:inline-flex;font-family:var(--mo);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
     color:var(--green);margin-bottom:16px;padding:6px 13px;border-radius:99px;
@@ -1486,7 +1487,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     text-transform:uppercase;color:var(--violet);white-space:nowrap}
 
   .rs-tags{list-style:none;margin:0;padding:0}
-  .rs-tags li{display:grid;grid-template-columns:130px 62px 1fr;gap:12px;
+  .rs-tags li{display:grid;grid-template-columns:130px 92px 1fr;gap:12px;
     align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line-2)}
   .rs-tags li:last-child{border-bottom:0}
   .rs-tags b{font-family:var(--ui);font-size:13.5px;font-weight:650;
@@ -1497,20 +1498,117 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .rs-tags i{font-style:normal;font-family:var(--ui);font-size:12.5px;
     line-height:1.5;color:var(--soft)}
 
-  .rs-miss{list-style:none;margin:0;padding:0}
-  .rs-miss li{display:flex;justify-content:space-between;gap:14px;
-    padding:8px 0;border-bottom:1px solid var(--line-2)}
+  .rs-miss{margin:0 0 14px}
+  .rs-miss-h{font-family:var(--ui);font-size:13px;font-weight:600;
+    color:var(--ink);margin:14px 0 4px}
+  .rs-miss ul{list-style:none;margin:0;padding:0}
+  .rs-miss li{display:grid;grid-template-columns:92px 1fr;gap:12px;
+    align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line-2)}
   .rs-miss li:last-child{border-bottom:0}
-  .rs-miss b{font-family:var(--ui);font-size:13.5px;font-weight:600;
-    color:var(--ink-2)}
-  .rs-miss span{font-family:var(--mo);font-size:12px;color:var(--soft);
-    font-variant-numeric:tabular-nums}
+  .rs-miss b{font-family:var(--mo);font-size:10px;letter-spacing:.11em;
+    text-transform:uppercase;font-weight:400;color:var(--soft)}
+  /* The authors' words, so the paper's serif. Quoted, never reworded. */
+  .rs-miss q{font-family:var(--rd);font-size:14px;line-height:1.55;
+    color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+
+  /* -- Results: the small print under the headline, and the gated layer.
+        Quiet, because they qualify the headline rather than compete. -- */
+  .rs-print{font-family:var(--ui);font-size:13px;line-height:1.6;
+    color:var(--soft);margin:20px 0 0;max-width:44em}
+  .rs-gate{margin-top:54px;padding-top:30px;border-top:1px solid var(--line)}
+  .rs-count-n{font-family:var(--ui);font-size:15px;color:var(--soft);
+    margin:0 0 10px}
+  .rs-count-n b{font-family:var(--mo);font-size:22px;font-weight:500;
+    color:var(--ink);margin-right:6px;font-variant-numeric:tabular-nums}
+  .rs-gate-p{font-family:var(--ui);font-size:15px;line-height:1.6;
+    color:var(--ink);margin:0 0 10px;max-width:38em}
+  .rs-gate-n{font-family:var(--ui);font-size:12.5px;line-height:1.55;
+    color:var(--soft);margin:0 0 22px;max-width:46em}
+  .rs-q-a{display:block;font-size:12.5px;color:var(--soft);margin-top:3px}
+
+  /* The guessing line on each bar. Neutral: it is a floor, not a verdict. */
+  .rs-bar-track{position:relative;overflow:visible}
+  .rs-bar-g{position:absolute;top:-4px;bottom:-4px;width:2px;
+    margin-left:-1px;background:var(--soft)}
+  .rs-bar-g em{position:absolute;top:calc(100% + 3px);left:50%;
+    transform:translateX(-50%);font-style:normal;font-family:var(--mo);
+    font-size:9px;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--soft);white-space:nowrap}
+  .rs-bar .rs-bar-sub{margin-top:24px}
 
   @media(max-width:700px){
     .rs-qs li{grid-template-columns:56px 1fr;row-gap:4px}
     .rs-q-c{grid-column:2}
     .rs-tags li{grid-template-columns:1fr auto;row-gap:2px}
     .rs-tags i{grid-column:1 / -1}
+    .rs-miss li{grid-template-columns:1fr;row-gap:2px}
+  }
+}
+
+/* ===========================================================================
+   Class view. Built from the results screen's quiet parts; the only new
+   shape is a horizontal share bar per option. Neutral throughout: our answer
+   is marked in words, not in green, because green means "explanation".
+   ======================================================================== */
+@layer components {
+  .cv-paper{margin:24px 0 0}
+  .cv-h1{font-family:var(--disp);font-size:clamp(26px,4.2vw,40px);
+    line-height:1.16;font-weight:600;letter-spacing:-.01em;color:var(--ink);
+    margin:8px 0 0;max-width:18em}
+  .cv-lead{font-family:var(--ui);font-size:16px;line-height:1.6;
+    color:var(--ink);margin:34px 0 0}
+  .cv-hidden{font-family:var(--mo);font-size:11px;letter-spacing:.06em;
+    color:var(--soft);margin:6px 0 0}
+  .cv-meta{font-family:var(--ui);font-size:12.5px;line-height:1.55;
+    color:var(--soft);margin:8px 0 0}
+  .cv-tag{font-family:var(--ui);font-size:12.5px;color:var(--soft);margin:0 0 6px}
+  .cv-tag b{font-family:var(--mo);font-weight:400;font-size:11px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .cv-q{font-family:var(--ui);font-size:15px;line-height:1.5;font-weight:600;
+    color:var(--ink);margin:0 0 12px;max-width:40em}
+  .cv-q-s{font-size:13.5px;margin-bottom:6px}
+  .cv-brief{font-family:var(--ui);font-size:13px;line-height:1.55;
+    color:var(--ink-2);margin:0}
+
+  .cv-split{list-style:none;margin:0;padding:0}
+  .cv-split li{display:grid;grid-template-columns:minmax(0,1fr) 120px 72px;
+    gap:12px;align-items:center;padding:8px 0;
+    border-bottom:1px solid var(--line-2)}
+  .cv-split li:last-child{border-bottom:0}
+  .cv-opt{font-family:var(--ui);font-size:13px;line-height:1.45;
+    color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+  .cv-split li.ours .cv-opt{color:var(--ink);font-weight:600}
+  .cv-ours{display:inline-block;margin-left:8px;font-style:normal;
+    font-family:var(--mo);font-size:9.5px;font-weight:400;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--ink);border:1px solid var(--ink);
+    border-radius:99px;padding:1px 7px;vertical-align:1px}
+  .cv-bar{display:block;height:8px;background:var(--line-2);border-radius:99px}
+  .cv-bar i{display:block;height:100%;background:var(--soft);border-radius:99px}
+  .cv-split li.ours .cv-bar i{background:var(--ink)}
+  .cv-n{font-family:var(--mo);font-size:12px;color:var(--ink);text-align:right;
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cv-n small{color:var(--soft);font-size:10.5px}
+
+  .cv-para{margin:22px 0 0;padding:18px 20px;border:1px solid var(--line);
+    border-radius:8px;background:var(--surf)}
+  .cv-para figcaption{font-family:var(--mo);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--soft);margin-bottom:10px}
+  /* The authors' words: the paper's serif, at the reading measure. */
+  .cv-para blockquote{font-family:var(--rd);font-size:15px;line-height:1.7;
+    color:var(--ink-2);margin:0;max-width:62ch;overflow-wrap:anywhere}
+
+  .cv-paras{list-style:none;margin:0;padding:0}
+  .cv-paras li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;
+    padding:9px 0;border-bottom:1px solid var(--line-2)}
+  .cv-paras li:last-child{border-bottom:0}
+  .cv-para-l{font-family:var(--ui);font-size:13px;font-weight:600;color:var(--ink)}
+  .cv-paras q{grid-column:1 / -1;font-family:var(--rd);font-size:14px;
+    line-height:1.55;color:var(--ink-2);overflow-wrap:anywhere}
+
+  @media(max-width:700px){
+    .cv-split li{grid-template-columns:minmax(0,1fr) 64px;row-gap:6px}
+    .cv-bar{grid-column:1 / -1;grid-row:2}
+    .cv-para{padding:14px 14px}
   }
 }
 

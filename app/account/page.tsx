@@ -7,7 +7,7 @@ import { BtnLink } from "@/components/Btn";
 
 export const metadata: Metadata = pageMetadata(
   "Account — FirstPaper",
-  "Accounts are coming. Soon you will be able to keep your XP, see every paper you have read, and get suggestions based on what you are interested in.",
+  "Accounts are coming. Reading works without one.",
 );
 
 export default function Account() {
@@ -26,15 +26,13 @@ export default function Account() {
               Accounts are coming
             </h1>
             <p className="ssub">
-              There is nothing to sign up for yet, and nothing you are
-              missing: a whole paper works start to finish without an account,
-              and you get your full results at the end. What an account will
-              add later is memory across papers — your XP carried forward, a
-              record of what you have read, and suggestions based on it.
+              There is nothing to sign up for yet, and you don&rsquo;t need
+              to. A whole paper works start to finish without an account, and
+              your results are on the last screen.
             </p>
             <div className="acct-cta">
               <BtnLink href="/library" variant="pri lg" icon="→">
-                Read a paper for now
+                Read a paper
               </BtnLink>
             </div>
           </Rise>
