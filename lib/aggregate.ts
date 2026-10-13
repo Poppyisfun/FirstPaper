@@ -1,5 +1,14 @@
 import { unstable_cache } from "next/cache";
-import { getPaper, type LoadedPaper, type Question } from "@/lib/content";
+import {
+  getPaper,
+  type CheckQuestion,
+  type JudgeQuestion,
+  type Paper,
+} from "@/lib/content";
+
+/* Either round's question. Judge questions carry a tag; check ones do
+   not, and the aggregate treats that as the only difference. */
+type AnyQuestion = CheckQuestion | JudgeQuestion;
 import { createSupabaseServerClient } from "@/lib/supabase";
 
 /**
@@ -118,7 +127,7 @@ const pct = (part: number, whole: number) => (100 * part) / whole;
 function lastAnswers(
   rows: EventRow[],
   type: string,
-  questions: Question[],
+  questions: AnyQuestion[],
 ): Map<string, Map<string, EventRow>> {
   const valid = new Map(
     questions.map((q) => [q.id, new Set(q.options.map((o) => o.id))]),
@@ -137,7 +146,7 @@ function lastAnswers(
 }
 
 function questionAggregates(
-  questions: Question[],
+  questions: AnyQuestion[],
   answers: Map<string, Map<string, EventRow>>,
 ): QuestionAggregate[] {
   return questions.map((q) => {
@@ -146,8 +155,8 @@ function questionAggregates(
     return {
       id: q.id,
       prompt: q.prompt,
-      tag: q.tag ?? null,
-      paragraphIds: q.paragraphIds,
+      tag: "tag" in q ? q.tag : null,
+      paragraphIds: [],
       split: gate(readers, () => {
         const counts = new Map<string, number>();
         for (const row of bySession.values()) {
@@ -159,7 +168,7 @@ function questionAggregates(
           text: o.text,
           count: counts.get(o.id) ?? 0,
           share: pct(counts.get(o.id) ?? 0, readers),
-          correct: o.id === q.correctOptionId,
+          correct: o.id === q.correct,
         }));
       }),
     };
@@ -172,7 +181,7 @@ function questionAggregates(
  * without a database.
  */
 export function aggregate(
-  paper: LoadedPaper,
+  paper: Paper,
   rows: EventRow[],
   computedAt = new Date().toISOString(),
 ): ClassAggregate {
@@ -182,7 +191,8 @@ export function aggregate(
   );
 
   /* -- Questions -- */
-  const { comprehension, appraisal } = paper.questions;
+  const comprehension = paper.check;
+  const appraisal = paper.judge;
   const judgeAnswers = lastAnswers(rows, "judge_answered", appraisal);
   const judge = questionAggregates(appraisal, judgeAnswers);
   const check = questionAggregates(
@@ -221,10 +231,8 @@ export function aggregate(
   }
 
   const sectionOf = new Map<string, string>();
-  for (const section of paper.source.sections) {
-    for (const p of section.paragraphs) {
-      sectionOf.set(p.id, section.heading ?? section.imrad);
-    }
+  for (const p of paper.paragraphs) {
+    sectionOf.set(p.id, p.section ?? p.imrad);
   }
 
   const missedParagraphs: ParagraphMisses[] = [];
@@ -246,7 +254,9 @@ export function aggregate(
   /* Paragraphs nobody has predicted yet are withheld too: they have fewer
      than five readers behind them, the same as one with four. */
   for (const id of sectionOf.keys()) {
-    if (!firstPrediction.has(id) && paper.predictions[id]) paragraphsWithheld += 1;
+    /* Every paragraph carries a prediction under the schema, so a
+       paragraph nobody predicted is simply one nobody reached. */
+    if (!firstPrediction.has(id)) paragraphsWithheld += 1;
   }
   missedParagraphs.sort((a, b) => b.wrongShare - a.wrongShare || b.wrong - a.wrong);
 
@@ -274,7 +284,7 @@ export function aggregate(
   });
 
   return {
-    slug: paper.meta.slug,
+    slug: paper.slug,
     /* Reached-results is a share of everyone who started, so it rides on the
        started count's threshold rather than its own. */
     reach: gate(sessions.size, () => ({

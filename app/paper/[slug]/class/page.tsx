@@ -85,8 +85,8 @@ function Lead({ data, slug }: { data: ClassAggregate; slug: string }) {
       <Split q={q} />
       {paragraphs.map((p) => (
         <blockquote key={p.id} className="cl-para">
-          <span className="cl-k">{p.sectionHeading ?? p.imrad}</span>
-          <p dangerouslySetInnerHTML={{ __html: p.paragraph.text }} />
+          <span className="cl-k">{p.section ?? p.imrad}</span>
+          <p dangerouslySetInnerHTML={{ __html: p.source_text }} />
         </blockquote>
       ))}
     </section>
@@ -115,7 +115,7 @@ export default async function ClassPage({
       </header>
 
       <main className="rs cl">
-        <h1 className="rc-t">{paper.meta.title}</h1>
+        <h1 className="rc-t">{paper.title}</h1>
         <p className="cl-intro">
           How everyone reading this paper on FirstPaper is getting on, taken
           together. There are no names and no individual rows: this shows where
@@ -222,7 +222,7 @@ export default async function ClassPage({
                           <p
                             className="cl-para-t"
                             dangerouslySetInnerHTML={{
-                              __html: hit.paragraph.text,
+                              __html: hit.source_text,
                             }}
                           />
                         )}
@@ -245,7 +245,7 @@ export default async function ClassPage({
             <p className="ph-honest">
               <b>FirstPaper can be wrong, and that&rsquo;s the point.</b> These
               are group patterns, not grades. Updated every few minutes.{" "}
-              <a href={paper.meta.originalUrl} target="_blank" rel="noreferrer">
+              <a href={paper.original_url} target="_blank" rel="noreferrer">
                 Read the original paper
               </a>
               .
