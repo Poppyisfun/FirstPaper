@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Bricolage_Grotesque, Literata, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { pageMetadata, SITE_URL } from "@/lib/metadata";
 
 /**
  * Display — Fraunces, an old-style variable serif. SOFT rounds the terminals
@@ -36,9 +37,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FirstPaper",
-  description:
+  metadataBase: SITE_URL,
+  ...pageMetadata(
+    "FirstPaper",
     "FirstPaper teaches teenagers to read and critically judge real scientific papers, section by section.",
+  ),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

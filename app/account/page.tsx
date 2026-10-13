@@ -1,14 +1,14 @@
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Nav from "@/components/Nav";
 import { Rise } from "@/components/motion-primitives";
 import { BtnLink } from "@/components/Btn";
 
-export const metadata: Metadata = {
-  title: "Account — FirstPaper",
-  description:
-    "Accounts are coming. Soon you will be able to keep your XP, see every paper you have read, and get suggestions based on what you are interested in.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Account — FirstPaper",
+  "Accounts are coming. Soon you will be able to keep your XP, see every paper you have read, and get suggestions based on what you are interested in.",
+);
 
 export default function Account() {
   return (

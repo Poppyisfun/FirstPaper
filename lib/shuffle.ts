@@ -15,7 +15,12 @@
  * stable across tabs as well.
  */
 
+import { useSyncExternalStore } from "react";
+
 const SEED_KEY = "firstpaper:seed";
+
+/** One value per page load, so the fallback seed cannot change under a render. */
+let cachedSeed: string | null = null;
 
 /** A 32-bit hash of a string. Not cryptographic; it only has to spread. */
 function hash(input: string): number {
@@ -47,6 +52,12 @@ function rng(seed: number): () => number {
  * will not survive a reload.
  */
 export function sessionSeed(): string {
+  if (cachedSeed) return cachedSeed;
+  cachedSeed = readOrCreateSeed();
+  return cachedSeed;
+}
+
+function readOrCreateSeed(): string {
   try {
     const existing = window.sessionStorage.getItem(SEED_KEY);
     if (existing) return existing;
@@ -70,4 +81,15 @@ export function shuffleWithSeed<T>(items: readonly T[], seed: string): T[] {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+const noSubscribe = () => () => {};
+
+/**
+ * The session seed as a hook. Null during server render and hydration, the
+ * seed afterwards: options are ordered in the browser only, so the server and
+ * the first client render agree, and callers show a placeholder while null.
+ */
+export function useSessionSeed(): string | null {
+  return useSyncExternalStore(noSubscribe, sessionSeed, () => null);
 }

@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Nav from "@/components/Nav";
 import { getAllPapers } from "@/lib/content";
 import HeroSpotlight from "@/components/HeroSpotlight";
@@ -57,6 +59,11 @@ const journey = [
     d: "How often you were right, set against how sure you said you were. That gap is the thing worth knowing.",
   },
 ];
+
+export const metadata: Metadata = pageMetadata(
+  "FirstPaper — read real research, and judge it",
+  "FirstPaper teaches teenagers to read and critically judge real scientific papers, section by section.",
+);
 
 export default function Home() {
   /* Derived, not asserted. The landing page and the library card used to

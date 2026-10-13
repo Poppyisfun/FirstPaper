@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { figuresFor, getAllPaperSlugs, getPaper } from "@/lib/content";
+import { paperMetadata } from "@/lib/metadata";
 import Reader, { type ReaderStep } from "./Reader";
 
 /** Prerender this phase for every paper that exists. */
@@ -14,13 +15,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/paper/[slug]/read">): Promise<Metadata> {
   const { slug } = await params;
-  const paper = getPaper(slug);
-  if (!paper) return { title: "Paper not found — FirstPaper" };
-
-  return {
-    title: `Read: ${paper.title} — FirstPaper`,
-    description: paper.practice_goal,
-  };
+  return paperMetadata(slug, "read");
 }
 
 /**

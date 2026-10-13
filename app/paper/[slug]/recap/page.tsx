@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getAllPaperSlugs, getPaper } from "@/lib/content";
+import { paperMetadata } from "@/lib/metadata";
 
 /** Prerender this phase for every paper that exists. */
 export function generateStaticParams() {
@@ -8,6 +10,13 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = false;
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/paper/[slug]/recap">): Promise<Metadata> {
+  const { slug } = await params;
+  return paperMetadata(slug, "recap");
+}
 
 /**
  * The whole paper in plain English.

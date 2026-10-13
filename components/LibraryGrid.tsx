@@ -57,7 +57,7 @@ export default function LibraryGrid() {
               initial={reduce ? false : { opacity: 0, scale: 0.94 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={reduce ? undefined : { opacity: 0, scale: 0.94 }}
-              transition={springSoft}
+              transition={reduce ? { duration: 0 } : springSoft}
               className="flex"
             >
               <PaperCard entry={entry} />
