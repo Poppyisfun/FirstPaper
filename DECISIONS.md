@@ -654,3 +654,67 @@ The old page made claims that are no longer true: a "green dot" peek, "controls,
 **Chose:** "Read your first paper"
 **Over:** "Start reading"
 **Because:** Same words as the hero and the final call on the landing page.
+
+## Design pass — typography and chroma
+
+Every call here is recorded with what it was chosen over, because a design
+decision without its alternative is indistinguishable from a default.
+
+**One type scale, anchored on sizes already in use.**
+Chose: seven text steps plus four display steps, named for the voice they
+carry (`--t-paper`, `--t-body`, `--t-ui`, `--t-opt`, `--t-note`, `--t-meta`,
+`--t-lead`), with the values taken from the most-used existing sizes.
+Over: a fresh modular ramp (1.2 or 1.25), which is tidier on paper.
+Because: the defect was thirty near-duplicate values, many half a pixel
+apart — not the ratios between them. A ramp would have moved every size on
+every screen to fix a problem that only needed the duplicates removed. 235
+declarations now resolve to 11 tokens; one 54px exception remains, the
+confidence slider's own number, which is deliberately outside the scale.
+
+**9px and 9.5px raised to 10.5px.**
+Chose: fold the three smallest sizes into one 10.5px step.
+Over: preserving them as authored.
+Because: text that small is not a decision, it is something that survived
+because nobody measured it.
+
+**The focus ring is ink, not green.**
+Chose: `2px solid var(--ink)`.
+Over: a green ring with a wider offset; a blue system default.
+Because: green means "this is our explanation". Spending it on every
+focusable element in the product empties it before a reader meets one. Ink
+clears AA against both backgrounds.
+
+**Section eyebrows: a hairline and sentence case.**
+Chose: small sans label in `--soft` under a 1px rule.
+Over: keeping the tracked-out capitals and only changing the colour.
+Because: recolouring would have fixed the chroma violation and left the
+genre tell. A tracked-out capitalised label in a tinted pill is the house
+style of every AI product shipped this year, and ours was green as well.
+
+**Scoring blocks and the account panel: hairlines, not tinted slabs.**
+Chose: a rule above each block, transparent background, no shadow.
+Over: neutral-tinted cards keeping the shape.
+Because: three tells at once — identical rounded cards, soft shadows, and
+commentary colours on blocks that are neither an explanation nor a caution.
+The subject is documents; a rule and space is what a document uses.
+
+**Progress bar: flat ink, gradient removed.**
+Chose: `background: var(--ink)`.
+Over: a neutral gradient.
+Because: a gradient as decoration is on the avoid list, and the green-to-mint
+ramp also spent the explanation colour on chrome.
+
+**The results headline gets the scale.**
+Chose: `clamp(30px, 5.4vw, 58px)`, 15ch measure, balanced wrap, more space
+above.
+Over: leaving it at `clamp(30px, 5.2vw, 52px)`; adding a rule or tint to
+give it weight.
+Because: this is the one screen allowed to be loud, and the instruction was
+boldness through scale and whitespace rather than decoration. A reader is
+calm and nearly invisible for twenty minutes; this sentence is the payoff.
+
+**The hero highlighter stays amber.**
+Chose: keep it.
+Over: making it neutral with the other chrome.
+Because: it marks the phrase that overreaches, which is exactly what amber
+means. It is commentary, not decoration.
