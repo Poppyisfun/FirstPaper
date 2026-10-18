@@ -156,7 +156,7 @@ function questionAggregates(
       id: q.id,
       prompt: q.prompt,
       tag: "tag" in q ? q.tag : null,
-      paragraphIds: [],
+      paragraphIds: q.paragraph_ids ?? [],
       split: gate(readers, () => {
         const counts = new Map<string, number>();
         for (const row of bySession.values()) {
@@ -322,6 +322,26 @@ const ORDER = [
 /** PostgREST's code for "no relationship between these tables". */
 const NO_RELATIONSHIP = "PGRST200";
 
+/**
+ * The narrow slice of the Supabase client this module uses.
+ *
+ * Declared rather than imported so a test can supply a stand-in without
+ * reaching for a mocking framework, and so the surface it depends on is
+ * visible in one place.
+ */
+export type QueryClient = {
+  from: (table: string) => {
+    select: (columns: string) => QueryBuilder;
+  };
+};
+
+type QueryBuilder = {
+  eq: (column: string, value: string) => QueryBuilder;
+  in: (column: string, values: readonly string[]) => QueryBuilder;
+  order: (column: string) => QueryBuilder;
+  range: (from: number, to: number) => Promise<Page>;
+};
+
 type Page = {
   data: Record<string, unknown>[] | null;
   error: { code?: string; message: string } | null;
@@ -366,8 +386,16 @@ function toRow(r: Record<string, unknown>): EventRow {
  * paper's session ids first and then their events in chunks. Same rows, more
  * round trips; the cache in front of this keeps that rare.
  */
-async function fetchRows(slug: string): Promise<EventRow[]> {
-  const db = createSupabaseServerClient();
+/**
+ * Every class-relevant event for one paper, oldest first.
+ *
+ * The client is a parameter so the two query paths can be tested without a
+ * database. Production never passes one.
+ */
+export async function fetchRows(
+  slug: string,
+  db: QueryClient = createSupabaseServerClient() as unknown as QueryClient,
+): Promise<EventRow[]> {
   const ordered = <T extends { order: (c: string) => T }>(q: T) =>
     ORDER.reduce((acc, column) => acc.order(column), q);
 

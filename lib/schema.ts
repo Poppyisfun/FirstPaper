@@ -114,6 +114,15 @@ const QuestionSchema = z
     options: z.array(OptionSchema).length(4),
     correct: z.string().min(1),
     feedback: z.string().min(1),
+    /**
+     * Paragraphs the answer rests on.
+     *
+     * Nullable, and empty is legitimate — a question about the paper as a
+     * whole rests on no single paragraph. The class view quotes these when
+     * it surfaces the question a class divided hardest on, which is what
+     * turns that page from a chart into a lesson plan.
+     */
+    paragraph_ids: z.array(z.string()).nullable().default([]),
   })
   .refine((q) => q.options.some((o) => o.id === q.correct), {
     message: "question.correct must match one of its option ids",
@@ -128,6 +137,15 @@ export const JudgeQuestionSchema = z
     options: z.array(OptionSchema).length(4),
     correct: z.string().min(1),
     feedback: z.string().min(1),
+    /**
+     * Paragraphs the answer rests on.
+     *
+     * Nullable, and empty is legitimate — a question about the paper as a
+     * whole rests on no single paragraph. The class view quotes these when
+     * it surfaces the question a class divided hardest on, which is what
+     * turns that page from a chart into a lesson plan.
+     */
+    paragraph_ids: z.array(z.string()).nullable().default([]),
     tag: TagSchema,
   })
   .refine((q) => q.options.some((o) => o.id === q.correct), {

@@ -481,7 +481,10 @@
         }
       ],
       "correct": "a",
-      "feedback": "The paper reports that lysate from cells transfected with the sgRNA-encoding vector alone did not support cleavage. Paired with the Cas9-only lysate also failing, that rules out the lysate itself supplying the cutting activity. Option b confuses this with the separate Northern blot finding that sgRNA is more stable when Cas9 is present; option d describes a control the paper never ran."
+      "feedback": "The paper reports that lysate from cells transfected with the sgRNA-encoding vector alone did not support cleavage. Paired with the Cas9-only lysate also failing, that rules out the lysate itself supplying the cutting activity. Option b confuses this with the separate Northern blot finding that sgRNA is more stable when Cas9 is present; option d describes a control the paper never ran.",
+      "paragraph_ids": [
+        "PMC3557905-s2-p2"
+      ]
     },
     {
       "id": "c2",
@@ -505,7 +508,11 @@
         }
       ],
       "correct": "a",
-      "feedback": "The original sgRNA was driven by the human U6 promoter. The 3'-extended versions were put under either the U6 or the H1 Pol III promoter — two promoters, not one. A reader who only skimmed would carry U6 forward from the earlier experiment and pick b."
+      "feedback": "The original sgRNA was driven by the human U6 promoter. The 3'-extended versions were put under either the U6 or the H1 Pol III promoter — two promoters, not one. A reader who only skimmed would carry U6 forward from the earlier experiment and pick b.",
+      "paragraph_ids": [
+        "PMC3557905-s2-p3",
+        "PMC3557905-s2-p0"
+      ]
     },
     {
       "id": "c3",
@@ -529,7 +536,10 @@
         }
       ],
       "correct": "a",
-      "feedback": "The two designs added 4 or 10 base pairs to the helix that mimics the crRNA:tracrRNA pairing, and both were additionally extended at the 3' end by five nucleotides taken from the native S. pyogenes tracrRNA. Two changes were made at once, which is itself worth noticing."
+      "feedback": "The two designs added 4 or 10 base pairs to the helix that mimics the crRNA:tracrRNA pairing, and both were additionally extended at the 3' end by five nucleotides taken from the native S. pyogenes tracrRNA. Two changes were made at once, which is itself worth noticing.",
+      "paragraph_ids": [
+        "PMC3557905-s2-p3"
+      ]
     },
     {
       "id": "c4",
@@ -553,7 +563,10 @@
         }
       ],
       "correct": "a",
-      "feedback": "Percent cleavage was the average intensity of the 160-200 bp cleavage products divided by the sum of that and the uncleaved 360 bp product. It is a measure of band intensity on a gel, not of cells. Option c is what most readers assume 'editing efficiency' means, and getting that wrong changes what the headline number is a number about."
+      "feedback": "Percent cleavage was the average intensity of the 160-200 bp cleavage products divided by the sum of that and the uncleaved 360 bp product. It is a measure of band intensity on a gel, not of cells. Option c is what most readers assume 'editing efficiency' means, and getting that wrong changes what the headline number is a number about.",
+      "paragraph_ids": [
+        "PMC3557905-s4-p3"
+      ]
     },
     {
       "id": "c5",
@@ -577,7 +590,10 @@
         }
       ],
       "correct": "a",
-      "feedback": "A ZFN pair targeting a neighbouring site in the same locus was the positive control. 'Neighbouring' is the load-bearing word: the comparison the Discussion later draws between Cas9 and ZFN efficiency is between two tools aimed at two different sequences, not a head-to-head at one."
+      "feedback": "A ZFN pair targeting a neighbouring site in the same locus was the positive control. 'Neighbouring' is the load-bearing word: the comparison the Discussion later draws between Cas9 and ZFN efficiency is between two tools aimed at two different sequences, not a head-to-head at one.",
+      "paragraph_ids": [
+        "PMC3557905-s2-p1"
+      ]
     }
   ],
   "judge": [
@@ -604,7 +620,10 @@
       ],
       "correct": "a",
       "feedback": "The sentence reads: 'These results suggest that the 3'-extended sgRNAs support more efficient Cas9 function in vivo, although more quantitative comparisons will be necessary to confirm this conclusion.' Suggest, not show — and the authors name the specific thing missing, which is quantification, not replication. The abstract states the same finding flatly. Both sentences are the authors'; the difference between them is the lesson.",
-      "tag": "hedging"
+      "tag": "hedging",
+      "paragraph_ids": [
+        "PMC3557905-s2-p3"
+      ]
     },
     {
       "id": "a2",
@@ -629,7 +648,12 @@
       ],
       "correct": "a",
       "feedback": "The cutting is established, and by two methods rather than one: the Surveyor assay detected indels and Sanger sequencing of cloned amplicons read the mutated alleles directly. That makes b an over-correction, which is its own kind of misreading. c and d are the genuine overclaims: the genome was never surveyed for off-target cuts, and no primary cells or tissue appear anywhere in the paper. Being too sceptical about a demonstrated result is as wrong as being too credulous about an undemonstrated one.",
-      "tag": "scope"
+      "tag": "scope",
+      "paragraph_ids": [
+        "PMC3557905-s0-p0",
+        "PMC3557905-s2-p1",
+        "PMC3557905-s3-p0"
+      ]
     },
     {
       "id": "a3",
@@ -654,7 +678,12 @@
       ],
       "correct": "a",
       "feedback": "Every experiment is one locus, the clathrin light chain gene, in HEK293T cells. Both halves matter: the gene without the line, or the line without the gene, leaves the claim looking wider than it is. c understates it in the opposite direction, and that is a real error too. The Surveyor assay was run on genomic DNA taken from living transfected cells; the lysate experiments were a separate line of evidence about what was limiting, not the basis for the editing claim.",
-      "tag": "generalisation"
+      "tag": "generalisation",
+      "paragraph_ids": [
+        "PMC3557905-s0-p0",
+        "PMC3557905-s2-p0",
+        "PMC3557905-s4-p1"
+      ]
     },
     {
       "id": "a4",
@@ -679,7 +708,10 @@
       ],
       "correct": "a",
       "feedback": "Mutagenesis at CLTA ran consistently at 6-8%, which the authors state is lower than the ZFN pair aimed at a nearby sequence, though within the range seen for ZFNs and TALENs generally. They report an unfavourable head-to-head and then argue for their system on a different ground — that retargeting means rewriting a short RNA rather than engineering a new protein. Easier to aim is not the same as better at cutting, and the two claims sit side by side.",
-      "tag": "comparison"
+      "tag": "comparison",
+      "paragraph_ids": [
+        "PMC3557905-s3-p0"
+      ]
     },
     {
       "id": "a5",
@@ -704,7 +736,11 @@
       ],
       "correct": "a",
       "feedback": "Transfection ran at 30-50% with Turbofect, the reagent used for the experiments behind the reported figure, so most of the DNA in the denominator came from cells that never had Cas9 in them. The correction is approximate but it is a correction, which is why b gives up too early. c has the arithmetic backwards: untransfected DNA can only land in the uncut band. The GFP count in d is how the 30-50% was arrived at, not a correction applied to the result.",
-      "tag": "denominator"
+      "tag": "denominator",
+      "paragraph_ids": [
+        "PMC3557905-s4-p1",
+        "PMC3557905-s4-p3"
+      ]
     }
   ],
   "recap": "Bacteria defend themselves against viruses with a protein that cuts DNA, guided to its target by a short piece of RNA. Change the RNA, change where it cuts. This paper asked whether that system, borrowed from bacteria, would work inside human cells.\n\nThe authors put the protein and a guide into a human cell line and aimed it at a gene. It cut. They checked the cut by looking for the scars left behind when a cell repairs broken DNA, and they found them. They tried longer guides and the cutting improved. They compared their results against an older editing tool aimed nearby.\n\nWhat this paper shows is that the system works in a dish. What it does not show is how well it works elsewhere, whether it cuts in places it shouldn't, or whether it would be safe in a person. Those questions came later, and some are still open.",

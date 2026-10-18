@@ -338,6 +338,32 @@ All seven exist from day one even where a paper uses three. `demonstration`
 is not a curriculum label — it is what the Jinek paper is about, and without
 it our best paper contributes nothing to a per-tag record.
 
+### The enum is frozen hard; the field set is frozen soft
+
+Two different rules, and the difference decides what may be added.
+
+**The tag enum never bends.** A tag added after papers are authored makes
+every earlier per-tag record partly incomparable, and that record is the
+product. There is no window in which adding one is cheap.
+
+**The field set bends while it is cheap.** Adding a field means revisiting
+every authored paper, so the cost is proportional to how many exist. At one
+paper a backfill is minutes; at twelve it is an afternoon and a chance to get
+one wrong. So the moment to notice a missing field is now, which is precisely
+what the freeze was designed to force.
+
+`paragraph_ids` was added on question schemas for exactly this reason: a class
+view that cannot quote the paragraph a disagreement rests on is a chart rather
+than a lesson plan.
+
+### XP derives from paragraph count
+
+`prediction` is required on every paragraph, not nullable, so "paragraphs that
+carry a prediction" and "paragraphs" are the same set by schema. The library
+card multiplies the paragraph count directly. If `prediction` ever becomes
+nullable, that card silently changes meaning and the condition has to come
+back.
+
 ### Fields added beyond the original list, and why
 
 `journal` and `figures[].label`, because the CC BY attribution line must name
