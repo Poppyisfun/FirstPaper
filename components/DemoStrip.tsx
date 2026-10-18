@@ -6,9 +6,14 @@ import { BtnButton } from "@/components/Btn";
 import { EZ } from "@/components/motion-primitives";
 
 /**
- * One line from a real study. Pressing the button lights the over-claiming
- * phrase and explains why it doesn't match the design — the whole product in
- * miniature. The highlight sweeps in like a marker stroke.
+ * One sentence, written by us in the shape a real paper's conclusion takes.
+ * Pressing the button lights the over-claiming phrase and explains why it
+ * doesn't match the design — the whole product in miniature.
+ *
+ * Deliberately not a quotation. A search of PubMed finds no study pairing an
+ * "A-allele" with morning alertness, and real papers of this kind name a
+ * variant by its rsID and do not pitch supplements. Labelling it as real
+ * would be the exact failure the demo teaches you to catch.
  */
 export default function DemoStrip() {
   const [revealed, setRevealed] = useState(false);
@@ -16,7 +21,9 @@ export default function DemoStrip() {
 
   return (
     <div className="demo">
-      <div className="demo-l">Try it. One sentence from a real study.</div>
+      <div className="demo-l">
+        Try it. We wrote this sentence. Papers really do end like this.
+      </div>
 
       <div className="demo-shell">
         <div className="demo-card">

@@ -44,7 +44,10 @@ const steps = [
     d: "Five quick questions on what the paper said. There is no penalty for a wrong answer. This is just to make sure the reading landed.",
   },
   {
-    tone: "a",
+    /* Violet, matching the judge screen. Amber means caution everywhere
+       else in the product, and spending it on a step marker here taught the
+       wrong association before the reader ever met a real caution. */
+    tone: "v",
     t: "Judge the science",
     d: "Five harder questions on whether the paper holds up. What did they actually show, and what are they only hoping? Does the claim cover more ground than the experiment did? Did the authors say shown, or suggests? Better than what? What is that percentage a fraction of? Before you see the options, you say how sure you are.",
   },

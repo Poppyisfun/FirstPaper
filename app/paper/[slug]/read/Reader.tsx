@@ -349,8 +349,8 @@ export default function Reader({
 
           <p className="rd-honest">
             <b>FirstPaper can be wrong, and that&rsquo;s the point.</b> The
-            paragraph on the left is the authors&rsquo;. Everything in green is
-            ours, and commentary can be mistaken. Check us against the original.
+            paragraph on the left is the authors&rsquo;. Everything beside it
+            is ours, and ours can be mistaken. Check us against the original.
           </p>
         </aside>
       </main>

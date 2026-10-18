@@ -103,8 +103,11 @@ export default function About() {
             <p>
               Everything that isn&rsquo;t the paper is ours. The explanations,
               the guesses you choose from, the questions, the answers we mark
-              as right, and the plain-English recap at the end. We write it
-              with help from an AI model, and then we test it.
+              as right, and the plain-English recap at the end. It is
+              drafted with an AI model against rules we wrote down, then read
+              line by line by a person before it goes up. A check that runs
+              before any paper is published confirms the questions can&rsquo;t
+              be answered from the explanations alone.
             </p>
             <p>
               The guesses are written from the authors&rsquo; paragraph alone,
