@@ -103,9 +103,18 @@ export default async function ClassPage({
   let data: ClassAggregate | null = null;
   try {
     data = await getClassAggregate(slug);
-  } catch {
+  } catch (err) {
     /* Shown as unavailable rather than as empty: "no data" and "no readers"
-       are different claims. */
+       are different claims.
+
+       Logged, because the reader-facing message is deliberately vague and a
+       swallowed error here is invisible: the only consumer of the embedded
+       join is this page, so a query that fails in production fails silently
+       and looks like an empty class. */
+    console.error(
+      `class aggregate failed for ${slug}:`,
+      err instanceof Error ? err.message : err,
+    );
   }
 
   return (

@@ -59,6 +59,23 @@ function integer(value: unknown): number | null {
 }
 
 /**
+ * Records a database failure in the server log.
+ *
+ * Every caller then carries on and reports success to the reader, which is
+ * the intended behaviour: losing an event must never interrupt someone
+ * reading a paper. What was missing is the other half — an operator could
+ * not tell a dead database from a quiet afternoon, because both looked like
+ * 200 and an empty list. Nothing here reaches the response.
+ */
+function logDbFailure(what: string, error: unknown): void {
+  const message =
+    typeof error === "object" && error !== null && "message" in error
+      ? String((error as { message: unknown }).message)
+      : String(error);
+  console.error(`events intake: ${what} failed: ${message}`);
+}
+
+/**
  * The session row for this reader and paper, creating it if absent.
  *
  * One row per reader per paper rather than per sitting. The table has no
@@ -96,7 +113,8 @@ async function sessionIdFor(
   if (created.error) {
     /* Two batches can race here and both try to create the session. Rather
        than a unique constraint we do not control, re-read: whichever insert
-       won, the row now exists. */
+       won, the row now exists. A re-read that also comes back empty means
+       the insert failed for some other reason, which is worth logging. */
     const retry = await db
       .from("sessions")
       .select("id")
@@ -104,6 +122,7 @@ async function sessionIdFor(
       .eq("paper_slug", slug)
       .limit(1)
       .maybeSingle();
+    if (!retry.data?.id) logDbFailure("session create", created.error);
     return (retry.data?.id as string) ?? null;
   }
 
@@ -156,7 +175,8 @@ async function persist(
     });
 
     const { error } = await db.from("events").insert(rows);
-    if (!error) stored += rows.length;
+    if (error) logDbFailure("event insert", error);
+    else stored += rows.length;
 
     /* A finished paper closes its session. Best effort: the events are the
        record, and completed_at is a convenience for querying. */
@@ -204,10 +224,12 @@ export async function POST(request: Request) {
   let stored = 0;
   try {
     stored = await persist(incoming, anonId);
-  } catch {
+  } catch (err) {
     /* Swallowed on purpose. Misconfigured keys, a database outage, a schema
        drift: none of it is the reader's problem, and none of it may reach
-       their screen or stop them finishing the paper. */
+       their screen or stop them finishing the paper. Logged all the same,
+       because it is the operator's problem. */
+    logDbFailure("write", err);
   }
 
   const response = NextResponse.json({
@@ -257,7 +279,11 @@ export async function GET(request: Request) {
       .from("sessions")
       .select("id, paper_slug")
       .eq("anon_id", anonId);
-    if (sessions.error || !sessions.data?.length) return empty;
+    if (sessions.error) {
+      logDbFailure("session lookup", sessions.error);
+      return empty;
+    }
+    if (!sessions.data?.length) return empty;
 
     const slugOf = new Map<string, string>(
       sessions.data.map((s) => [s.id as string, s.paper_slug as string]),
@@ -269,7 +295,11 @@ export async function GET(request: Request) {
       .in("session_id", [...slugOf.keys()])
       .eq("type", "judge_answered")
       .order("created_at", { ascending: true });
-    if (rows.error || !rows.data) return empty;
+    if (rows.error) {
+      logDbFailure("judge event read", rows.error);
+      return empty;
+    }
+    if (!rows.data) return empty;
 
     const events = rows.data.map((row) => ({
       name: row.type as string,
@@ -285,9 +315,10 @@ export async function GET(request: Request) {
       { ok: true, events },
       { headers: { "Cache-Control": "no-store" } },
     );
-  } catch {
+  } catch (err) {
     /* Missing keys or an outage. The results screen still has the session
        log, so this degrades to a smaller count, never to an error. */
+    logDbFailure("read", err);
     return empty;
   }
 }
