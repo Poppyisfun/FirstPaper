@@ -22,7 +22,7 @@ export default function DemoStrip() {
   return (
     <div className="demo">
       <div className="demo-l">
-        Try it. We wrote this sentence. Papers really do end like this.
+        Try it. I wrote this sentence. Papers really do end like this.
       </div>
 
       <div className="demo-shell">

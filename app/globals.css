@@ -301,9 +301,16 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .sect{padding:clamp(84px,11vw,140px) 0}
   .sect.tight{padding:clamp(56px,7vw,88px) 0}
   .shead{max-width:640px;margin-bottom:56px}
-  .skick{display:block;font-family:var(--ui);font-size:var(--t-note);
-    letter-spacing:.01em;color:var(--soft);margin-bottom:14px;
-    padding-top:14px;border-top:1px solid var(--line)}
+  /* Catalogue entry, same form as the hero's citation and the figure's
+     index. Uppercase earns its place because the label is a number and a
+     name, which is information; "What you get" was not. */
+  .skick{display:flex;gap:13px;align-items:baseline;font-family:var(--mo);
+    font-size:var(--t-meta);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--soft);margin-bottom:22px;padding-bottom:13px;
+    border-bottom:1px solid var(--ink)}
+  .skick-n{color:var(--ink)}
+  .skick.on-dark{border-bottom-color:rgba(255,255,255,.3)}
+  .skick.on-dark .skick-n{color:#fff}
   .stitle{font-family:var(--disp);font-variation-settings:var(--fv-lg);
     font-size:clamp(30px,4.2vw,46px);line-height:1.1;font-weight:400;
     letter-spacing:-.016em;margin:0 0 16px}
@@ -330,9 +337,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 
   /* ══ DARK STRIP ══ */
   .strip{background:var(--ink);color:#fff;border-radius:var(--r-out);padding:52px 44px;position:relative;overflow:hidden}
-  .strip .glow{position:absolute;inset:0;pointer-events:none;background:
-    radial-gradient(500px 240px at 88% 14%,rgba(91,75,214,.3),transparent 62%),
-    radial-gradient(420px 220px at 6% 90%,rgba(11,150,110,.2),transparent 64%)}
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:30px;position:relative;z-index:1}
   .st .v{font-family:var(--disp);font-variation-settings:var(--fv-lg);
     font-size:clamp(36px,4.4vw,48px);line-height:1;letter-spacing:-.014em;
@@ -1073,16 +1077,10 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .strip-prose p:last-child{margin:0}
 
   /* ── What you get ── */
-  .gains{display:flex;flex-direction:column;gap:12px;max-width:760px}
-  .gain{display:flex;gap:16px;align-items:flex-start;
-    background:var(--surf);border:1px solid var(--line);border-radius:16px;
-    padding:20px 22px;box-shadow:var(--sh1);
-    transition:transform .45s var(--ez),box-shadow .45s var(--ez)}
-  .gain:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-  .gain-c{flex:none;width:26px;height:26px;border-radius:99px;display:grid;place-items:center;
-    background:var(--line-2);border:1px solid var(--line);color:var(--ink-2);
-    font-size:var(--t-note);font-weight:700;margin-top:2px}
-  .gain p{margin:0;font-size:var(--t-lead);line-height:1.6;color:var(--ink)}
+  /* One argument that runs, and one line after it. */
+  .runs{max-width:60ch}
+  .runs p{font-size:var(--t-lead);line-height:1.72;color:var(--ink);margin:0}
+  .runs-after{margin-top:22px !important;color:var(--soft) !important}
 
   /* ── The journey ── */
   .jrn{position:relative;display:flex;flex-direction:column;gap:4px;max-width:820px}

@@ -26,29 +26,6 @@ const MY_RUN = {
   judge: { right: 2, of: 5, label: "Appraisal", gloss: "whether it holds up" },
 } as const;
 
-const audience = [
-  {
-    t: "Students",
-    d: "You are curious about science and want to go past the textbook. Maybe you have a science fair, a research program, or a question that a search result cannot answer.",
-  },
-  {
-    t: "New researchers",
-    d: "You just joined a lab or started a college course, and you are expected to read papers that nobody ever taught you how to read.",
-  },
-  {
-    t: "Anyone who wants the truth",
-    d: "You saw a headline that said a study shows something, and you want to know what the study actually says.",
-  },
-];
-
-const gains = [
-  "You stop depending on other people’s summaries.",
-  "You can tell a strong study from a weak one.",
-  "You know when a headline is bigger than the science behind it.",
-  "You can hold your own in a lab, a class, or an argument.",
-  "The skill transfers. Learn it on one paper and you carry it to every paper after.",
-];
-
 /** Marker colour follows the phase colours used inside the paper itself. */
 const steps = [
   {
@@ -216,27 +193,25 @@ export default function Home() {
           </figure>
         </section>
 
-        {/* ── Who this is for ── */}
+        {/* ── Who it is for ──
+            Three identical cards used to sit here, which was the banned card
+            pattern and a rule of three at once. Two sentences now. */}
         <section className="sect">
           <Rise className="shead">
-            <div className="skick">Who this is for</div>
-            <h2 className="stitle">Built for people who want the real thing</h2>
+            <div className="skick">
+              <span className="skick-n">003</span>Who it is for
+            </div>
+            <h2 className="stitle">
+              If you can read a news article, you can read this.
+            </h2>
             <p className="ssub">
-              If you can read a news article, you can learn to read a research
-              paper. That is the whole idea.
+              Mostly teenagers. Someone with a science fair project, or
+              someone who has just joined a lab and been handed papers nobody
+              taught them to read. The paper here is pitched at a reader who
+              has taken high school biology, and you do not need more than
+              that.
             </p>
           </Rise>
-
-          <Stagger className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(258px,1fr))]">
-            {audience.map((card) => (
-              <RiseItem key={card.t} className="shell">
-                <article className="lc g">
-                  <h3 className="lc-t">{card.t}</h3>
-                  <p className="lc-d">{card.d}</p>
-                </article>
-              </RiseItem>
-            ))}
-          </Stagger>
         </section>
 
         {/* ── Why this matters ── */}
@@ -244,7 +219,9 @@ export default function Home() {
           <Rise className="strip">
             <div className="glow" />
             <div className="strip-prose">
-              <div className="skick on-dark">Why this matters</div>
+              <div className="skick on-dark">
+                <span className="skick-n">004</span>Why this matters
+              </div>
               <h2 className="strip-h">
                 Every important claim traces back to a paper
               </h2>
@@ -269,29 +246,43 @@ export default function Home() {
           </Rise>
         </section>
 
-        {/* ── What you get ── */}
+        {/* ── What changes ──
+            Five parallel bullets used to sit here, all of them abstractions.
+            One argument runs instead, built from a number in this paper, and
+            one short line follows it. */}
         <section className="sect">
           <Rise className="shead">
-            <div className="skick">What you get</div>
-            <h2 className="stitle">What changes when you can read a paper</h2>
+            <div className="skick">
+              <span className="skick-n">005</span>What changes
+            </div>
+            <h2 className="stitle">
+              You start asking what a number is a fraction of.
+            </h2>
           </Rise>
 
-          <Stagger className="gains">
-            {gains.map((g) => (
-              <RiseItem key={g} className="gain">
-                <span className="gain-c" aria-hidden="true">
-                  ✓
-                </span>
-                <p>{g}</p>
-              </RiseItem>
-            ))}
-          </Stagger>
+          <Rise className="runs">
+            <p>
+              The paper I picked reports an editing rate from a Surveyor
+              assay. It reads like a share of cells. It is band intensity on a
+              gel: cut fragments over cut plus uncut, measured from DNA pooled
+              across the whole dish. Only 30 to 50 percent of those cells ever
+              took up the plasmids, so among the cells that actually got the
+              machinery, the real rate is roughly two to three times the
+              figure you first read. None of it is hidden. It takes somebody
+              asking what the denominator was, and almost nobody asks.
+            </p>
+            <p className="runs-after">
+              Learn that on one paper and you have it for the next one.
+            </p>
+          </Rise>
         </section>
 
         {/* ── How it works ── */}
         <section className="sect" id="how">
           <Rise className="shead">
-            <div className="skick">How it works</div>
+            <div className="skick">
+              <span className="skick-n">006</span>How it works
+            </div>
             <h2 className="stitle">What happens when you open a paper</h2>
             <p className="ssub">
               One paper takes about {minutes} minutes. Here is exactly what
@@ -317,7 +308,9 @@ export default function Home() {
         {/* ── Scoring ── */}
         <section className="sect">
           <Rise className="shead">
-            <div className="skick">Scoring</div>
+            <div className="skick">
+              <span className="skick-n">007</span>Scoring
+            </div>
             <h2 className="stitle">What earns XP, and what costs nothing</h2>
           </Rise>
 
@@ -346,14 +339,16 @@ export default function Home() {
         {/* ── Your account ── */}
         <section className="sect tight">
           <Rise className="acct">
-            <div className="skick">Your account</div>
+            <div className="skick">
+              <span className="skick-n">008</span>Your account
+            </div>
             <h2 className="stitle">Accounts are coming</h2>
             <p>
               You do not need one. A whole paper works start to finish without
               signing up for anything, and you see your full results at the
               end.
             </p>
-            <BtnLink href="/library" variant="pri lg" icon="→">
+            <BtnLink href="/library" variant="pri lg">
               Read a paper instead
             </BtnLink>
           </Rise>
@@ -373,7 +368,7 @@ export default function Home() {
               the next one.
             </p>
             <div className="final-cta">
-              <BtnLink href="/library" variant="pri lg" icon="→">
+              <BtnLink href="/library" variant="pri lg">
                 Read your first paper
               </BtnLink>
             </div>

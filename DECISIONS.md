@@ -766,3 +766,42 @@ chose: draw it, at the real 25%, derived from the option counts.
 because: it cuts towards honesty and towards drama at the same time. 80% is
 far above it; 40% is a point and a half above it. The second fact is the
 finding and the line is what makes it visible.
+
+
+## The voice, as set by the hero and the gap figure
+
+Written down before the rest of the pages were rewritten, so they could be
+written to it rather than near it.
+
+**One person speaks, and says I.** The site is built by one person and says
+so. "We" survives in exactly one place, where it means the commentary: "what
+we think it says". Everywhere else that "we" appeared it was a company voice
+standing in for a person who exists, which is the thing that made the old
+copy sound generated.
+
+**Every claim arrives with its receipt.** The hero does not say "a real
+research paper", it says Jinek et al., eLife 2013, PMC3557905, CC BY 3.0,
+17 paragraphs, 18 minutes. The figure does not say "readers improve", it
+says 2 of 5, somewhere between 12% and 77%. A sentence that cannot carry a
+number, a name or a quotation from the paper is usually a sentence with
+nothing in it.
+
+**Limits are stated in the same tone as everything else.** One paper so far.
+No accounts. Five questions is not much and the interval says how much. None
+of these is apologised for and none is dressed up. The product's whole
+argument is that a number should be reported with what it rests on, so the
+page has to do that to itself first.
+
+**Nothing lands on three.** Three parallel clauses, three bullets and three
+cards are the rhythm generated copy falls into, and the old page had all
+three shapes. Sections are now deliberately uneven: one long argument, one
+short line after it.
+
+**Flat sentences, no lift at the end.** "Almost nobody is taught the second
+one." "There is nothing to average yet." No closing uplift, no promise about
+what the reader will become.
+
+**Visually: ink, white, and the paper's own numbers.** Display type large
+enough to be the image, a mono catalogue line where a reference belongs,
+hairline rules, square ends. The three commentary colours never appear as
+decoration, because they carry meaning twenty paragraphs later.
