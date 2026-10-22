@@ -139,3 +139,4 @@ let the model identify the paper, and then it answered from memory". A
 question scoring 3/3 with notes and 0/3 with nothing can be either.
 
 Weight towards solid, well-structured work that is not canonical.
+
