@@ -225,19 +225,10 @@ export default function Home() {
           </Rise>
         </section>
 
-        {/* ── Origin ── */}
-        <section className="sect">
-          <Rise className="origin">
-            <div className="origin-in">
-              <q>
-                I wanted to read real genetics research and could not get past
-                the first page. Nobody teaches you how. So I built the thing I
-                wish I had.
-              </q>
-              <div className="who">The founder, a high school junior</div>
-            </div>
-          </Rise>
-        </section>
+        {/* The origin story used to sit here. It is gone rather than
+            rewritten: who built this is provenance, and provenance belongs on
+            About. The page now runs from what you get to the closing action,
+            which is shorter and reads more certain for it. */}
 
         {/* ── Final call ── */}
         <section className="sect final">

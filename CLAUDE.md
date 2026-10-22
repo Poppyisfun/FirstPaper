@@ -383,6 +383,21 @@ label. `xp` was deliberately **not** added: the library card derives it from
 the paper's length, because the authored number had already drifted from what
 the paper can actually yield.
 
+## Only one host is production
+
+`https://first-paper-one.vercel.app` is production. Nothing else is.
+
+Any `first-paper-git-*.vercel.app` is a branch build and may be weeks stale.
+They answer 302 to anyone signed out, so they look protected, but a
+logged-in browser passes straight through and renders them exactly like the
+real site. A branch build of a merged branch therefore shows copy describing
+a product from several phases ago while looking current.
+
+**Every copy or design claim is verified against the production host, named
+in full, or it does not count.** Delete branch aliases once their branch is
+merged; a stale public URL of a shipped product is a liability, not a
+convenience.
+
 ## Nothing may fail quietly
 
 **Anything that can fail silently must report its failure somewhere a human
