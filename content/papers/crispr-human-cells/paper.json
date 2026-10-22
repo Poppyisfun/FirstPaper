@@ -481,7 +481,7 @@
         }
       ],
       "correct": "d",
-      "feedback": "The paper reports that lysate from cells transfected with the sgRNA-encoding vector alone did not support cleavage. Paired with the Cas9-only lysate also failing, that rules out the lysate itself supplying the cutting activity. Option b confuses this with the separate Northern blot finding that sgRNA is more stable when Cas9 is present; option a describes a control the paper never ran.",
+      "feedback": "The paper reports that lysate from cells transfected with the sgRNA-encoding vector alone did not support cleavage. Paired with the Cas9-only lysate also failing, that rules out the lysate itself supplying the cutting activity. The answer about the guide RNA being degraded without Cas9 confuses this with the separate Northern blot finding that sgRNA is more stable when Cas9 is present; the one about a scrambled guide describes a control the paper never ran.",
       "paragraph_ids": [
         "PMC3557905-s2-p2"
       ]
@@ -563,7 +563,7 @@
         }
       ],
       "correct": "a",
-      "feedback": "Percent cleavage was the average intensity of the 160-200 bp cleavage products divided by the sum of that and the uncleaved 360 bp product. It is a measure of band intensity on a gel, not of cells. Option c is what most readers assume 'editing efficiency' means, and getting that wrong changes what the headline number is a number about.",
+      "feedback": "Percent cleavage was the average intensity of the 160-200 bp cleavage products divided by the sum of that and the uncleaved 360 bp product. It is a measure of band intensity on a gel, not of cells. The answer about cells carrying an edit is what most readers assume 'editing efficiency' means, and getting that wrong changes what the headline number is a number about.",
       "paragraph_ids": [
         "PMC3557905-s4-p3"
       ]

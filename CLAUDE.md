@@ -383,6 +383,23 @@ label. `xp` was deliberately **not** added: the library card derives it from
 the paper's length, because the authored number had already drifted from what
 the paper can actually yield.
 
+## Nothing may fail quietly
+
+**Anything that can fail silently must report its failure somewhere a human
+will see.** The database failed silently for days. The content gate skipped
+silently for at least four commits. Both were invisible because the failure
+path returned something that looked like success.
+
+When adding any check, ask what it does when it cannot run — and **if the
+answer is "passes", that is the bug.** A skipped check reporting green is how
+both of those happened.
+
+This is not an argument against failing softly for the reader. The event
+intake still swallows its errors on the way to the browser, because losing an
+event must never interrupt someone reading a paper. It logs every one of them
+on the way out. Those are two different audiences and only one of them is
+owed silence.
+
 ## The CI gate
 
 `.github/workflows/content.yml` runs on every pull request touching
@@ -408,8 +425,12 @@ export, or a teacher-facing answer sheet, all of which read the file in
 order. The gate starts at four questions, because a shorter round cannot
 spread far enough to pass.
 
-**The leak gate runs when `ANTHROPIC_API_KEY` is set** and fails when more
-than **1 of 10** questions is answerable from the explanations alone. It
+**The leak gate fails the build when `ANTHROPIC_API_KEY` is absent**, and
+fails when more than **1 of 10** questions is answerable from the
+explanations alone. It used to warn and pass without the key, so the only
+behavioural check in the project had never gated anything. To merge content
+without it on purpose, put `[skip-leak-gate]` in the pull request title —
+deliberate, and visible in the history. It
 gates on shape leaks only; corpus recognition and domain knowledge are
 recorded and ignored.
 

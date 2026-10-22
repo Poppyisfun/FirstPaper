@@ -76,17 +76,39 @@ jobs:
       # not. Those two are reported and ignored.
       #
       # Threshold: no more than 1 of 10.
+      # A missing key FAILS. It used to warn and pass, which meant the only
+      # behavioural gate in the project had never gated anything and said so
+      # in a log nobody reads. A check that passes when it cannot run is not
+      # a check; it is a green tick with nothing behind it.
+      #
+      # To merge content without it on purpose, put [skip-leak-gate] in the
+      # pull request title. That is deliberate and visible in the history,
+      # which is the whole difference from skipping by accident.
+      - name: Key present?
+        if: ${{ !contains(github.event.pull_request.title, '[skip-leak-gate]') }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::error::ANTHROPIC_API_KEY is not set, so the behavioural"
+            echo "::error::leak gate cannot run. It is the only check that"
+            echo "::error::asks whether our explanations give the answers"
+            echo "::error::away, so content must not merge without it."
+            echo "::error::Add the repository secret, or put"
+            echo "::error::[skip-leak-gate] in the pull request title to"
+            echo "::error::opt out on purpose."
+            exit 1
+          fi
+
       - name: Leak gate
-        if: ${{ env.ANTHROPIC_API_KEY != '' }}
+        if: ${{ !contains(github.event.pull_request.title, '[skip-leak-gate]') }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python content/ingest/verify_questions.py --max-leaks 1
 
-      - name: Skipped notice
-        if: ${{ env.ANTHROPIC_API_KEY == '' }}
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Opted out
+        if: ${{ contains(github.event.pull_request.title, '[skip-leak-gate]') }}
         run: |
-          echo "::warning::ANTHROPIC_API_KEY is not set, so the behavioural"
-          echo "::warning::leak gate did not run. Mechanical checks still ran."
-          echo "::warning::Set the secret to enable it before merging content."
+          echo "::warning::[skip-leak-gate] in the title, so the behavioural"
+          echo "::warning::gate was skipped on purpose. The explanations in"
+          echo "::warning::this change have not been tested for leaks."
