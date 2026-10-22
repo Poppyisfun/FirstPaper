@@ -21,13 +21,16 @@ export default function Library() {
 
       <main className="wrap">
         <div className="lib-head">
-          <Rise className="skick">The library</Rise>
-          <Rise as="h1" className="stitle" delay={0.06} style={{ maxWidth: "16ch" }}>
-            Choose a paper to work through.
+          <Rise className="skick">
+            <span className="skick-n">001</span>The catalogue
+          </Rise>
+          <Rise as="h1" className="stitle" delay={0.06} style={{ maxWidth: "17ch" }}>
+            One paper, done properly.
           </Rise>
           <Rise as="p" className="ssub" delay={0.12} style={{ maxWidth: 560 }}>
-            Every paper here is free and open-access, and picked because
-            it&rsquo;s worth your time.
+            I prepare each one by hand, paragraph by paragraph, which is why
+            they arrive slowly. This is the one that exists so far. It is open
+            access, and the authors&rsquo; licence is on the record below.
           </Rise>
         </div>
 
@@ -35,13 +38,8 @@ export default function Library() {
           <LibraryGrid />
         </div>
 
-        <Rise
-          as="p"
-          className="mx-auto my-[76px] max-w-[620px] rounded-[20px] border border-dashed border-line bg-surface px-6 py-7 text-center text-[13.5px] leading-relaxed text-ink-soft"
-        >
-          Each paper here is prepared by hand, paragraph by paragraph. So they
-          arrive slowly.
-        </Rise>
+        {/* The reason for a short shelf, said once, at the end, without a
+            box around it. It is already in the page's opening lines. */}
       </main>
       <Footer />
     </>

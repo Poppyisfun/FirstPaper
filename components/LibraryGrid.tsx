@@ -48,9 +48,9 @@ export default function LibraryGrid() {
       </Rise>
       )}
 
-      <motion.div className="cards" layout={!reduce}>
+      <motion.div className="recs" layout={!reduce}>
         <AnimatePresence mode="popLayout">
-          {shown.map((entry) => (
+          {shown.map((entry, i) => (
             <motion.div
               key={entry.slug}
               layout={!reduce}
@@ -58,9 +58,9 @@ export default function LibraryGrid() {
               animate={{ opacity: 1, scale: 1 }}
               exit={reduce ? undefined : { opacity: 0, scale: 0.94 }}
               transition={reduce ? { duration: 0 } : springSoft}
-              className="flex"
+              className="block"
             >
-              <PaperCard entry={entry} />
+              <PaperCard entry={entry} index={i} />
             </motion.div>
           ))}
         </AnimatePresence>

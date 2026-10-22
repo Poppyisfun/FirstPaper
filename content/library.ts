@@ -29,6 +29,16 @@ export type LibraryEntry = {
   minutes: number;
   /** The most XP the paper can award, derived from its content and the scoring rules. */
   xp: number;
+  /* The reference, for the catalogue record. Every field comes off the
+     paper file, so a row can never cite something the paper does not say. */
+  authors: string;
+  journal: string;
+  year: number;
+  pmcid: string;
+  doi: string | null;
+  licence: string;
+  licenceUrl: string;
+  paragraphs: number;
 };
 
 /**
@@ -59,6 +69,15 @@ export const LIBRARY: LibraryEntry[] = getAllPapers().map((paper) => ({
     paper.paragraphs.length * XP_PARAGRAPH_PREDICTED +
     paper.check.length * XP_CHECK_CORRECT +
     paper.judge.length * XP_JUDGE_CORRECT,
+  authors: paper.authors,
+  journal: paper.journal,
+  year: paper.year,
+  pmcid: paper.pmcid,
+  /* The DOI lives inside original_url; the `doi` field is the fallback. */
+  doi: paper.original_url.match(/doi\.org\/(.+)$/)?.[1] ?? paper.doi,
+  licence: `CC BY ${paper.licence_url.match(/licenses\/by\/([0-9.]+)/)?.[1] ?? ""}`.trim(),
+  licenceUrl: paper.licence_url,
+  paragraphs: paper.paragraphs.length,
 }));
 
 export const FILTERS = [

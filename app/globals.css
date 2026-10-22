@@ -424,6 +424,33 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     .gap-chance-m{display:block}
   }
 
+  /* ══ CATALOGUE RECORD ══
+     An index entry, not a card: hairlines, no radius, no shadow, no sheen.
+     The reference line is set in mono where a citation would be. */
+  .recs{display:block;border-top:1px solid var(--ink)}
+  .rec{display:grid;grid-template-columns:84px 1fr;gap:0 10px;
+    padding:32px 0;border-bottom:1px solid var(--line)}
+  .rec-n{font-family:var(--mo);font-size:var(--t-meta);letter-spacing:.14em;
+    color:var(--soft);padding-top:7px}
+  .rec-t{font-family:var(--disp);font-variation-settings:var(--fv-sm);
+    font-size:clamp(23px,3vw,34px);line-height:1.16;letter-spacing:-.015em;
+    font-weight:500;margin:0}
+  .rec-t a{color:var(--ink);text-decoration:none}
+  .rec-t a:hover{text-decoration:underline;text-underline-offset:4px}
+  .rec-a{font-size:var(--t-opt);color:var(--ink-2);margin:10px 0 0}
+  .rec-ref,.rec-m{display:flex;flex-wrap:wrap;gap:5px 16px;font-family:var(--mo);
+    font-size:var(--t-meta);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--soft);margin:11px 0 0}
+  .rec-ref a{color:var(--soft);text-underline-offset:3px}
+  .rec-ref a:hover{color:var(--ink)}
+  .rec-g{font-size:var(--t-body);line-height:1.6;color:var(--ink);margin:18px 0 0;
+    max-width:52ch}
+  .rec-m{margin-top:16px}
+  @media(max-width:620px){
+    .rec{grid-template-columns:1fr;gap:0}
+    .rec-n{padding:0 0 10px}
+  }
+
   /* ══ LIBRARY ══ */
   .lib-head{padding:24px 0 34px}
   .filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:30px}
