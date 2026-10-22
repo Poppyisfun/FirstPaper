@@ -161,7 +161,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .brand:hover{opacity:.62}
   /* The mark is not a comment on anything. */
   .brand .p{color:var(--ink)}
-  .nav.dark .brand{color:#fff}.nav.dark .brand .p{color:#4FD1A5}
+  .nav.dark .brand{color:#fff}.nav.dark .brand .p{color:#fff}
 
   .nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
   .nlink{position:relative;display:inline-flex;align-items:center;min-height:44px;font-size:var(--t-opt);font-weight:600;color:var(--soft);padding:9px 14px;border-radius:99px;

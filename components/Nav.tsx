@@ -47,9 +47,6 @@ export default function Nav({ dark = false, active, hud }: NavProps) {
             </div>
             <Link className="ncta" href="/library">
               <span className="lbl">Start reading</span>
-              <span className="ic" aria-hidden="true">
-                →
-              </span>
             </Link>
           </>
         )}

@@ -72,9 +72,12 @@ export default function HeroCopy({ paper }: { paper: HeroPaper }) {
       </motion.div>
 
       <motion.h1 className="big" variants={v}>
-        Almost nobody reads
+        {/* The explicit spaces matter: JSX drops the whitespace either side
+            of an element on its own line, so when the break is hidden at
+            narrow widths the words would otherwise fuse. */}
+        Almost nobody reads{" "}
         <br />
-        the paper the headline
+        the paper the headline{" "}
         <br />
         came from.
       </motion.h1>
