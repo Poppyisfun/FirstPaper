@@ -38,8 +38,13 @@ jobs:
 
       # Zod parses every paper.json at module load, so a schema violation
       # fails here with the field path rather than at request time.
+      # `next typegen` first, or tsc cannot see PageProps and LayoutProps:
+      # they are generated into .next/types, which a fresh checkout does not
+      # have. Without it this step fails on every run, whatever the content
+      # says, which is the one thing a content gate must not do.
       - name: Schema and types
         run: |
+          npx next typegen
           npx tsc --noEmit
           node scripts/verify-content.js
 
