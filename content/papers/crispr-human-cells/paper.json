@@ -27,18 +27,18 @@
         "options": [
           {
             "id": "o1",
-            "text": "Proof that the cut happened where they aimed it, in living cells, and some sign of how often it worked rather than just that it can."
+            "text": "Evidence that the cutting is safe in a living person, with no harm done to the patient and no lasting side effects once the treatment has finished."
           },
           {
             "id": "o2",
-            "text": "Evidence that the cutting is safe in a living person, with no harm done to the patient and no lasting side effects once the treatment has finished."
+            "text": "Proof that the cut happened where they aimed it, in living cells, and some sign of how often it worked rather than just that it can."
           },
           {
             "id": "o3",
             "text": "A survey of the whole genome showing every other place the protein cut by mistake, counted and listed, so the damage elsewhere is fully known."
           }
         ],
-        "correct": "o1"
+        "correct": "o2"
       }
     },
     {
@@ -79,18 +79,18 @@
         "options": [
           {
             "id": "o1",
-            "text": "The authors report that the single-guide RNA version of this system had already been shown to edit genes successfully inside human and other eukaryotic cells."
+            "text": "In bacteria, Cas9 cuts DNA at a site set by a guide RNA; whether this worked in eukaryotic cells was unknown."
           },
           {
             "id": "o2",
-            "text": "In bacteria, Cas9 cuts DNA at a site set by a guide RNA; whether this worked in eukaryotic cells was unknown."
+            "text": "The authors report that the single-guide RNA version of this system had already been shown to edit genes successfully inside human and other eukaryotic cells."
           },
           {
             "id": "o3",
             "text": "Bacteria need several different Cas proteins working together to cut invading DNA, and the 20-letter guide sequence only works once the tracrRNA is removed from the complex."
           }
         ],
-        "correct": "o2"
+        "correct": "o1"
       }
     },
     {
@@ -183,7 +183,7 @@
         "options": [
           {
             "id": "o1",
-            "text": "Extracts from cells given only the Cas9 vector did not cut the target plasmid, but cutting happened once lab-made guide RNA was added to the extract. Extracts from cells given both vectors cut the plasmid, and adding extra guide RNA raised the cutting further."
+            "text": "The authors report that extracts from cells given the guide RNA vector on its own still cut the plasmid, which seems to suggest that these human cells already make plenty of Cas9 by themselves."
           },
           {
             "id": "o2",
@@ -191,10 +191,10 @@
           },
           {
             "id": "o3",
-            "text": "The authors report that extracts from cells given the guide RNA vector on its own still cut the plasmid, which seems to suggest that these human cells already make plenty of Cas9 by themselves."
+            "text": "Extracts from cells given only the Cas9 vector did not cut the target plasmid, but cutting happened once lab-made guide RNA was added to the extract. Extracts from cells given both vectors cut the plasmid, and adding extra guide RNA raised the cutting further."
           }
         ],
-        "correct": "o1"
+        "correct": "o3"
       }
     },
     {
@@ -213,14 +213,14 @@
           },
           {
             "id": "o2",
-            "text": "The researchers made longer versions of the guide RNA's Cas9-binding part and tested them in cells, and the results appear to suggest these guides support more efficient cutting."
+            "text": "Extra bases were added to the part of the guide that matches the target DNA, and the Surveyor assay measured a 2.3-fold rise in cutting."
           },
           {
             "id": "o3",
-            "text": "Extra bases were added to the part of the guide that matches the target DNA, and the Surveyor assay measured a 2.3-fold rise in cutting."
+            "text": "The researchers made longer versions of the guide RNA's Cas9-binding part and tested them in cells, and the results appear to suggest these guides support more efficient cutting."
           }
         ],
-        "correct": "o2"
+        "correct": "o3"
       }
     },
     {
@@ -235,18 +235,18 @@
         "options": [
           {
             "id": "o1",
-            "text": "Zinc-finger nucleases cut the CLTA site worse than Cas9 did, and the authors say too little Cas9 protein is being made in the cells."
+            "text": "Cas9 steered by a guide RNA cuts human DNA at a chosen spot, editing it 6–8% of the time."
           },
           {
             "id": "o2",
-            "text": "Cas9 steered by a guide RNA cuts human DNA at a chosen spot, editing it 6–8% of the time."
+            "text": "Zinc-finger nucleases cut the CLTA site worse than Cas9 did, and the authors say too little Cas9 protein is being made in the cells."
           },
           {
             "id": "o3",
             "text": "Adding caps and tails to the guide RNAs seems to have lifted editing at the CLTA site from 6% to 8%, suggesting guide RNA stability is the limit."
           }
         ],
-        "correct": "o2"
+        "correct": "o1"
       }
     },
     {
@@ -313,18 +313,18 @@
         "options": [
           {
             "id": "o1",
-            "text": "X-tremeGENE beat Turbofect head to head, cutting the target gene in 80-90% of cells against only 30-50% for the rival reagent."
+            "text": "Human kidney cells were grown, given plasmid DNA using one of two reagents, then broken open to extract their DNA."
           },
           {
             "id": "o2",
-            "text": "Human kidney cells were grown, given plasmid DNA using one of two reagents, then broken open to extract their DNA."
+            "text": "X-tremeGENE beat Turbofect head to head, cutting the target gene in 80-90% of cells against only 30-50% for the rival reagent."
           },
           {
             "id": "o3",
             "text": "The authors suggest that counting glowing green cells after 48 hours showed what share of cells had the target gene successfully edited."
           }
         ],
-        "correct": "o2"
+        "correct": "o1"
       }
     },
     {
@@ -339,18 +339,18 @@
         "options": [
           {
             "id": "o1",
-            "text": "Human kidney cells received a plasmid carrying the guide RNA, and two days later the researchers extracted the cells' total RNA, separated it by size on a urea gel, transferred it onto a nylon membrane, and used a radioactive DNA probe to show that the short guide RNA was present in those cells."
+            "text": "Human kidney cells received a plasmid carrying a tagged version of the Cas9 gene, and two days later the researchers burst the cells open, ran a small amount of the liquid down a gel, transferred it onto a membrane, and used a tag-binding antibody to show the protein was there."
           },
           {
             "id": "o2",
-            "text": "Human kidney cells received a plasmid carrying a tagged version of the Cas9 gene, and two days later the researchers burst the cells open, ran a small amount of the liquid down a gel, transferred it onto a membrane, and used a tag-binding antibody to show the protein was there."
+            "text": "Human kidney cells received a plasmid carrying the guide RNA, and two days later the researchers extracted the cells' total RNA, separated it by size on a urea gel, transferred it onto a nylon membrane, and used a radioactive DNA probe to show that the short guide RNA was present in those cells."
           },
           {
             "id": "o3",
             "text": "Human kidney cells received both plasmids, and two days later the researchers pulled the genomic DNA out, copied the target stretch by PCR, treated the copies with an enzyme that cuts where strands mismatch, and ran the pieces down a gel to estimate how much editing had happened."
           }
         ],
-        "correct": "o2"
+        "correct": "o1"
       }
     },
     {
@@ -369,14 +369,14 @@
           },
           {
             "id": "o2",
-            "text": "The target stretch was copied and read letter by letter directly, with no enzyme involved and no gel used at any stage."
+            "text": "The target stretch was copied and weighed against an unedited sample, and the difference in weight gave the amount of editing."
           },
           {
             "id": "o3",
-            "text": "The target stretch was copied and weighed against an unedited sample, and the difference in weight gave the amount of editing."
+            "text": "The target stretch was copied and read letter by letter directly, with no enzyme involved and no gel used at any stage."
           }
         ],
-        "correct": "o2"
+        "correct": "o3"
       }
     },
     {
@@ -395,14 +395,14 @@
           },
           {
             "id": "o2",
-            "text": "Running the guide RNA on a urea acrylamide gel measured how tightly it stuck to its DNA target, and the gel confirmed a strong, specific match."
+            "text": "The authors seem to have made the guide RNA in a tube using T7 polymerase and a DNA template, then cleaned it up on a gel."
           },
           {
             "id": "o3",
-            "text": "The authors seem to have made the guide RNA in a tube using T7 polymerase and a DNA template, then cleaned it up on a gel."
+            "text": "Running the guide RNA on a urea acrylamide gel measured how tightly it stuck to its DNA target, and the gel confirmed a strong, specific match."
           }
         ],
-        "correct": "o3"
+        "correct": "o2"
       }
     },
     {
@@ -447,14 +447,14 @@
           },
           {
             "id": "o2",
-            "text": "Cell extract, plasmid and guide RNA are warmed together and run on a gel, where bands of about 2230 and 3100 base pairs seem to show Cas9 cut the DNA."
+            "text": "XhoI is the enzyme being tested here. It makes the 2230 and 3100 base pair pieces, and adding the guide RNA blocks that cutting completely."
           },
           {
             "id": "o3",
-            "text": "XhoI is the enzyme being tested here. It makes the 2230 and 3100 base pair pieces, and adding the guide RNA blocks that cutting completely."
+            "text": "Cell extract, plasmid and guide RNA are warmed together and run on a gel, where bands of about 2230 and 3100 base pairs seem to show Cas9 cut the DNA."
           }
         ],
-        "correct": "o2"
+        "correct": "o3"
       }
     }
   ],
@@ -465,7 +465,7 @@
       "options": [
         {
           "id": "a",
-          "text": "Lysate from cells given the guide RNA vector alone — establishing that the cutting seen in the other conditions came from Cas9 made in the cells, not from something else in the lysate"
+          "text": "Lysate from cells given Cas9 with a scrambled guide — establishing that targeting depends on the guide sequence matching"
         },
         {
           "id": "b",
@@ -477,11 +477,11 @@
         },
         {
           "id": "d",
-          "text": "Lysate from cells given Cas9 with a scrambled guide — establishing that targeting depends on the guide sequence matching"
+          "text": "Lysate from cells given the guide RNA vector alone — establishing that the cutting seen in the other conditions came from Cas9 made in the cells, not from something else in the lysate"
         }
       ],
-      "correct": "a",
-      "feedback": "The paper reports that lysate from cells transfected with the sgRNA-encoding vector alone did not support cleavage. Paired with the Cas9-only lysate also failing, that rules out the lysate itself supplying the cutting activity. Option b confuses this with the separate Northern blot finding that sgRNA is more stable when Cas9 is present; option d describes a control the paper never ran.",
+      "correct": "d",
+      "feedback": "The paper reports that lysate from cells transfected with the sgRNA-encoding vector alone did not support cleavage. Paired with the Cas9-only lysate also failing, that rules out the lysate itself supplying the cutting activity. Option b confuses this with the separate Northern blot finding that sgRNA is more stable when Cas9 is present; option a describes a control the paper never ran.",
       "paragraph_ids": [
         "PMC3557905-s2-p2"
       ]
@@ -520,7 +520,7 @@
       "options": [
         {
           "id": "a",
-          "text": "One added 4 extra base pairs to the helix and the other added 10; both also gained 5 nucleotides at the 3' end"
+          "text": "Both added the same 10 base pairs to the helix, but differed in their 3' extension — 5 nucleotides against 10"
         },
         {
           "id": "b",
@@ -528,14 +528,14 @@
         },
         {
           "id": "c",
-          "text": "Both added the same 10 base pairs to the helix, but differed in their 3' extension — 5 nucleotides against 10"
+          "text": "One added 4 extra base pairs to the helix and the other added 10; both also gained 5 nucleotides at the 3' end"
         },
         {
           "id": "d",
           "text": "One added 5 extra base pairs to the helix and the other added 20; both also gained 4 nucleotides at the 3' end"
         }
       ],
-      "correct": "a",
+      "correct": "c",
       "feedback": "The two designs added 4 or 10 base pairs to the helix that mimics the crRNA:tracrRNA pairing, and both were additionally extended at the 3' end by five nucleotides taken from the native S. pyogenes tracrRNA. Two changes were made at once, which is itself worth noticing.",
       "paragraph_ids": [
         "PMC3557905-s2-p3"
@@ -574,11 +574,11 @@
       "options": [
         {
           "id": "a",
-          "text": "A pair of zinc-finger nucleases, aimed at a site neighbouring the one Cas9 targeted — not the same site"
+          "text": "A pair of zinc-finger nucleases, aimed at exactly the site Cas9 targeted"
         },
         {
           "id": "b",
-          "text": "A pair of zinc-finger nucleases, aimed at exactly the site Cas9 targeted"
+          "text": "A pair of zinc-finger nucleases, aimed at a site neighbouring the one Cas9 targeted — not the same site"
         },
         {
           "id": "c",
@@ -589,7 +589,7 @@
           "text": "Cas9 carrying a guide RNA already shown to work at a different gene"
         }
       ],
-      "correct": "a",
+      "correct": "b",
       "feedback": "A ZFN pair targeting a neighbouring site in the same locus was the positive control. 'Neighbouring' is the load-bearing word: the comparison the Discussion later draws between Cas9 and ZFN efficiency is between two tools aimed at two different sequences, not a head-to-head at one.",
       "paragraph_ids": [
         "PMC3557905-s2-p1"
@@ -631,7 +631,7 @@
       "options": [
         {
           "id": "a",
-          "text": "Cas9 and a guide RNA made inside the cell cut a chosen site, and the repair left insertions and deletions there."
+          "text": "That Cas9 cuts its intended site and no others, no stray cuts having been found elsewhere in the genome."
         },
         {
           "id": "b",
@@ -639,14 +639,14 @@
         },
         {
           "id": "c",
-          "text": "That Cas9 cuts its intended site and no others, no stray cuts having been found elsewhere in the genome."
+          "text": "Cas9 and a guide RNA made inside the cell cut a chosen site, and the repair left insertions and deletions there."
         },
         {
           "id": "d",
           "text": "That editing is reliable enough in cultured human cells to justify testing it in primary tissue."
         }
       ],
-      "correct": "a",
+      "correct": "c",
       "feedback": "The cutting is established, and by two methods rather than one: the Surveyor assay detected indels and Sanger sequencing of cloned amplicons read the mutated alleles directly. That makes b an over-correction, which is its own kind of misreading. c and d are the genuine overclaims: the genome was never surveyed for off-target cuts, and no primary cells or tissue appear anywhere in the paper. Being too sceptical about a demonstrated result is as wrong as being too credulous about an undemonstrated one.",
       "tag": "scope",
       "paragraph_ids": [
@@ -691,7 +691,7 @@
       "options": [
         {
           "id": "a",
-          "text": "Lower than the ZFN pair used here, but within the range ZFNs and TALENs achieve generally"
+          "text": "Lower than the ZFN pair used here, and below the general range for ZFNs and TALENs"
         },
         {
           "id": "b",
@@ -703,10 +703,10 @@
         },
         {
           "id": "d",
-          "text": "Lower than the ZFN pair used here, and below the general range for ZFNs and TALENs"
+          "text": "Lower than the ZFN pair used here, but within the range ZFNs and TALENs achieve generally"
         }
       ],
-      "correct": "a",
+      "correct": "d",
       "feedback": "Mutagenesis at CLTA ran consistently at 6-8%, which the authors state is lower than the ZFN pair aimed at a nearby sequence, though within the range seen for ZFNs and TALENs generally. They report an unfavourable head-to-head and then argue for their system on a different ground — that retargeting means rewriting a short RNA rather than engineering a new protein. Easier to aim is not the same as better at cutting, and the two claims sit side by side.",
       "tag": "comparison",
       "paragraph_ids": [
@@ -719,11 +719,11 @@
       "options": [
         {
           "id": "a",
-          "text": "With 30-50% of cells transfected, the rate among cells that got the machinery is roughly two to three times the figure reported."
+          "text": "Nothing can be concluded. Without knowing which individual cells were transfected, the percentage cannot be corrected in any principled way and should be read only as a lower bound of unknown looseness."
         },
         {
           "id": "b",
-          "text": "Nothing can be concluded. Without knowing which individual cells were transfected, the percentage cannot be corrected in any principled way and should be read only as a lower bound of unknown looseness."
+          "text": "With 30-50% of cells transfected, the rate among cells that got the machinery is roughly two to three times the figure reported."
         },
         {
           "id": "c",
@@ -734,7 +734,7 @@
           "text": "The figure already accounts for it, which is why the authors counted GFP-positive cells."
         }
       ],
-      "correct": "a",
+      "correct": "b",
       "feedback": "Transfection ran at 30-50% with Turbofect, the reagent used for the experiments behind the reported figure, so most of the DNA in the denominator came from cells that never had Cas9 in them. The correction is approximate but it is a correction, which is why b gives up too early. c has the arithmetic backwards: untransfected DNA can only land in the uncut band. The GFP count in d is how the 30-50% was arrived at, not a correction applied to the result.",
       "tag": "denominator",
       "paragraph_ids": [

@@ -275,6 +275,17 @@ highlighter swipe when a paragraph resolves. Always respect
 - `/paper/[slug]/results` calibration, gated cross-paper verdicts, breakdown
 - `/paper/[slug]/class` the instructor's aggregate (not linked from the flow)
 - `/api/events` event intake (POST) and the reader's own judge events (GET)
+- `/api/health` is the keep-alive, called daily by the Vercel cron in
+  `vercel.json`. It **reads a row** rather than answering from nothing: a
+  check that does not round-trip keeps Vercel warm and lets Supabase pause
+  underneath it. 200 and `reachable`, or 503 and `unreachable`, with the time.
+
+  This exists because the project did pause, and nothing said so. POST
+  `/api/events` returned 200 because the intake fails silently for the reader
+  by design, GET returned an empty list indistinguishable from a new reader,
+  and the class view said it could not load, which reads like a blip. Every
+  failure path now also logs server-side. Keep that logging: it is the only
+  reason the outage surfaced.
 
 ## What may and may not change
 
@@ -381,11 +392,21 @@ add a paper.
 **Mechanical checks always run** — no model, no key, no network: explanation
 word-count ratio, licence in the permitted set, every tag parsing against the
 enum, answer keys pointing at real options, figure files present and
-lowercase.
+lowercase, and **where the correct answers sit**.
 
 The ratio rule is **60–75%, and the ceiling is the only hard one.** Over 75%
 fails the build. Under 60% is a warning: a short paragraph explained in a
 sentence must not be padded, and padding is how commentary becomes filler.
+
+**No more than 40% of a round's correct answers may share a position, or an
+option id.** The first paper was authored with the correct option written
+first in all ten check and judge sets, and at `o2` in eleven of seventeen
+predictions. Nothing looked wrong, because `lib/shuffle.ts` reorders options
+per session — which is exactly why it survived. Shuffling protects what the
+browser renders; it does nothing for server output, a no-JS fallback, an
+export, or a teacher-facing answer sheet, all of which read the file in
+order. The gate starts at four questions, because a shorter round cannot
+spread far enough to pass.
 
 **The leak gate runs when `ANTHROPIC_API_KEY` is set** and fails when more
 than **1 of 10** questions is answerable from the explanations alone. It

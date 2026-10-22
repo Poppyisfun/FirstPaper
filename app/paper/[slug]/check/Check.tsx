@@ -35,8 +35,10 @@ export default function Check({
   const question = questions[index];
   const atLast = index === questions.length - 1;
 
-  /* Shuffled per session. In the stored file the correct option is written
-     first every time, so a fixed order would be the entire answer key. */
+  /* Shuffled per session, so two readers never compare positions and no
+     order survives a reload. The file no longer leans on this: the correct
+     answers are spread across positions there too, and check_content.py
+     fails the build if more than 40% of a round's answers bunch at one. */
   const options = useMemo(() => {
     if (!seed) return [];
     return shuffleWithSeed(question.options, `${seed}:${question.id}`);

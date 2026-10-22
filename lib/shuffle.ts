@@ -1,10 +1,15 @@
 /**
  * Deterministic option shuffling, seeded per session.
  *
- * Options must not sit in a fixed order. In a stored set the correct answer
- * tends to be written first, and a reader who notices that stops reading the
- * options at all. Shuffling per render would be worse: the order would change
- * under them on every reload.
+ * Options must not sit in a fixed order: a reader who notices the correct
+ * answer keeps turning up in the same place stops reading the options at all.
+ * Shuffling per render would be worse than a fixed order, because then the
+ * options would move under them on every reload.
+ *
+ * This is the second line of defence, not the only one. The authored files
+ * spread their correct answers across positions as well, because shuffling
+ * only protects what the browser renders — server output, a no-JS fallback
+ * or an export reads the file in order.
  *
  * So the order is a pure function of (session seed, item key). One reader sees
  * a stable order across reloads; two readers see different orders; and the

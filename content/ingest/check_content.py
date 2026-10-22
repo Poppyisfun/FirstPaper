@@ -17,6 +17,7 @@ import argparse
 import json
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -37,9 +38,54 @@ LICENCES = {"CC-BY", "CC-BY-4.0", "CC0"}
 RATIO_MAX = 75
 RATIO_MIN = 60
 
+# No more than this share of a round's correct answers may sit at the same
+# position, or carry the same option id.
+#
+# The first paper was authored with the correct option first in all ten check
+# and judge sets. Nothing was wrong on screen, because options are shuffled
+# per session — but the file is the answer key, and it stops being hidden the
+# moment anything renders in file order: server rendering, a no-JS fallback,
+# an export, a teacher-facing answer sheet.
+#
+# Below MIN_ANSWERS a round is too short to spread: four questions over four
+# options is 25% at best, three is 33%, two cannot pass at all. Checking those
+# would fail an honest paper, so the gate starts where it can be met.
+ANSWER_POSITION_MAX = 0.40
+MIN_ANSWERS = 4
+
 
 def words(text: str) -> int:
     return len(re.sub(r"<[^>]+>", " ", text).split())
+
+
+def answer_spread(name: str, questions: list[dict]) -> list[str]:
+    """Fails when one position, or one option id, holds too many answers."""
+    n = len(questions)
+    if n < MIN_ANSWERS:
+        return []
+
+    positions: Counter[int] = Counter()
+    ids: Counter[str] = Counter()
+    for q in questions:
+        option_ids = [o["id"] for o in q.get("options", [])]
+        if q.get("correct") not in option_ids:
+            continue  # the answer-key check already reports this
+        positions[option_ids.index(q["correct"])] += 1
+        ids[q["correct"]] += 1
+
+    fails = []
+    for label, counts in (("position", positions), ("option id", ids)):
+        if not counts:
+            continue
+        worst, count = counts.most_common(1)[0]
+        share = count / n
+        if share > ANSWER_POSITION_MAX:
+            fails.append(
+                f"{name}: {count} of {n} correct answers share {label} "
+                f"{worst!r} ({share:.0%}, limit {ANSWER_POSITION_MAX:.0%}) — "
+                f"anything that renders in file order hands over the answer key"
+            )
+    return fails
 
 
 def check_paper(path: Path) -> tuple[list[str], list[str]]:
@@ -117,6 +163,14 @@ def check_paper(path: Path) -> tuple[list[str], list[str]]:
             fails.append(f"{p['id']}: prediction.correct is not one of its options")
 
     # ── figures ───────────────────────────────────────────────────────
+    # ── where the correct answers sit ─────────────────────────────────
+    predictions = [
+        p["prediction"] for p in paper.get("paragraphs", []) if p.get("prediction")
+    ]
+    fails += answer_spread("predictions", predictions)
+    fails += answer_spread("check", paper.get("check", []))
+    fails += answer_spread("judge", paper.get("judge", []))
+
     for f in paper.get("figures", []):
         if f.get("src"):
             on_disk = ROOT / "public" / f["src"].lstrip("/")
