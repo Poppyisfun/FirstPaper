@@ -1,20 +1,87 @@
 name: content
 
-# Every pull request that touches authored content, plus main. The point is
-# that someone other than the author can open a pull request adding a paper
-# and it can be merged on a green run, without reading all seventeen
-# paragraphs by hand.
+# Every pull request and every push to main. The point is that someone other
+# than the author can open a pull request adding a paper and it can be merged
+# on a green run, without reading all seventeen paragraphs by hand.
+#
+# There is no path filter here on purpose. The mechanical checks are cheap and
+# should run on everything; it is the expensive behavioural gate that is
+# scoped, by the `scope` job below. Filtering the whole workflow instead would
+# mean a change that breaks schema parsing never gets checked because it
+# happened to touch no content.
 on:
   pull_request:
-    paths:
-      - "content/**"
-      - "lib/schema.ts"
-      - ".github/workflows/content.yml"
   push:
     branches: [main]
   workflow_dispatch:
 
 jobs:
+  scope:
+    name: Did content change?
+    runs-on: ubuntu-latest
+    outputs:
+      content: ${{ steps.detect.outputs.content }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The whole history, or there is nothing to diff against.
+          fetch-depth: 0
+
+      # Fails towards running. Anything this cannot work out — a first push,
+      # a force push, a shallow clone, a manual run — counts as a content
+      # change, because a paper that slips past the gate is far worse than a
+      # stylesheet that triggers it.
+      - name: Detect
+        id: detect
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+        run: |
+          # Generous on purpose: the papers, the ingest scripts and prompts,
+          # the schema the papers are parsed by, and the script that checks
+          # they still line up.
+          PATTERN='^(content/|lib/schema\.ts$|scripts/verify-content\.js$)'
+
+          files=""
+          unknown=""
+          case "$EVENT" in
+            pull_request)
+              git fetch --no-tags origin "$BASE_REF" >/dev/null 2>&1 || true
+              files=$(git diff --name-only "origin/$BASE_REF...HEAD" 2>/dev/null) || unknown=1
+              ;;
+            push)
+              if [ -z "$BEFORE" ] \
+                || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] \
+                || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+                unknown=1
+              else
+                files=$(git diff --name-only "$BEFORE" "$SHA" 2>/dev/null) || unknown=1
+              fi
+              ;;
+            *)
+              unknown=1
+              ;;
+          esac
+
+          if [ -n "$unknown" ]; then
+            echo "could not work out what changed, so assuming content did"
+            echo "content=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "files changed:"
+          echo "$files" | sed 's/^/  /'
+
+          if printf '%s\n' "$files" | grep -qE "$PATTERN"; then
+            echo "content changed, the leak gate will run"
+            echo "content=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "no content changed, the leak gate does not apply"
+            echo "content=false" >> "$GITHUB_OUTPUT"
+          fi
+
   mechanical:
     name: Mechanical checks
     runs-on: ubuntu-latest
@@ -58,7 +125,11 @@ jobs:
   leak-gate:
     name: Can the explanations answer the questions?
     runs-on: ubuntu-latest
-    needs: mechanical
+    needs: [scope, mechanical]
+    # Only when content actually changed. The gate still fails closed when it
+    # does — not running and running-but-skipped are different things, and the
+    # second one is what put a green tick on an unchecked paper.
+    if: ${{ needs.scope.outputs.content == 'true' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
