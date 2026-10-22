@@ -364,8 +364,7 @@ export default function Home() {
           <Rise>
             <h2 className="stitle">Start with one paper.</h2>
             <p className="ssub">
-              It takes {minutes} minutes. You will finish knowing how to read
-              the next one.
+              It takes {minutes} minutes, and you do not need an account.
             </p>
             <div className="final-cta">
               <BtnLink href="/library" variant="pri lg">
