@@ -34,12 +34,10 @@ const gains = [
 /** Marker colour follows the phase colours used inside the paper itself. */
 const steps = [
   {
-    tone: "g",
     t: "Read the real paper",
     d: "Not a summary. The actual published text, with the real figures. Beside every paragraph is a plain language explanation.",
   },
   {
-    tone: "g",
     t: "Check what you understood",
     d: "Five quick questions on what the paper said. There is no penalty for a wrong answer. This is just to make sure the reading landed.",
   },
@@ -47,17 +45,14 @@ const steps = [
     /* Violet, matching the judge screen. Amber means caution everywhere
        else in the product, and spending it on a step marker here taught the
        wrong association before the reader ever met a real caution. */
-    tone: "v",
     t: "Judge the science",
     d: "Five harder questions on whether the paper holds up. What did they actually show, and what are they only hoping? Does the claim cover more ground than the experiment did? Did the authors say shown, or suggests? Better than what? What is that percentage a fraction of? Before you see the options, you say how sure you are.",
   },
   {
-    tone: "g",
     t: "Read it in plain English",
     d: "A simple summary of the whole paper, with no technical words at all. Nothing stays foggy.",
   },
   {
-    tone: "v",
     t: "See your results",
     d: "How often you were right, set against how sure you said you were. That gap is the thing worth knowing. One paper is five judgements, which is not much to go on, and the page says so. After four, it can tell you which way you lean.",
   },
@@ -173,7 +168,7 @@ export default function Home() {
           <Stagger className="jrn">
             {steps.map((step, i) => (
               <RiseItem key={step.t} className="jrn-step">
-                <div className={`jrn-m ${step.tone}`} aria-hidden="true">
+                <div className="jrn-m" aria-hidden="true">
                   {i + 1}
                 </div>
                 <div className="jrn-b">
@@ -224,7 +219,7 @@ export default function Home() {
               signing up for anything, and you see your full results at the
               end.
             </p>
-            <BtnLink href="/library" variant="v lg" icon="→">
+            <BtnLink href="/library" variant="pri lg" icon="→">
               Read a paper instead
             </BtnLink>
           </Rise>

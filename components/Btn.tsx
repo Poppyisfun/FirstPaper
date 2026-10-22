@@ -9,7 +9,7 @@ const MotionLink = motion.create(Link);
 
 type Common = {
   children: ReactNode;
-  /** Visual variant, appended to `.btn` (pri | ghost | glow-b | v | lg). */
+  /** Visual variant, appended to `.btn` (pri | ghost | glow-b | lg). */
   variant?: string;
   /** Trailing glyph, rendered inside its own circle. */
   icon?: string;

@@ -119,7 +119,7 @@ button{font-family:inherit;cursor:pointer}
    spends the explanation colour before a reader meets an explanation.
    Ink against either background clears AA comfortably. */
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
-.hero :focus-visible,.strip :focus-visible,.nav.dark :focus-visible{outline-color:#5FCCA8}
+.hero :focus-visible,.strip :focus-visible,.nav.dark :focus-visible{outline-color:#fff}
 
 ::selection{background:var(--hl);color:var(--ink)}
 
@@ -227,15 +227,17 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .btn.lg{padding:16px 30px;font-size:var(--t-body)}
   .btn.lg:has(.ic){padding-right:10px}
   .btn.lg .ic{width:30px;height:30px;font-size:var(--t-opt)}
-  .btn.glow-b{background:linear-gradient(135deg,#0B7A5C,#0C8564);color:#fff;border:0;
-    box-shadow:0 4px 18px rgba(11,122,92,.34)}
-  .btn.glow-b:hover{box-shadow:0 12px 36px rgba(11,122,92,.46)}
-  .btn.glow-b .ic{background:rgba(255,255,255,.2)}
+  /* White on the dark hero: the brightest thing on the screen, which is what
+     one clear action should be. It used to be a green gradient, which made the
+     explanation colour the first thing anyone saw. */
+  .btn.glow-b{background:#fff;color:var(--ink);border:0;
+    box-shadow:0 4px 18px rgba(0,0,0,.28)}
+  .btn.glow-b:hover{box-shadow:0 12px 36px rgba(0,0,0,.38)}
+  .btn.glow-b .ic{background:rgba(10,14,20,.08)}
   .btn.ghost{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.2);color:#fff;box-shadow:none;
     backdrop-filter:blur(6px)}
   .btn.ghost:hover{background:rgba(255,255,255,.11);box-shadow:none}
   .btn.ghost .ic{background:rgba(255,255,255,.14)}
-  .btn.v{background:var(--violet);color:#fff;border-color:var(--violet)}
   .btn:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
 
   /* ══ HERO ══ */
@@ -256,16 +258,18 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 
   /* Eyebrow as a pill badge rather than a bare line. */
   .eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mo);font-size:var(--t-meta);
-    letter-spacing:.2em;text-transform:uppercase;color:#8FE3C2;margin-bottom:26px;
+    letter-spacing:.2em;text-transform:uppercase;color:#C8D2DA;margin-bottom:26px;
     padding:7px 15px 7px 12px;border-radius:99px;
-    background:rgba(143,227,194,.08);border:1px solid rgba(143,227,194,.2)}
-  .eyebrow i{width:5px;height:5px;border-radius:99px;background:#5FCCA8;flex:none;
-    box-shadow:0 0 0 3px rgba(95,204,168,.22)}
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18)}
+  .eyebrow i{width:5px;height:5px;border-radius:99px;background:#C8D2DA;flex:none;
+    box-shadow:0 0 0 3px rgba(255,255,255,.14)}
 
   h1.big{font-family:var(--disp);font-variation-settings:var(--fv-xl);
     font-size:clamp(40px,7vw,82px);line-height:1.02;font-weight:400;
     letter-spacing:-.02em;margin:0 0 28px;max-width:15ch}
-  h1.big em{font-style:italic;color:#F0C476}
+  /* Italic Fraunces against the upright roman is the whole contrast. It was
+     amber as well, which spent the caution colour on a word in a headline. */
+  h1.big em{font-style:italic}
   .lede{font-size:clamp(16.5px,1.9vw,19.5px);line-height:1.64;color:#A9B7C2;max-width:600px;margin:0 0 38px}
   .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 
@@ -378,8 +382,9 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .pc-top{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
   .tp{font-family:var(--mo);font-size:var(--t-meta);letter-spacing:.13em;text-transform:uppercase;padding:5px 10px;
     border-radius:99px;font-weight:500}
-  .tp.gen{background:var(--green-s);color:var(--green)} .tp.evo{background:var(--blue-s);color:var(--blue)}
-  .tp.med{background:var(--amber-s);color:var(--amber-t)} .tp.eco{background:#E9F0E2;color:#4A6B33}
+  /* One neutral tag. A topic is not an explanation, a caution or a figure,
+     so it does not get to borrow any of those colours to say so. */
+  .tp.gen,.tp.evo,.tp.med,.tp.eco{background:var(--line-2);color:var(--ink-2)}
   .tier{margin-left:auto;font-family:var(--mo);font-size:var(--t-meta);letter-spacing:.11em;text-transform:uppercase;
     color:var(--soft);border:1px solid var(--line);padding:5px 9px;border-radius:99px}
   .pc-t{font-family:var(--rd);font-size:var(--d-sm);line-height:1.42;font-weight:600;margin-bottom:12px;
@@ -411,7 +416,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     padding-top:14px;border-top:1px solid var(--line)}
   .ab-pull{background:transparent;border-left:2px solid var(--line);border-radius:0;
     padding:26px 28px;margin:30px 0;font-family:var(--disp);font-variation-settings:var(--fv-sm);
-    font-size:clamp(19px,2.4vw,24px);line-height:1.4;color:#0F3C31;letter-spacing:-.006em}
+    font-size:clamp(19px,2.4vw,24px);line-height:1.4;color:var(--ink);letter-spacing:-.006em}
   .ab-cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:30px 0}
   .ab-c{border-radius:20px;padding:24px;border:1px solid var(--line);background:var(--surf);
     box-shadow:var(--sh1);transition:transform .5s var(--ez),box-shadow .5s var(--ez)}
@@ -987,7 +992,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
 
   /* Prose inside the dark strips. */
   .strip-prose{position:relative;z-index:1;max-width:62ch}
-  .skick.on-dark{background:rgba(95,204,168,.12);border-color:rgba(95,204,168,.28);color:#8FE3C2}
+  .skick.on-dark{background:transparent;border-color:rgba(255,255,255,.22);color:#C8D2DA}
   .strip-h{font-family:var(--disp);font-variation-settings:var(--fv-lg);
     font-size:clamp(27px,3.8vw,38px);line-height:1.12;font-weight:400;letter-spacing:-.018em;
     margin:0 0 20px;color:#fff}
@@ -1002,7 +1007,7 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     transition:transform .45s var(--ez),box-shadow .45s var(--ez)}
   .gain:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
   .gain-c{flex:none;width:26px;height:26px;border-radius:99px;display:grid;place-items:center;
-    background:var(--green-s);border:1px solid var(--green-l);color:var(--green);
+    background:var(--line-2);border:1px solid var(--line);color:var(--ink-2);
     font-size:var(--t-note);font-weight:700;margin-top:2px}
   .gain p{margin:0;font-size:var(--t-lead);line-height:1.6;color:var(--ink)}
 
@@ -1017,9 +1022,9 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     font-family:var(--mo);font-size:var(--t-ui);font-weight:700;background:var(--surf);
     border:2px solid var(--line);color:var(--soft);position:relative;z-index:1;
     box-shadow:0 0 0 5px var(--bg)}
-  .jrn-m.g{border-color:var(--green);color:var(--green);background:var(--green-s)}
-  .jrn-m.a{border-color:var(--amber);color:var(--amber-t);background:var(--amber-s)}
-  .jrn-m.v{border-color:var(--violet);color:var(--violet);background:var(--violet-s)}
+  /* The markers were tinted green, amber and violet by step, which read as
+     meaning and meant nothing — step three was not a challenge. The number
+     and the rule carry the sequence on their own. */
   .jrn-b{padding-top:4px;min-width:0}
   .jrn-t{font-family:var(--disp);font-variation-settings:var(--fv-sm);font-size:var(--d-lg);
     font-weight:500;letter-spacing:-.008em;margin:0 0 8px;line-height:1.2}
@@ -1049,9 +1054,9 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
      around it. */
   .acct{background:transparent;border:0;border-top:1px solid var(--line);
     border-radius:0;padding:32px 0 0;text-align:left}
-  .acct .skick{background:#fff;border-color:var(--violet-l);color:var(--violet)}
+  .acct .skick{background:#fff;border-color:var(--line);color:var(--soft)}
   .acct .stitle{margin-bottom:14px}
-  .acct p{font-size:var(--t-lead);line-height:1.72;color:#3A2E9E;margin:0 auto 26px;max-width:56ch}
+  .acct p{font-size:var(--t-lead);line-height:1.72;color:var(--ink-2);margin:0 auto 26px;max-width:56ch}
   .acct-page{max-width:720px;margin:0 auto;text-align:center;padding-top:28px}
   .acct-page .ssub{margin:0 auto;max-width:54ch}
   .acct-cta{margin-top:30px}
