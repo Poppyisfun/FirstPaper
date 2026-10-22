@@ -168,6 +168,9 @@ export default function Home() {
                   <div className="gap-lab">
                     <b>{r.label}</b>
                     <span>{r.gloss}</span>
+                    <span className="gap-of">
+                      {r.right} of {r.of}
+                    </span>
                   </div>
                   <div className="gap-track">
                     <span
@@ -180,10 +183,6 @@ export default function Home() {
                     {chance !== null && (
                       <span className="gap-tick" aria-hidden="true" />
                     )}
-                    <span className="gap-sub">
-                      {r.right} of {r.of} &middot; really somewhere between{" "}
-                      {r.lo}% and {r.hi}%
-                    </span>
                   </div>
                 </div>
               ))}
@@ -203,7 +202,15 @@ export default function Home() {
             <p className="gap-prov">
               One person, one reading, {MY_RUN.check.of + MY_RUN.judge.of}{" "}
               questions
-              {chance !== null && `, ${[...optionCounts][0]} options each, so guessing scores ${pct(chance)}%`}
+              {chance !== null &&
+                `, ${[...optionCounts][0]} options each, so guessing scores ${pct(chance)}%`}
+              .{" "}
+              {rows
+                .map(
+                  (r) =>
+                    `${r.label} was ${r.right} of ${r.of}, which really means somewhere between ${r.lo}% and ${r.hi}%`,
+                )
+                .join("; ")}
               . That is not an average, and there is nothing to average yet.
             </p>
           </figure>

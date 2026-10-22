@@ -383,9 +383,11 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     font-family:var(--disp);font-variation-settings:var(--fv-xl);
     font-size:clamp(54px,11vw,128px);line-height:.78;font-weight:500;
     letter-spacing:-.03em;color:var(--ink);white-space:nowrap}
-  .gap-sub{display:block;font-family:var(--mo);font-size:var(--t-meta);
-    letter-spacing:.07em;text-transform:uppercase;color:var(--soft);
-    margin-top:13px}
+  /* The sample size sits in the axis column. It used to sit under the bar,
+     where the 128px numeral printed straight over it. */
+  .gap-of{display:block;font-family:var(--mo);font-size:var(--t-meta);
+    letter-spacing:.09em;text-transform:uppercase;color:var(--soft);
+    margin-top:9px}
   /* Only drawn narrow, where the full-height line would cut through type. */
   .gap-tick{display:none}
   .gap-chance-m{display:none;font-family:var(--mo);font-size:var(--t-meta);
