@@ -449,7 +449,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     .brand{font-size:var(--t-body)}
     .nlink{padding:8px 10px;font-size:var(--t-note)}
     .ncta{padding:9px 7px 9px 14px;font-size:var(--t-note)}
-    .ncta .ic{width:23px;height:23px;font-size:var(--t-meta)}
     .hero{padding-left:20px;padding-right:20px}
     .demo{margin-top:52px}
     .demo-card{padding:22px 20px}
@@ -459,11 +458,13 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     .cards{grid-template-columns:1fr}
     .foot{padding:34px 20px 44px}
   }
-  /* Below 520px the nav CTA duplicates the Library link — drop it. */
+  /* Below 520px the Library link drops out, so the call to action is the
+     only way to the library from the nav and has to keep its words. It used
+     to collapse to an arrow glyph; there is no arrow now, and an unlabelled
+     white circle is not a button. */
   @media(max-width:520px){
     .nav-links .nlink.hide-xs{display:none}
-    .ncta .lbl{display:none}
-    .ncta{padding:8px}
+    .ncta{padding:9px 13px;font-size:var(--t-meta);letter-spacing:0}
   }
 }
 
