@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
 import Nav from "@/components/Nav";
 import { getAllPapers } from "@/lib/content";
-import HeroSpotlight from "@/components/HeroSpotlight";
 import HeroCopy from "@/components/HeroCopy";
 import DemoStrip from "@/components/DemoStrip";
 import { Rise, Stagger, RiseItem } from "@/components/motion-primitives";
@@ -69,6 +68,23 @@ export default function Home() {
      place a paper says how long it takes. */
   const minutes = Math.min(...getAllPapers().map((p) => p.estimated_minutes));
 
+  /* The hero's catalogue line and its two numbers come from the paper file.
+     The DOI is carried inside original_url rather than in the `doi` field,
+     which is null, so it is read back out rather than typed. */
+  const first = getAllPapers()[0];
+  const heroPaper = {
+    title: first.title,
+    firstAuthor: first.authors.split(",")[0].trim().split(" ")[0],
+    journal: first.journal,
+    year: first.year,
+    pmcid: first.pmcid,
+    doi: first.original_url.match(/doi\.org\/(.+)$/)?.[1] ?? first.doi,
+    licence: `CC BY ${first.licence_url.match(/licenses\/by\/([0-9.]+)/)?.[1] ?? ""}`.trim(),
+    licenceUrl: first.licence_url,
+    paragraphs: first.paragraphs.length,
+    minutes: first.estimated_minutes,
+  };
+
   return (
     <>
       <a className="skip" href="#how">
@@ -76,10 +92,10 @@ export default function Home() {
       </a>
       <Nav dark />
 
-      <HeroSpotlight>
-        <HeroCopy />
+      <div className="hero">
+        <HeroCopy paper={heroPaper} />
         <DemoStrip />
-      </HeroSpotlight>
+      </div>
 
       <main className="wrap">
         {/* ── Who this is for ── */}

@@ -250,30 +250,25 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   /* ══ HERO ══ */
   .hero{position:relative;background:var(--ink);color:#fff;overflow:hidden;
     padding:clamp(78px,11vw,132px) 24px clamp(80px,10vw,112px);margin-top:-72px;padding-top:clamp(140px,16vw,196px)}
-  .hero .glow{position:absolute;inset:0;pointer-events:none;background:
-    radial-gradient(720px 340px at 76% 8%,rgba(91,75,214,.30),transparent 62%),
-    radial-gradient(620px 320px at 8% 92%,rgba(11,150,110,.26),transparent 62%),
-    radial-gradient(500px 260px at 50% 50%,rgba(169,100,13,.13),transparent 70%)}
-  /* left/top pinned to 0 so the JS transform is measured from the hero origin */
-  .hero .spot{position:absolute;left:0;top:0;width:660px;height:660px;border-radius:50%;
-    pointer-events:none;opacity:0;will-change:transform;
-    background:radial-gradient(circle,rgba(120,200,175,.13),transparent 62%);
-    transform:translate(-50%,-50%);
-    transition:transform .9s var(--ez),opacity .6s var(--ez)}
-  .hero .spot.lit{opacity:1}
   .hero-in{max-width:1000px;margin:0 auto;position:relative;z-index:2}
 
-  /* Eyebrow as a pill badge rather than a bare line. */
-  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mo);font-size:var(--t-meta);
-    letter-spacing:.2em;text-transform:uppercase;color:#C8D2DA;margin-bottom:26px;
-    padding:7px 15px 7px 12px;border-radius:99px;
-    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18)}
-  .eyebrow i{width:5px;height:5px;border-radius:99px;background:#C8D2DA;flex:none;
-    box-shadow:0 0 0 3px rgba(255,255,255,.14)}
+  /* The paper's reference, set where a catalogue number goes. Uppercase is
+     allowed here because the line carries the citation: delete it and you
+     lose the journal, the year, the PMCID, the DOI and the licence. */
+  .hero-idx{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px 16px;
+    font-family:var(--mo);font-size:var(--t-meta);letter-spacing:.14em;
+    text-transform:uppercase;color:#8E9BA7;margin-bottom:34px;
+    padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.14)}
+  .hero-idx-n{color:#fff}
+  .hero-idx a{color:#8E9BA7;text-underline-offset:3px}
+  .hero-idx a:hover{color:#fff}
 
   h1.big{font-family:var(--disp);font-variation-settings:var(--fv-xl);
-    font-size:clamp(40px,7vw,82px);line-height:1.02;font-weight:400;
-    letter-spacing:-.02em;margin:0 0 28px;max-width:15ch}
+    font-size:clamp(42px,8.4vw,104px);line-height:.96;font-weight:500;
+    letter-spacing:-.028em;margin:0 0 30px;max-width:20ch;text-wrap:balance}
+  /* The line breaks are written into the markup, so they only apply where
+     there is room for them. Below that the sentence wraps on its own. */
+  @media (max-width:620px){ h1.big br{display:none} }
   /* Italic Fraunces against the upright roman is the whole contrast. It was
      amber as well, which spent the caution colour on a word in a headline. */
   h1.big em{font-style:italic}
