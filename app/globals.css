@@ -340,6 +340,83 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .st .l{font-family:var(--mo);font-size:var(--t-meta);letter-spacing:.16em;text-transform:uppercase;color:#8B98A5;margin-top:11px;
     line-height:1.5}
 
+  /* ══ THE GAP ══
+     A figure from a paper, not a dashboard widget: square ends, flat ink
+     fills, no reveal on load, no icons. Category labels sit in a left column
+     like a chart's axis so the guessing line can cross both bars without
+     crossing any type.
+
+     The numbers are the largest type on the site, past the 104px headline,
+     and each one is positioned at its own bar's end. Where a number sits on
+     the page is its value, so the space between them is the finding. */
+  .gap-sect{padding-top:clamp(60px,7.5vw,100px);padding-bottom:clamp(56px,7vw,88px)}
+  .gap{margin:0;max-width:1000px}
+  .gap-idx{display:flex;gap:14px;align-items:baseline;font-family:var(--mo);
+    font-size:var(--t-meta);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--soft);padding-bottom:13px;border-bottom:1px solid var(--ink)}
+  .gap-idx-n{color:var(--ink)}
+  .gap-lead{font-size:var(--t-lead);line-height:1.6;color:var(--ink-2);
+    max-width:56ch;margin:24px 0 0}
+
+  /* --lab is the axis column; --pad reserves room for the number that sits
+     past the end of the longest bar, so nothing can push the page sideways. */
+  .gap-plot{--lab:184px;--pad:250px;position:relative;margin:52px 0 0;
+    padding-right:var(--pad)}
+
+  .gap-chance{position:absolute;top:-10px;bottom:34px;z-index:2;width:1px;
+    left:calc(var(--lab) + (100% - var(--lab)) * var(--chance));
+    background:repeating-linear-gradient(to bottom,var(--soft) 0 3px,transparent 3px 7px)}
+  .gap-chance-l{position:absolute;top:-19px;left:0;white-space:nowrap;
+    font-family:var(--mo);font-size:var(--t-meta);letter-spacing:.1em;
+    text-transform:uppercase;color:var(--soft)}
+
+  .gap-row{display:grid;grid-template-columns:var(--lab) 1fr;align-items:start}
+  .gap-row + .gap-row{margin-top:46px}
+  .gap-lab{font-family:var(--ui);font-size:var(--t-opt);line-height:1.45;
+    padding-right:22px}
+  .gap-lab b{display:block;color:var(--ink);font-weight:600}
+  .gap-lab span{color:var(--soft)}
+
+  .gap-track{position:relative}
+  .gap-fill{display:block;height:20px;background:var(--ink)}
+  .gap-n{position:absolute;top:50%;transform:translate(16px,-50%);
+    font-family:var(--disp);font-variation-settings:var(--fv-xl);
+    font-size:clamp(54px,11vw,128px);line-height:.78;font-weight:500;
+    letter-spacing:-.03em;color:var(--ink);white-space:nowrap}
+  .gap-sub{display:block;font-family:var(--mo);font-size:var(--t-meta);
+    letter-spacing:.07em;text-transform:uppercase;color:var(--soft);
+    margin-top:13px}
+  /* Only drawn narrow, where the full-height line would cut through type. */
+  .gap-tick{display:none}
+  .gap-chance-m{display:none;font-family:var(--mo);font-size:var(--t-meta);
+    letter-spacing:.1em;text-transform:uppercase;color:var(--soft);
+    margin:20px 0 0;padding-left:11px;border-left:1px dashed var(--soft)}
+
+  .gap-say{font-family:var(--disp);font-variation-settings:var(--fv-lg);
+    font-size:clamp(24px,3.4vw,38px);line-height:1.2;letter-spacing:-.015em;
+    color:var(--ink);margin:58px 0 0;max-width:26ch;text-wrap:balance}
+  .gap-prov{font-size:var(--t-note);line-height:1.6;color:var(--soft);
+    margin:18px 0 0;max-width:54ch}
+
+  /* Narrow: one column, bar full width, number above it. The continuous
+     guessing line would cross the labels once they stack, so each bar
+     carries its own mark at the same value instead. */
+  @media(max-width:760px){
+    .gap-plot{--lab:0px;--pad:0px}
+    .gap-chance{display:none}
+    .gap-row{grid-template-columns:1fr;gap:10px}
+    .gap-row + .gap-row{margin-top:34px}
+    .gap-lab{padding-right:0}
+    .gap-lab b{display:inline;margin-right:8px}
+    .gap-n{position:static;transform:none;display:block;
+      font-size:clamp(56px,17vw,82px);margin-bottom:10px}
+    .gap-fill{height:16px}
+    .gap-tick{display:block;position:absolute;top:0;height:16px;width:1px;
+      left:calc(100% * var(--chance));
+      background:repeating-linear-gradient(to bottom,#fff 0 3px,transparent 3px 6px)}
+    .gap-chance-m{display:block}
+  }
+
   /* ══ LIBRARY ══ */
   .lib-head{padding:24px 0 34px}
   .filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:30px}

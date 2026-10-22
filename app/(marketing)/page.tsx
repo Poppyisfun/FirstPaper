@@ -2,10 +2,29 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
 import Nav from "@/components/Nav";
 import { getAllPapers } from "@/lib/content";
+import { chanceBaseline, pct, wilsonInterval } from "@/lib/stats";
 import HeroCopy from "@/components/HeroCopy";
 import DemoStrip from "@/components/DemoStrip";
 import { Rise, Stagger, RiseItem } from "@/components/motion-primitives";
 import { BtnLink } from "@/components/Btn";
+
+/**
+ * My own run through this paper. Not an average, not a typical result, and
+ * not a claim about readers: nobody else has finished it yet.
+ *
+ * Named constants rather than inline numbers so they can never be mistaken
+ * for something derived from data we do not have.
+ *
+ * WHEN THERE ARE READERS: once five or more people have completed the paper,
+ * this figure can be rebuilt from events as a real aggregate, under the same
+ * suppression rule the class view uses (MIN_READERS in lib/aggregate.ts).
+ * Do not build that switch before the fifth reader exists. A switch with
+ * nothing to switch to is how a placeholder becomes a published number.
+ */
+const MY_RUN = {
+  check: { right: 4, of: 5, label: "Comprehension", gloss: "what the paper said" },
+  judge: { right: 2, of: 5, label: "Appraisal", gloss: "whether it holds up" },
+} as const;
 
 const audience = [
   {
@@ -85,6 +104,22 @@ export default function Home() {
     minutes: first.estimated_minutes,
   };
 
+  /* The guessing line, from the real option counts. Drawn only when every
+     question offers the same number, because a single line across both bars
+     would otherwise be wrong for one of them. */
+  const optionCounts = new Set(
+    [...first.check, ...first.judge].map((q) => q.options.length),
+  );
+  const chance =
+    optionCounts.size === 1 ? chanceBaseline([...optionCounts][0]) : null;
+
+  /* Five questions is not much, and the interval says so. Same function the
+     results screen uses, so the figure and the screen cannot disagree. */
+  const rows = [MY_RUN.check, MY_RUN.judge].map((r) => {
+    const [lo, hi] = wilsonInterval(r.right, r.of);
+    return { ...r, share: pct(r.right / r.of), lo: pct(lo), hi: pct(hi) };
+  });
+
   return (
     <>
       <a className="skip" href="#how">
@@ -98,6 +133,82 @@ export default function Home() {
       </div>
 
       <main className="wrap">
+        {/* ── The gap ──
+            Deliberately not wrapped in Rise: no reveal on load. It is the
+            argument, not an effect, and it should be there when the page is. */}
+        <section className="sect gap-sect">
+          <figure className="gap">
+            <div className="gap-idx">
+              <span className="gap-idx-n">002</span>
+              <span>One run, mine</span>
+            </div>
+
+            <p className="gap-lead">
+              I wrote every explanation in this paper and have read it more
+              times than anyone alive. I still got {MY_RUN.judge.right} of{" "}
+              {MY_RUN.judge.of} right on whether it holds up.
+            </p>
+
+            <div
+              className="gap-plot"
+              style={
+                chance !== null
+                  ? ({ "--chance": pct(chance) / 100 } as React.CSSProperties)
+                  : undefined
+              }
+            >
+              {chance !== null && (
+                <div className="gap-chance" aria-hidden="true">
+                  <span className="gap-chance-l">guessing {pct(chance)}%</span>
+                </div>
+              )}
+
+              {rows.map((r) => (
+                <div className="gap-row" key={r.label}>
+                  <div className="gap-lab">
+                    <b>{r.label}</b>
+                    <span>{r.gloss}</span>
+                  </div>
+                  <div className="gap-track">
+                    <span
+                      className="gap-fill"
+                      style={{ width: `${r.share}%` }}
+                    />
+                    <span className="gap-n" style={{ left: `${r.share}%` }}>
+                      {r.share}%
+                    </span>
+                    {chance !== null && (
+                      <span className="gap-tick" aria-hidden="true" />
+                    )}
+                    <span className="gap-sub">
+                      {r.right} of {r.of} &middot; really somewhere between{" "}
+                      {r.lo}% and {r.hi}%
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+              {chance !== null && (
+                <p className="gap-chance-m" aria-hidden="true">
+                  guessing {pct(chance)}%
+                </p>
+              )}
+            </div>
+
+            <figcaption className="gap-say">
+              Reading a paper and judging it are different skills. Almost
+              nobody is taught the second one.
+            </figcaption>
+
+            <p className="gap-prov">
+              One person, one reading, {MY_RUN.check.of + MY_RUN.judge.of}{" "}
+              questions
+              {chance !== null && `, ${[...optionCounts][0]} options each, so guessing scores ${pct(chance)}%`}
+              . That is not an average, and there is nothing to average yet.
+            </p>
+          </figure>
+        </section>
+
         {/* ── Who this is for ── */}
         <section className="sect">
           <Rise className="shead">
