@@ -451,6 +451,11 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
     .rec-n{padding:0 0 10px}
   }
 
+  /* How the commentary is made is the paragraph a scientist weighs this
+     site by, so it is set larger than the prose around it. */
+  .ab-sec.ab-prov p:first-of-type{font-size:clamp(17px,2.1vw,21px);
+    line-height:1.62;color:var(--ink)}
+
   /* ══ LIBRARY ══ */
   .lib-head{padding:24px 0 34px}
   .filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:30px}

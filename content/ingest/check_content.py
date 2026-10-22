@@ -105,6 +105,22 @@ def check_paper(path: Path) -> tuple[list[str], list[str]]:
     if not paper.get("licence_url"):
         fails.append("licence_url is missing")
 
+    # ── identifiers ───────────────────────────────────────────────────
+    # The landing page and the library both print the DOI as part of the
+    # citation. The first paper shipped with `doi` null and the value only
+    # reachable by pulling it back out of original_url, which worked and was
+    # a trap: nothing would have told paper two it was missing.
+    doi = paper.get("doi")
+    if not doi:
+        fails.append(
+            "doi is missing — the citation on the landing page and the "
+            "library record both print it"
+        )
+    elif not re.match(r"^10\.\d{4,9}/\S+$", doi):
+        fails.append(f"doi {doi!r} is not a bare DOI such as 10.7554/eLife.00471")
+    if not paper.get("pmcid"):
+        fails.append("pmcid is missing")
+
     # ── tags ──────────────────────────────────────────────────────────
     for q in paper.get("judge", []):
         tag = q.get("tag")

@@ -34,7 +34,9 @@ export default function About() {
       <main className="wrap">
         <div className="sect" id="about-body" style={{ paddingTop: 28 }}>
           <Rise className="ab-hero">
-            <div className="ab-kick">About</div>
+            <div className="skick">
+              <span className="skick-n">000</span>About
+            </div>
             <h1 className="stitle" style={{ maxWidth: "15ch" }}>
               What this is, and how it&rsquo;s made.
             </h1>
@@ -46,11 +48,14 @@ export default function About() {
           </Rise>
 
           <Rise className="ab-sec">
-            <h2>What it is</h2>
+            <div className="skick">
+              <span className="skick-n">001</span>What it is
+            </div>
             <p>
-              You get the paper on one side, word for word. Our explanation
-              sits beside it. Before the explanation appears, you guess what
-              the paragraph says. Then you see what we think it says.
+              You get the paper on one side, word for word, and my
+              explanation beside it. Before the explanation appears you guess
+              what the paragraph says, and then you see what we think it
+              says.
             </p>
             <p>
               After the paper come two short rounds of questions. The first
@@ -65,7 +70,9 @@ export default function About() {
           </Rise>
 
           <Rise className="ab-sec">
-            <h2>Who it&rsquo;s for</h2>
+            <div className="skick">
+              <span className="skick-n">002</span>Who it&rsquo;s for
+            </div>
             <p>
               Anyone who has opened a research paper and closed it again.
               Mostly that means teenagers. A student with a science fair
@@ -81,7 +88,9 @@ export default function About() {
           </Rise>
 
           <Rise className="ab-sec">
-            <h2>What the judging questions ask</h2>
+            <div className="skick">
+              <span className="skick-n">003</span>What the judging questions ask
+            </div>
             <p>
               Reading what a paper says and judging whether it holds up are
               different skills. The second one is rarer. Every judging question
@@ -98,20 +107,22 @@ export default function About() {
             </p>
           </Rise>
 
-          <Rise className="ab-sec">
-            <h2>How the commentary is made</h2>
+          <Rise className="ab-sec ab-prov">
+            <div className="skick">
+              <span className="skick-n">004</span>How the commentary is made
+            </div>
             <p>
-              Everything that isn&rsquo;t the paper is ours. The explanations,
-              the guesses you choose from, the questions, the answers we mark
-              as right, and the plain-English recap at the end. It is
-              drafted with an AI model against rules we wrote down, then read
-              line by line by a person before it goes up. A check that runs
-              before any paper is published confirms the questions can&rsquo;t
-              be answered from the explanations alone.
+              Everything that isn&rsquo;t the paper is mine: the explanations,
+              the guesses you choose from, the questions, the answers marked
+              as right, and the plain-English recap at the end. It is drafted
+              with an AI model against rules I wrote down, then read line by
+              line by me before it goes up. A check that runs before any
+              paper is published confirms the questions can&rsquo;t be
+              answered from the explanations alone.
             </p>
             <p>
               The guesses are written from the authors&rsquo; paragraph alone,
-              never from our explanation, so you can&rsquo;t pick the right one
+              never from my explanation, so you can&rsquo;t pick the right one
               by recognising how we sound. Then every set is shown to a model
               with no paragraph at all. If it can still pick the right answer
               from how the options look, say because it&rsquo;s the longest or
@@ -119,9 +130,9 @@ export default function About() {
               patterns fast, and then stops reading the paper.
             </p>
             <p>
-              The questions go through the same test. We also check that our
-              explanations never state the answer to a question that comes
-              after them.
+              The questions go through the same test, and I check that an
+              explanation never states the answer to a question that comes
+              after it.
             </p>
           </Rise>
 
@@ -132,28 +143,32 @@ export default function About() {
           </Rise>
 
           <Rise className="ab-sec">
-            <h2>It can be wrong</h2>
+            <div className="skick">
+              <span className="skick-n">005</span>It can be wrong
+            </div>
             <p>
-              Our explanations are a reading of the paper, not the paper. The
-              answers we mark as right are our judgement. Tests catch some
-              mistakes. They don&rsquo;t catch all of them.
+              The explanations are a reading of the paper, not the paper, and
+              the answers marked as right are my judgement. Tests catch some
+              mistakes and not all of them.
             </p>
             <p>
               So every screen says so, and the original paper is one click
-              away from every paragraph. If you disagree with us and can point
+              away from every paragraph. If you disagree with me and can point
               to the sentence in the paper that backs you up, you have done
               exactly what this is for.
             </p>
           </Rise>
 
           <Rise className="ab-sec">
-            <h2>Where the papers come from</h2>
+            <div className="skick">
+              <span className="skick-n">006</span>Where the papers come from
+            </div>
             <p>
-              Every paper here is open access. The authors published it under a
-              licence that lets anyone reproduce it, as long as the work is
-              credited. We reproduce the text and figures word for word. We
-              don&rsquo;t fix typos, shorten anything or modernise the wording.
-              The authors are credited on every paragraph, with a link to the
+              Every paper here is open access. The authors published it under
+              a licence that lets anyone reproduce it so long as the work is
+              credited. The text and figures are reproduced word for word: no
+              fixed typos, nothing shortened, no modernised wording. The
+              authors are credited on every paragraph, with a link to the
               original.
             </p>
             {papers.map((p) => (
@@ -176,16 +191,19 @@ export default function About() {
           </Rise>
 
           <Rise className="ab-sec">
-            <h2>Who built it</h2>
+            <div className="skick">
+              <span className="skick-n">007</span>Who built it
+            </div>
             <p>
-              A high school junior who tried to read real genetics research and
-              couldn&rsquo;t get past the first page. Nobody teaches you how.
-              This is the thing that would have helped.
+              One person: a high school junior, working on it by hand. There
+              is no team, no funding and no organisation behind this, which is
+              worth knowing when you decide how much weight to give the
+              commentary.
             </p>
           </Rise>
 
           <Rise style={{ maxWidth: 720 }}>
-            <BtnLink href="/library" variant="pri lg" icon="→">
+            <BtnLink href="/library" variant="pri lg">
               Read your first paper
             </BtnLink>
           </Rise>

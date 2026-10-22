@@ -31,7 +31,7 @@ export default function Account() {
               your results are on the last screen.
             </p>
             <div className="acct-cta">
-              <BtnLink href="/library" variant="pri lg" icon="→">
+              <BtnLink href="/library" variant="pri lg">
                 Read a paper
               </BtnLink>
             </div>
