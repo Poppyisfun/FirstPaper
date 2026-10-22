@@ -1258,11 +1258,6 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .rd-expl-idle{font-family:var(--ui);font-size:var(--t-opt);line-height:1.6;
     color:var(--soft);margin:0;max-width:34ch}
 
-  .rd-honest{font-family:var(--ui);font-size:var(--t-note);line-height:1.6;
-    color:var(--soft);margin:30px 0 0;padding-top:18px;
-    border-top:1px dashed var(--line)}
-  .rd-honest b{color:var(--ink);font-weight:600}
-
   /* ── Footer ── */
   .rd-foot{border-top:1px solid var(--line);background:var(--surf)}
   .rd-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
