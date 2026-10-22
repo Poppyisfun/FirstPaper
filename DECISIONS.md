@@ -718,3 +718,51 @@ Chose: keep it.
 Over: making it neutral with the other chrome.
 Because: it marks the phrase that overreaches, which is exactly what amber
 means. It is commentary, not decoration.
+
+
+## The gap figure on the landing page
+
+**The one line under the bars.**
+
+chose: "Reading a paper and judging it are different skills. Almost nobody
+is taught the second one."
+
+over: "Understanding what a paper says and knowing whether to believe it are
+different skills. Only one of them gets taught." — truer to the mechanism,
+but it takes twenty-four words to land and the second clause is a shrug
+rather than a claim.
+
+over: "I can explain this paper line by line and still get its claims wrong."
+— the strongest sentence of the three, and it belongs to the lead line above
+the figure, which already says it with the numbers attached. Saying it twice
+spends it.
+
+over: "Comprehension is taught. Appraisal is not." — the shortest, and it
+reads as a slogan. The point needs the word "different" to be an argument
+rather than an assertion.
+
+because: it names the two skills, says which one is missing, and stops. It
+is the flat sentence the figure exists to earn, and the second sentence
+carries the whole finding: 40% is a point and a half above guessing.
+
+**Whose numbers.**
+
+chose: my own run, labelled as one person reading once.
+
+over: an aggregate across readers — there are none, and inventing one is
+precisely the move this product criticises.
+
+over: no numbers until readers exist — the argument is the gap, and a page
+that makes the argument without showing it is asking to be believed.
+
+because: a result measured against myself is the strongest version of the
+claim available. I wrote every explanation in the paper and still scored 2
+of 5 on whether it holds up.
+
+**Drawing the guessing line.**
+
+chose: draw it, at the real 25%, derived from the option counts.
+
+because: it cuts towards honesty and towards drama at the same time. 80% is
+far above it; 40% is a point and a half above it. The second fact is the
+finding and the line is what makes it visible.

@@ -400,9 +400,10 @@ body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opa
   .gap-prov{font-size:var(--t-note);line-height:1.6;color:var(--soft);
     margin:18px 0 0;max-width:54ch}
 
-  /* Narrow: one column, bar full width, number above it. The continuous
+  /* Narrow: one column, bar full width, number under it. The continuous
      guessing line would cross the labels once they stack, so each bar
-     carries its own mark at the same value instead. */
+     carries its own mark at the same value and the line is named once
+     beneath them. */
   @media(max-width:760px){
     .gap-plot{--lab:0px;--pad:0px}
     .gap-chance{display:none}
