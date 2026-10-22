@@ -8,6 +8,13 @@
 :root{
   --ink:#0A0E14; --ink-2:#28323D; --soft:#68737F;
   --bg:#FAF9F6; --surf:#FFFFFF; --line:#E6E4DC; --line-2:#F0EEE7;
+  /* GREEN, AMBER and VIOLET are the commentary colours: explanation,
+     caution, challenge. They carry meaning on the reading surface and so
+     they appear NOWHERE else — not on a button, a tick, a tag, an eyebrow
+     or a focus ring. A landing page using the challenge colour as a button
+     teaches a reader that violet means "button", and then it cannot mean
+     anything on the judge screen. BLUE is figures, RED is a failed check.
+     If a layout needs lifting, use scale, weight and whitespace. */
   --green:#0B7A5C; --green-s:#E3F1EA; --green-l:#B4DCCB;
   --amber:#A9640D; --amber-s:#FAEDD7; --amber-l:#E8CB97;
   /* Amber for small text. --amber itself is 4.02:1 on --amber-s and 4.42:1 on
